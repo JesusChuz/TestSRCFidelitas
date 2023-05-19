@@ -1,0 +1,109 @@
+﻿@{
+    ViewData["Title"] = "Agregar Ingeniero";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<div class="app-content content">
+    <div class="card-body">
+        <div class="col-md-6" style="float:none;margin:auto;">
+            <div class="card mb-2">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Complete la siguiente información</h5>
+                </div>
+                <div class="card-body">
+                    <form>
+                        <div class="mb-3">
+                            <label class="form-label" for="basic-icon-default-name">Nombre</label>
+                            <div class="input-group input-group-merge">
+                                <span id="basic-icon-default-name" class="input-group-text">
+                                    <i class="bx bx-user"></i>
+                                </span>
+                                <input type="text"
+                                       class="form-control"
+                                       id="basic-icon-default-name"
+                                       placeholder="John" />
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="basic-icon-default-lastname">Apellido</label>
+                            <div class="input-group input-group-merge">
+                                <span id="basic-icon-default-lastname" class="input-group-text">
+                                    <i class="bx bx-user"></i>
+                                </span>
+                                <input type="text"
+                                       class="form-control"
+                                       id="basic-icon-default-lastname"
+                                       placeholder="Rodriguez" />
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="basic-icon-default-email">Email</label>
+                            <div class="input-group input-group-merge">
+                                <span class="input-group-text"><i class="bx bx-envelope"></i></span>
+                                <input type="text"
+                                       id="basic-icon-default-email"
+                                       class="form-control"
+                                       placeholder="john.rodriguez@tek-experts.com" />
+                                <span id="basic-icon-default-email2" class="input-group-text">tek-experts.com</span>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="basic-default-password12">Password</label>
+                            <div class="input-group input-group-merge">
+                                <span class="input-group-text"><i class="bx bx-envelope"></i></span>
+                                <input type="password"
+                                       class="form-control"
+                                       id="basic-default-password12"
+                                       placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                                       aria-describedby="basic-default-password2" />
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="input-group">
+                                <label class="input-group-text" for="inputGroupSelect01">
+                                    Posición
+                                    <i class="bx bx-buildings"></i>
+                                </label>
+                                <select class="form-select" id="inputGroupSelect01">
+                                    <option selected>Seleccionar...</option>
+                                    <option value="1">Team Manager</option>
+                                    <option value="2">Subject Matter Expert</option>
+                                    <option value="3">Technical Lead</option>
+                                    <option value="4">Support Enginer Stage 3</option>
+                                    <option value="5">Support Enginer Stage 2</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="input-group">
+                                <label class="input-group-text" for="inputGroupSelect01">
+                                    Rol del usuario
+                                    <i class="bx bx-buildings"></i>
+                                </label>
+                                <select class="form-select" id="inputGroupSelect01">
+                                    <option selected>Seleccionar...</option>
+                                    <option value="1">Usuario Común</option>
+                                    <option value="2">Administrador</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="input-group">
+                                <label class="input-group-text" for="inputGroupSelect01">
+                                    Manager
+                                    <i class="bx bx-buildings"></i>
+                                </label>
+                                <select class="form-select" id="inputGroupSelect01">
+                                    <option selected>Seleccionar...</option>
+                                    <option value="1">John Bread</option>
+                                    <option value="2">Dahiana Kramer</option>
+                                </select>
+                            </div>
+                        </div>
+                        </br>
+                        <button type="submit" class="btn btn-primary">Crear cuenta</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

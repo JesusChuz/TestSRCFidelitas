@@ -1,0 +1,216 @@
+﻿@{
+    ViewData["Title"] = "Editar ingeniero";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<div class="app-content content">
+    <div class="content-wrapper">
+        <h4 class="fw-bold py-3"><span class="text-muted fw-light">Engineers/</span>Actualizar información</h4>
+        <div class="row">
+            <div class="col-xxl">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <div class="card mb-2">
+                                <h5 class="mb-0">Complete la información del ingeniero</h5>
+                                <div class="card-body">
+                                    <form>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="basic-icon-default-name">Nombre</label>
+                                            <div class="input-group input-group-merge">
+                                                <span id="basic-icon-default-name" class="input-group-text">
+                                                    <i class="bx bx-user"></i>
+                                                </span>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="basic-icon-default-name"
+                                                       placeholder="John" />
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="basic-icon-default-lastname">Apellido</label>
+                                            <div class="input-group input-group-merge">
+                                                <span id="basic-icon-default-lastname" class="input-group-text">
+                                                    <i class="bx bx-user"></i>
+                                                </span>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="basic-icon-default-lastname"
+                                                       placeholder="Rodriguez" />
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="basic-icon-default-email">Email</label>
+                                            <div class="input-group input-group-merge">
+                                                <span class="input-group-text"><i class="bx bx-envelope"></i></span>
+                                                <input type="text"
+                                                       id="basic-icon-default-email"
+                                                       class="form-control"
+                                                       placeholder="john.rodriguez@tek-experts.com" />
+                                                <span id="basic-icon-default-email2" class="input-group-text">tek-experts.com</span>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="basic-default-password12">Password</label>
+                                            <div class="input-group input-group-merge">
+                                                <span class="input-group-text"><i class="bx bx-envelope"></i></span>
+                                                <input type="password"
+                                                       class="form-control"
+                                                       id="basic-default-password12"
+                                                       placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                                                       aria-describedby="basic-default-password2" />
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="input-group">
+                                                <label class="input-group-text" for="inputGroupSelect01">
+                                                    Position
+                                                    <i class="bx bx-buildings"></i>
+                                                </label>
+                                                <select class="form-select" id="inputGroupSelect01">
+                                                    <option selected>Seleccionar...</option>
+                                                    <option value="1">Team Manager</option>
+                                                    <option value="2">Subject Matter Expert</option>
+                                                    <option value="3">Technical Lead</option>
+                                                    <option value="4">Support Enginer Stage 3</option>
+                                                    <option value="5">Support Enginer Stage 2</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="input-group">
+                                                <label class="input-group-text" for="inputGroupSelect01">
+                                                    User rol
+                                                    <i class="bx bx-buildings"></i>
+                                                </label>
+                                                <select class="form-select" id="inputGroupSelect01">
+                                                    <option selected>Seleccionar...</option>
+                                                    <option value="1">Usuario Común</option>
+                                                    <option value="2">Administrador</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="input-group">
+                                                <label class="input-group-text" for="inputGroupSelect01">
+                                                    Manager
+                                                    <i class="bx bx-buildings"></i>
+                                                </label>
+                                                <select class="form-select" id="inputGroupSelect01">
+                                                    <option selected>Seleccionar...</option>
+                                                    <option value="1">John Bread</option>
+                                                    <option value="2">Dahiana Kramer</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        </br>
+                                        <a class="btn btn-danger" asp-controller="Main" asp-action="Ingenieros">Regresar</a>
+                                        <button type="submit" class="btn btn-primary">Actualizar</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xxl">
+                <div class="card mb-4">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <h5 class="mb-0">Información actual</h5>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="mb-3">
+                                <label class="form-label" for="basic-icon-default-name">Nombre</label>
+                                <div class="input-group input-group-merge">
+                                    <span id="basic-icon-default-name" class="input-group-text">
+                                        <i class="bx bx-user"></i>
+                                    </span>
+                                    <input type="text"
+                                           class="form-control"
+                                           id="basic-icon-default-name"
+                                           placeholder="John" disabled />
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="basic-icon-default-lastname">Apellido</label>
+                                <div class="input-group input-group-merge">
+                                    <span id="basic-icon-default-lastname" class="input-group-text">
+                                        <i class="bx bx-user"></i>
+                                    </span>
+                                    <input type="text"
+                                           class="form-control"
+                                           id="basic-icon-default-lastname"
+                                           placeholder="Rodriguez" disabled />
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="basic-icon-default-email">Email</label>
+                                <div class="input-group input-group-merge">
+                                    <span class="input-group-text"><i class="bx bx-envelope"></i></span>
+                                    <input type="text"
+                                           id="basic-icon-default-email"
+                                           class="form-control"
+                                           placeholder="john.rodriguez@tek-experts.com" disabled />
+                                    <span id="basic-icon-default-email2" class="input-group-text">tek-experts.com</span>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="basic-default-password12">Password</label>
+                                <div class="input-group input-group-merge">
+                                    <span class="input-group-text"><i class="bx bx-envelope"></i></span>
+                                    <input type="password"
+                                           class="form-control"
+                                           id="basic-default-password12"
+                                           placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                                           aria-describedby="basic-default-password2" disabled />
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="input-group">
+                                    <label class="input-group-text" for="inputGroupSelect01">
+                                        Posición
+                                        <i class="bx bx-buildings"></i>
+                                    </label>
+                                    <select class="form-select" id="inputGroupSelect01" disabled>
+                                        <option selected>Seleccionar...</option>
+                                        <option value="1">Team Manager</option>
+                                        <option value="2">Subject Matter Expert</option>
+                                        <option value="3">Technical Lead</option>
+                                        <option value="4">Support Enginer Stage 3</option>
+                                        <option value="5">Support Enginer Stage 2</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="input-group">
+                                    <label class="input-group-text" for="inputGroupSelect01">
+                                        Rol de usuario
+                                        <i class="bx bx-buildings"></i>
+                                    </label>
+                                    <select class="form-select" id="inputGroupSelect01" disabled>
+                                        <option selected>Seleccionar...</option>
+                                        <option value="1">Common User</option>
+                                        <option value="2">Administrator</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="input-group">
+                                    <label class="input-group-text" for="inputGroupSelect01">
+                                        Manager
+                                        <i class="bx bx-buildings"></i>
+                                    </label>
+                                    <select class="form-select" id="inputGroupSelect01" disabled>
+                                        <option selected>Seleccionar...</option>
+                                        <option value="1">John Bread</option>
+                                        <option value="2">Dahiana Kramer</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

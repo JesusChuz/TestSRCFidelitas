@@ -1,0 +1,205 @@
+﻿@{
+    ViewData["Title"] = "Reconocimientos";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-wrapper-before"></div>
+        <div class="content-header row">
+            <div class="content-header-left col-md-4 col-12 mb-2">
+                <h3 class="content-header-title">Reconocimientos</h3>
+            </div>
+            <div class="content-header-right col-md-8 col-12">
+                <div class="breadcrumbs-top float-md-right">
+                    <div class="breadcrumb-wrapper mr-1">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="index.html">Principal</a>
+                            </li>
+                            <li class="breadcrumb-item active">
+                                Reconocimientos
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <!-- Table reconocimientos pendings -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="navbar-nav align-items-center">
+                                <h3 class="content-header-right">Reconocimientos pendientes de revisión</h3>
+                            </div>
+                            <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                            <div class="heading-elements">
+                                <ul class="list-inline mb-0">
+                                    <li>
+                                        <!-- Search -->
+                                        <div class="navbar-nav align-items-center">
+                                            <div class="nav-item d-flex align-items-center">
+                                                <i class="bx bx-search fs-4 lh-0"></i>
+                                                <input type="text"
+                                                       class="form-control border-0 shadow-none"
+                                                       placeholder="Buscar"
+                                                       aria-label="Buscar" />
+                                            </div>
+                                        </div>
+                                        <!-- /Search -->
+                                    </li>
+                                    <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                    <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                                    <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-content collapse show">
+                            <div class="card-body">
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class="thead-default">
+                                        <tr>
+                                            <th scope="col">Número de Reconocimiento</th>
+                                            <th scope="col">Número de Caso</th>
+                                            <th scope="col">Solicitante</th>
+                                            <th scope="col">Ingeniero reconocido</th>
+                                            <th scope="col">Estado</th>
+                                            <th scope="col">Comentarios</th>
+                                            <th scope="col">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>004</td>
+                                            <td>212343436008</t>
+                                            <td>Juan</td>
+                                            <td>Andres</td>
+                                            <td>Pending</td>
+                                            <td>Me ayudo mucho y logramos resolver el problema</td>
+                                            <td>
+                                                <a class="btn btn-danger" href=""><i class="fas fa-check"></i></a>
+                                                <a class="btn btn-danger" href=""><i class="fas fa-cancel"></i></a>
+                                                <a class="btn btn-danger" href=""><i class="fas fa-trash"></i></a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>005</td>
+                                            <td>2123434360223</td>
+                                            <td>Pedro</td>
+                                            <td>Pablo</td>
+                                            <td>Pending</td>
+                                            <td>Thanks to him, we were able to move forward with the case</td>
+                                            <td>
+                                                <a class="btn btn-danger" href=""><i class="fas fa-check"></i></a>
+                                                <a class="btn btn-danger" href=""><i class="fas fa-cancel"></i></a>
+                                                <a class="btn btn-danger" href=""><i class="fas fa-trash"></i></a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>006</td>
+                                            <td>212343436008</td>
+                                            <td>Diana</td>
+                                            <td>Todd</td>
+                                            <td>Pending</td>
+                                            <td>Todd me ayudo aclarando muchas dudas que tenia con el caso y gracias a el obtuvimos una buena reseña por parte del cliente</td>
+                                            <td>
+                                                <a class="btn btn-danger" href=""><i class="fas fa-check"></i></a>
+                                                <a class="btn btn-danger" href=""><i class="fas fa-cancel"></i></a>
+                                                <a class="btn btn-danger" href=""><i class="fas fa-trash"></i></a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Table Historial de reconocimientos -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="navbar-nav align-items-center">
+                                <h3 class="content-header-left">Historial Reconocimientos</h3>
+                            </div>
+                            <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                            <div class="heading-elements">
+                                <ul class="list-inline mb-0">
+                                    <li>
+                                        <!-- Search -->
+                                        <div class="navbar-nav align-items-center">
+                                            <div class="nav-item d-flex align-items-center">
+                                                <i class="bx bx-search fs-4 lh-0"></i>
+                                                <input type="text"
+                                                       class="form-control border-0 shadow-none"
+                                                       placeholder="Buscar"
+                                                       aria-label="Buscar" />
+                                            </div>
+                                        </div>
+                                        <!-- /Search -->
+                                    </li>
+                                    <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                    <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                                    <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-content collapse show">
+                            <div class="card-body">
+                            </div>
+                            <div class="table-responsive text-nowrap">
+                                <table class="table">
+                                    <thead class="thead-default text-nowrap">
+                                        <tr>
+                                            <th scope="col">Número de Reconocimiento</th>
+                                            <th scope="col">Número de Caso</th>
+                                            <th scope="col">Solicitante</th>
+                                            <th scope="col">Ingeniero reconocido</th>
+                                            <th scope="col">Estado</th>
+                                            <th scope="col">Comentarios</th>
+                                            <th scope="col">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>001</td>
+                                            <td>21223243436008</td>
+                                            <td>Andrey</td>
+                                            <td>Andres</td>
+                                            <td>Aprobado</td>
+                                            <td>Me ayudo mucho</td>
+                                            <td><a class="btn btn-danger" href=""><i class="fas fa-trash"></i></a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>002</td>
+                                            <td>212343436338</td>
+                                            <td>Priscilla</td>
+                                            <td>Todd</td>
+                                            <td>Aprobado</td>
+                                            <td>Gracias!!</td>
+                                            <td><a class="btn btn-danger" href=""><i class="fas fa-trash"></i></a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>003</td>
+                                            <td>2123320036008</td>
+                                            <td>Andres</td>
+                                            <td>Todd</td>
+                                            <td>Aprobado</td>
+                                            <td>We are stronger together!</td>
+                                            <td><a class="btn btn-danger" href=""><i class="fas fa-trash"></i></a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

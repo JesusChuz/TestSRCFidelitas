@@ -1,0 +1,58 @@
+﻿@{
+    ViewData["Title"] = "Reconocer";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<div class="app-content content">
+    <div class="card-body">
+        <div class="col-md-6" style="float:none;margin:auto;">
+            <div class="card mb-2">
+                <div class="card-header d-flex justify-content-between align-items-center navbar-nav align-items-center">
+                    <h5>Complete la siguiente información</h5>
+                </div>
+                <div class="card-body">
+                    <form>
+                        <div class="mb-3">
+                            <label class="form-label" for="basic-icon-default-name">Número de caso</label>
+                            <div class="input-group input-group-merge">
+                                <span id="basic-icon-default-name" class="input-group-text">
+                                    <i class="fas fa-ticket"></i>
+                                </span>
+                                <input type="text"
+                                       class="form-control"
+                                       id="basic-icon-default-name"
+                                       placeholder="20023412220044" />
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="input-group">
+                                <label class="input-group-text" for="inputGroupSelect01">
+                                    ¿A quién quieres reconocer?
+                                    <i class="bx bx-buildings"></i>
+                                </label>
+                                <select class="form-select" id="inputGroupSelect01">
+                                    <option selected>Seleccionar...</option>
+                                    <option value="1">Luis Pereira</option>
+                                    <option value="2">Manuel Rodriguez</option>
+                                    <option value="3">Todd Biston</option>
+                                    <option value="4">Natalie Murphy</option>
+                                    <option value="5">Ana Ruiz</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="basic-icon-default-email">Comentarios</label>
+                            <div class="input-group input-group-merge">
+                                <span class="input-group-text"><i class="fas fa-heart"></i></span>
+                                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                            </div>
+                        </div>
+                        </br>
+                        <div class="navbar-nav align-items-center">
+                            <button type="submit" class="btn btn-primary">Enviar Reconocimiento</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

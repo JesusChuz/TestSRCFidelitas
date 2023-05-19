@@ -1,0 +1,122 @@
+﻿@{
+    ViewData["Title"] = "Editar Recompensa";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<div class="app-content content">
+    <div class="content-wrapper">
+        <h4 class="fw-bold py-3"><span class="text-muted fw-light">Recompensas/</span>Actualizar información</h4>
+        <div class="row">
+            <div class="col-xxl">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <div class="card mb-2">
+                                <h5 class="mb-0">Complete las información de la recompensa</h5>
+                                <div class="card-body">
+                                    <form>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="basic-icon-default-name">Título</label>
+                                            <div class="input-group input-group-merge">
+                                                <span id="basic-icon-default-name" class="input-group-text">
+                                                    <i class="fas fa-pen"></i>
+                                                </span>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="basic-icon-default-name"
+                                                       placeholder="Dia libre" />
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="basic-icon-default-lastname">Descripción</label>
+                                            <div class="input-group input-group-merge">
+                                                <span id="basic-icon-default-lastname" class="input-group-text">
+                                                    <i class="fas fa-book"></i>
+                                                </span>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="basic-icon-default-lastname"
+                                                       placeholder="Este dia libre no se descontara de tus vacaciones" />
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="basic-icon-default-email">Precio</label>
+                                            <div class="input-group input-group-merge">
+                                                <span class="input-group-text"><i class="fas fa-money"></i></span>
+                                                <input type="text"
+                                                       id="basic-icon-default-email"
+                                                       class="form-control"
+                                                       placeholder="3000" />
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="basic-icon-default-email">Imágen</label>
+                                            <div class="input-group input-group-merge">
+                                                <span class="input-group-text"><i class="fas fa-photo"></i></span>
+                                                <input type="file"
+                                                       class="account-file-input"
+                                                       accept="image/png, image/jpeg" />
+                                            </div>
+                                        </div>
+                                        </br>
+                                        <a class="btn btn-danger" asp-controller="Main" asp-action="Ingenieros"> Regresar</a>
+                                        <button type="submit" class="btn btn-primary">Actualizar</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xxl">
+                <div class="card mb-4">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <h5 class="mb-0">Información Actual</h5>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="mb-3">
+                                <label class="form-label" for="basic-icon-default-name">Título</label>
+                                <div class="input-group input-group-merge">
+                                    <span id="basic-icon-default-name" class="input-group-text">
+                                        <i class="fas fa-pen"></i>
+                                    </span>
+                                    <input type="text"
+                                           class="form-control"
+                                           id="basic-icon-default-name"
+                                           placeholder="Día Libre" disabled />
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="basic-icon-default-lastname">Descripción</label>
+                                <div class="input-group input-group-merge">
+                                    <span id="basic-icon-default-lastname" class="input-group-text">
+                                        <i class="fas fa-book"></i>
+                                    </span>
+                                    <input type="text"
+                                           class="form-control"
+                                           id="basic-icon-default-lastname"
+                                           placeholder="Este día libre nos se descontara de tus vacaciones" disabled />
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="basic-icon-default-email">Precio</label>
+                                <div class="input-group input-group-merge">
+                                    <span class="input-group-text"><i class="fas fa-money"></i></span>
+                                    <input type="text"
+                                           id="basic-icon-default-email"
+                                           class="form-control"
+                                           placeholder="3000" disabled />
+                                </div>
+                                <br />
+                                <div class="mb-3">
+                                    <label class="form-label" for="basic-icon-default-email">Imágen actual</label>
+                                    <img class="card-img" src="~/theme-assets/images/rewards/freeday.PNG" width="400" height="500" alt="Card image" />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
