@@ -88,3 +88,17 @@ CREATE TABLE Frases (
     FOREIGN KEY (ID_Ingeniero) REFERENCES Ingeniero(ID_Ingeniero)
 );
 
+--Stored Procedures
+CREATE PROCEDURE GetLockoutEnabledAndIsNew
+    @Email VARCHAR(50)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT LockoutEnabled, IsNew
+    FROM AspNetUsers
+    WHERE Email = @Email;
+END;
+
+EXEC GetLockoutEnabledAndIsNew @Email = 'john.wick@gmail.com';
+

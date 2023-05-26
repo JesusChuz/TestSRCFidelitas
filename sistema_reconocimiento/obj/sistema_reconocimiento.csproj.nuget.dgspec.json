@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Users\\XPC\\Documents\\Fidelitas\\SistemaReconocimientos\\sistema_reconocimiento\\sistema_reconocimiento\\sistema_reconocimiento.csproj": {}
+    "E:\\Users\\XPC\\Documents\\Fidelitas\\Cuatrimestre VIII\\DiseñoyDesarrolloSistemas\\Proyectos\\sistema_reconocimiento\\sistema_reconocimiento.csproj": {}
   },
   "projects": {
-    "E:\\Users\\XPC\\Documents\\Fidelitas\\SistemaReconocimientos\\sistema_reconocimiento\\sistema_reconocimiento\\sistema_reconocimiento.csproj": {
+    "E:\\Users\\XPC\\Documents\\Fidelitas\\Cuatrimestre VIII\\DiseñoyDesarrolloSistemas\\Proyectos\\sistema_reconocimiento\\sistema_reconocimiento.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Users\\XPC\\Documents\\Fidelitas\\SistemaReconocimientos\\sistema_reconocimiento\\sistema_reconocimiento\\sistema_reconocimiento.csproj",
+        "projectUniqueName": "E:\\Users\\XPC\\Documents\\Fidelitas\\Cuatrimestre VIII\\DiseñoyDesarrolloSistemas\\Proyectos\\sistema_reconocimiento\\sistema_reconocimiento.csproj",
         "projectName": "sistema_reconocimiento",
-        "projectPath": "E:\\Users\\XPC\\Documents\\Fidelitas\\SistemaReconocimientos\\sistema_reconocimiento\\sistema_reconocimiento\\sistema_reconocimiento.csproj",
+        "projectPath": "E:\\Users\\XPC\\Documents\\Fidelitas\\Cuatrimestre VIII\\DiseñoyDesarrolloSistemas\\Proyectos\\sistema_reconocimiento\\sistema_reconocimiento.csproj",
         "packagesPath": "C:\\Users\\XPC\\.nuget\\packages\\",
-        "outputPath": "E:\\Users\\XPC\\Documents\\Fidelitas\\SistemaReconocimientos\\sistema_reconocimiento\\sistema_reconocimiento\\obj\\",
+        "outputPath": "E:\\Users\\XPC\\Documents\\Fidelitas\\Cuatrimestre VIII\\DiseñoyDesarrolloSistemas\\Proyectos\\sistema_reconocimiento\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -25,6 +25,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\sdk\\7.0.302\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -42,6 +43,38 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.16, )"
+            },
+            "Microsoft.AspNetCore.Identity.UI": {
+              "target": "Package",
+              "version": "[6.0.16, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.16, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[6.0.16, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[6.0.16, )"
+            },
+            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
+              "target": "Package",
+              "version": "[6.0.13, )"
+            },
+            "System.Data.SqlClient": {
+              "target": "Package",
+              "version": "[4.8.5, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -61,7 +94,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
         }
       }
     }
