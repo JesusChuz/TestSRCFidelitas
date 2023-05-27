@@ -11,8 +11,9 @@ namespace sistema_reconocimiento.Models
 
         [Required]
         public string Password { get; set; }
+        [Required]
         public string OldPassword { get; set; }
-        [Compare("Password")]
+        [Required]
         public string ConfirmPassword { get; set;}
     }
 }

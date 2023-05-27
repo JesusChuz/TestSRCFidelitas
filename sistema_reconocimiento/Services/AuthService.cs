@@ -12,7 +12,6 @@ namespace sistema_reconocimiento.Services
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
-
         public AuthService(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             this.signInManager = signInManager;
@@ -132,21 +131,68 @@ namespace sistema_reconocimiento.Services
         public async Task<Status> UpdatePasswordAsync(LoginModel model)
         {
             var status = new Status();
-            var user = await userManager.FindByEmailAsync(model.Email);
-
-            var token = await userManager.GeneratePasswordResetTokenAsync(user);
-
-            var result = await userManager.ResetPasswordAsync(user, token, model.Password);
-            if (!result.Succeeded)
+            var email_check = await userManager.FindByEmailAsync(model.Email);
+            //primero valida si el correo existe
+            if (email_check == null)
             {
                 status.StatusCode = 0;
-                status.Message = "Password update failed";
+                status.Message = "Invalid email";
                 return status;
             }
-            status.StatusCode = 1;
-            status.Message = "Password has been updated successfully!";
-            return status;
+            //valida si la contraseña es correcta, por detras desencripta hash 
+            if (!await userManager.CheckPasswordAsync(email_check, model.OldPassword))
+            {
+                status.StatusCode = 0;
+                status.Message = "Invalid password";
+                return status;
+            }
+            var signInResult = await signInManager.PasswordSignInAsync(email_check, model.OldPassword, false, true);
+            if (signInResult.Succeeded)
+            {
+                //consulta el rol del usuario que se acaba de autenticar
+                var userRoles = await userManager.GetRolesAsync(email_check);
+                var authClaims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, email_check.UserName)
+                };
+                foreach (var userRole in userRoles)
+                {
+                    authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+                }
+                status.StatusCode = 1;
+                if (model.Password == model.ConfirmPassword)
+                {
+                    var token = await userManager.GeneratePasswordResetTokenAsync(email_check);
+                    var result = await userManager.ResetPasswordAsync(email_check, token, model.Password);
+                    if (!result.Succeeded)
+                    {
+                        status.StatusCode = 0;
+                        status.Message = "Password update failed";
+                        return status;
+                    }
+                    status.StatusCode = 1;
+                    status.Message = "Password has been updated successfully!";
+                    return status;
+                }
+                else
+                {
+                    status.StatusCode = 0;
+                    status.Message = "Passwords does not match";
+                    return status;
+                }
+            }
+            else if (signInResult.IsLockedOut)
+            {
+                status.StatusCode = 0;
+                status.Message = "user locked out";
+                return status;
+            }
+            else
+            {
+                status.StatusCode = 0;
+                status.Message = "Error on loggin in";
+                return status;
+            }
         }
-
     }
 }

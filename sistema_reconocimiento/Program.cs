@@ -27,7 +27,13 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 builder.Services.ConfigureApplicationCookie(op => op.LoginPath = "/Auth/Login");
 
 builder.Services.AddScoped<IAuthService, AuthService>();
-
+builder.Services.AddDistributedMemoryCache();  // Opcional: Configurar un proveedor de caché distribuida
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);  // Configurar el tiempo de expiración de la sesión
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -45,6 +51,7 @@ app.UseRouting();
 app.UseAuthentication();;
 
 app.UseAuthorization();
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",

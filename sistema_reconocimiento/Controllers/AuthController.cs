@@ -18,6 +18,8 @@ using Microsoft.Extensions.Configuration;
 using sistema_reconocimiento.Models;
 using sistema_reconocimiento.Interface;
 using System.Configuration;
+using Microsoft.AspNetCore.Http;
+using System.Drawing;
 // se manda a llamar los metodos que se declararon en la interface con unos ultimos detalles
 namespace sistema_reconocimiento.Controllers
 {
@@ -51,7 +53,7 @@ namespace sistema_reconocimiento.Controllers
         }
         [HttpPost]
         public async Task<IActionResult> Login(LoginModel model)
-        {
+         {
             /* if (!ModelState.IsValid)
              {
                  return View(model);
@@ -99,10 +101,19 @@ namespace sistema_reconocimiento.Controllers
                                     bool isNew = (bool)reader["IsNew"];
                                     if (lockoutEnabled == true || isNew == true) //-> redirija a la vista de cambio de password para que al cambiarla, se desbloquee (pase lockoutEnabled a false y isNew a false)
                                     {
+                                        // Obtener el objeto de sesión
+                                        ISession session = HttpContext.Session;
+                                        //Establecer el valor en la sesión
+                                        session.SetString("EmailSession", model.Email);
                                         return RedirectToAction("Cambio_password", "Auth");
                                     }
                                     else
                                     {
+                                        // Obtener el objeto de sesión
+                                        ISession session = HttpContext.Session;
+                                        //Establecer el valor en la sesión
+                                        session.SetString("EmailSession", model.Email);
+
                                         return RedirectToAction("Index", "Main");
                                     }
                                 }
@@ -113,21 +124,6 @@ namespace sistema_reconocimiento.Controllers
                                 }
                             }
                         }
-                        /* using (SqlCommand command_update = new SqlCommand("ChangeIsNew", connection))
-                         {
-                             if (password_change == true)
-                             {
-                                 command_update.CommandType = CommandType.StoredProcedure;
-                                 command_update.Parameters.AddWithValue("@email", model.Email);
-                                 command_update.Parameters.AddWithValue("@newValue", 0);
-                                 command_update.ExecuteNonQuery();
-                                 return RedirectToAction("Cambio_password", "Auth");
-                             }
-                             else
-                             {
-                                 return RedirectToAction("Index", "Main");
-                             }
-                         }*/
                     }
                     catch (Exception ex)
                     {
@@ -188,15 +184,14 @@ namespace sistema_reconocimiento.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Cambio_password(string email, string password, string oldpassword, string confirmnewpassword)
+        public async Task<IActionResult> Cambio_password(string email, string password, string oldpassword, string confirmpassword)
         {
-
             var model = new LoginModel
             {
                 Email = email,
                 OldPassword = oldpassword,
                 Password = password,
-                ConfirmPassword = confirmnewpassword
+                ConfirmPassword = confirmpassword
             };
            /* if (!ModelState.IsValid)
             {
