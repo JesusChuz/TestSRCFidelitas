@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using NuGet.Protocol;
 using NuGet.Protocol.Plugins;
 using sistema_reconocimiento.Interface;
 using sistema_reconocimiento.Models;
@@ -72,7 +73,7 @@ namespace sistema_reconocimiento.Services
             await signInManager.SignOutAsync();
         }
 
-        public async Task<Status> RegistrationAsync(AccountRegistrationModel model)
+        public async Task<Status> RegistrationAsync(AccountRegistration model)
         {
             var status = new Status();
             var userExists = await userManager.FindByNameAsync(model.Username);
@@ -85,11 +86,9 @@ namespace sistema_reconocimiento.Services
 
             ApplicationUser user = new ApplicationUser
             {
-                SecurityStamp = Guid.NewGuid().ToString(),
                 Name = model.Name,
                 Email = model.Email,
-                UserName = model.Username,
-                EmailConfirmed = true,
+                UserName = model.Username
             };
 
             var result = await userManager.CreateAsync(user, model.Password);
@@ -112,7 +111,25 @@ namespace sistema_reconocimiento.Services
             return status;
         }
 
-        public async Task<Status> UpdateAsync(LoginModel model)
+        /*  public async Task<Status> UpdateAsync(LoginModel model)
+          {
+              var status = new Status();
+              var user = await userManager.FindByEmailAsync(model.Email);
+
+              var token = await userManager.GeneratePasswordResetTokenAsync(user);
+
+              var result = await userManager.ResetPasswordAsync(user, token, model.Password);
+              if (!result.Succeeded)
+              {
+                  status.StatusCode = 0;
+                  status.Message = "Password update failed";
+                  return status;
+              }
+              status.StatusCode = 1;
+              status.Message = "Password has been updated successfully!";
+              return status;
+          }*/
+        public async Task<Status> UpdatePasswordAsync(LoginModel model)
         {
             var status = new Status();
             var user = await userManager.FindByEmailAsync(model.Email);
@@ -130,5 +147,6 @@ namespace sistema_reconocimiento.Services
             status.Message = "Password has been updated successfully!";
             return status;
         }
+
     }
 }

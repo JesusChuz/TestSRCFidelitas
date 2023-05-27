@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-//Clase para proceso de creacion de cuenta con Identity, el cual necesita de la existencia de las tablas AspNetUsers, AspNetUserRoles, AspNetRoles. etc...
+
 namespace sistema_reconocimiento.Models
 {
     public class LoginModel
@@ -11,5 +11,8 @@ namespace sistema_reconocimiento.Models
 
         [Required]
         public string Password { get; set; }
+        public string OldPassword { get; set; }
+        [Compare("Password")]
+        public string ConfirmPassword { get; set;}
     }
 }

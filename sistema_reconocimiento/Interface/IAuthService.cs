@@ -5,8 +5,8 @@ namespace sistema_reconocimiento.Interface
     public interface IAuthService
     {
         Task<Status> LoginAsync(LoginModel model);
-        Task<Status> RegistrationAsync(AccountRegistrationModel model);
+        Task<Status> RegistrationAsync(AccountRegistration model);
         Task LogoutAsync();
-        Task<Status> UpdateAsync(LoginModel model);
+        Task<Status> UpdatePasswordAsync(LoginModel model);
     }
 }

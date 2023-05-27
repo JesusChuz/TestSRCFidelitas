@@ -35,7 +35,7 @@ namespace sistema_reconocimiento.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Registration(AccountRegistrationModel model)
+        public async Task<IActionResult> Registration(AccountRegistration model)
         {
             if (!ModelState.IsValid)
                 return View(model);
@@ -46,36 +46,35 @@ namespace sistema_reconocimiento.Controllers
         }
         public IActionResult Login()
         {
-             //return View("~/Views/Main/Index.cshtml");
-             return View();
+            //return View("~/Views/Main/Index.cshtml");
+            return View();
         }
         [HttpPost]
         public async Task<IActionResult> Login(LoginModel model)
         {
-           /* if (!ModelState.IsValid)
+            /* if (!ModelState.IsValid)
+             {
+                 return View(model);
+             }
+             var result = await _service.LoginAsync(model);
+             if (result.StatusCode == 1)
+             {
+                 //if (cuenta es nueva?(columna)and cuenta inactiva?(columna)) -> redirija a la vista de cambio de password
+                 //{
+                 // return RedirectToAction("Cambio_password", "Auth");
+                 //}else{
+                     return RedirectToAction("Index", "Main");
+                 //}
+             }
+             else
+             {
+                 TempData["msg"] = result.Message;
+                 return RedirectToAction(nameof(Login));
+             }*/
+            /*if (!ModelState.IsValid)
             {
                 return View(model);
-            }
-            var result = await _service.LoginAsync(model);
-            if (result.StatusCode == 1)
-            {
-                //if (cuenta es nueva?(columna)and cuenta inactiva?(columna)) -> redirija a la vista de cambio de password
-                //{
-                // return RedirectToAction("Cambio_password", "Auth");
-                //}else{
-                    return RedirectToAction("Index", "Main");
-                //}
-            }
-            else
-            {
-                TempData["msg"] = result.Message;
-                return RedirectToAction(nameof(Login));
             }*/
-            
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
             var result = await _service.LoginAsync(model);
             if (result.StatusCode == 1)
             {
@@ -98,10 +97,12 @@ namespace sistema_reconocimiento.Controllers
                                 {
                                     bool lockoutEnabled = (bool)reader["LockoutEnabled"];
                                     bool isNew = (bool)reader["IsNew"];
-                                    if (lockoutEnabled=true&&isNew==true) //-> redirija a la vista de cambio de password para que al cambiarla, se desbloquee (pase lockoutEnabled a false y isNew a false)
+                                    if (lockoutEnabled == true || isNew == true) //-> redirija a la vista de cambio de password para que al cambiarla, se desbloquee (pase lockoutEnabled a false y isNew a false)
                                     {
                                         return RedirectToAction("Cambio_password", "Auth");
-                                    }else{
+                                    }
+                                    else
+                                    {
                                         return RedirectToAction("Index", "Main");
                                     }
                                 }
@@ -112,6 +113,21 @@ namespace sistema_reconocimiento.Controllers
                                 }
                             }
                         }
+                        /* using (SqlCommand command_update = new SqlCommand("ChangeIsNew", connection))
+                         {
+                             if (password_change == true)
+                             {
+                                 command_update.CommandType = CommandType.StoredProcedure;
+                                 command_update.Parameters.AddWithValue("@email", model.Email);
+                                 command_update.Parameters.AddWithValue("@newValue", 0);
+                                 command_update.ExecuteNonQuery();
+                                 return RedirectToAction("Cambio_password", "Auth");
+                             }
+                             else
+                             {
+                                 return RedirectToAction("Index", "Main");
+                             }
+                         }*/
                     }
                     catch (Exception ex)
                     {
@@ -140,35 +156,82 @@ namespace sistema_reconocimiento.Controllers
         //i.e: localhost:878787/Auth/AddAccount 
         public async Task<IActionResult> AddAccount()
         {
-            var model = new AccountRegistrationModel
+            var model = new AccountRegistration
             {
                 Username = "Jorge",
-                Name = "Trey Guillum",
-                Email = "trey.guillum@gmail.com",
+                Name = "Jorge Granados",
+                Email = "jorge.granados@gmail.com",
                 Password = "Admin@12345#"
             };
             model.Role = "comun";
             var result = await _service.RegistrationAsync(model);
             return Ok(result);
         }
-        public async Task<IActionResult> UpdatePassword()
-        {
-            var model = new LoginModel
-            {
-                Email = "trey.guillum@gmail.com",
-                Password = "Trey@12345#"
-            };
-            var result = await _service.UpdateAsync(model);
-            return Ok(result);
-        }
+        /* public async Task<IActionResult> UpdatePassword()
+         {
+             var model = new LoginModel
+             {
+                 Email = "jorge.granados@gmail.com",
+                 Password = "Jorge@12345#"
+             };
+             var result = await _service.UpdateAsync(model);
+             return Ok(result);
+         } */
         public IActionResult Recuperar_password()
         {
             //mandar correo, pero por detras, antes de enviar el correo, el password tuvo que haberse actualizado, despues, se pasa a la vista Cambio_password que llama al metodo cambio_password
             return View();
         }
+        [Authorize]
         public IActionResult Cambio_password()
         {
             return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Cambio_password(string email, string password, string oldpassword, string confirmnewpassword)
+        {
+
+            var model = new LoginModel
+            {
+                Email = email,
+                OldPassword = oldpassword,
+                Password = password,
+                ConfirmPassword = confirmnewpassword
+            };
+           /* if (!ModelState.IsValid)
+            {
+                return View(model);
+            }*/
+            var result = await _service.UpdatePasswordAsync(model);
+            if (result.StatusCode == 1)
+            {   // Crear la conexión a la base de datos
+                using (SqlConnection connection = new SqlConnection(_varConnStr))
+                {
+                    try
+                    {
+                        connection.Open();
+                        using (SqlCommand command_update = new SqlCommand("ChangeIsNew", connection))
+                        {
+                            command_update.CommandType = CommandType.StoredProcedure;
+                            command_update.Parameters.AddWithValue("@email", model.Email);
+                            command_update.Parameters.AddWithValue("@newValue", 0);
+                            command_update.ExecuteNonQuery();
+                            return RedirectToAction("Index", "Main");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error: {ex.Message}");
+                        connection.Close();
+                        return RedirectToAction(nameof(Cambio_password));
+                    }
+                }
+            }
+            else
+            {
+                TempData["msg"] = result.Message;
+                return RedirectToAction(nameof(Cambio_password));
+            }
         }
     }
 }

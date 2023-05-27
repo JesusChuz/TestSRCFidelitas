@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace sistema_reconocimiento.Models
 {
     public class ApplicationUser:IdentityUser
     {
         public string Name { get; set; }
-        public bool IsActive { get; set; }
-
+        public bool IsNew { get; set; }
     }
 }
