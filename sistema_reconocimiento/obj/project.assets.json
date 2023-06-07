@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Andiel\\Documents\\Trabajos_de_la_U\\cuatrimestre#7\\Dise-desarrollo\\Principal-proyecto-Desarrollo\\sistema_reconocimiento\\sistema_reconocimiento.csproj",
+      "projectUniqueName": "C:\\Users\\Andiel\\Documents\\Trabajos_de_la_U\\cuatrimestre#7\\Dise-desarrollo\\Main-Proyecto\\sistema_reconocimiento\\sistema_reconocimiento.csproj",
       "projectName": "sistema_reconocimiento",
-      "projectPath": "C:\\Users\\Andiel\\Documents\\Trabajos_de_la_U\\cuatrimestre#7\\Dise-desarrollo\\Principal-proyecto-Desarrollo\\sistema_reconocimiento\\sistema_reconocimiento.csproj",
+      "projectPath": "C:\\Users\\Andiel\\Documents\\Trabajos_de_la_U\\cuatrimestre#7\\Dise-desarrollo\\Main-Proyecto\\sistema_reconocimiento\\sistema_reconocimiento.csproj",
       "packagesPath": "C:\\Users\\Andiel\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Andiel\\Documents\\Trabajos_de_la_U\\cuatrimestre#7\\Dise-desarrollo\\Principal-proyecto-Desarrollo\\sistema_reconocimiento\\obj\\",
+      "outputPath": "C:\\Users\\Andiel\\Documents\\Trabajos_de_la_U\\cuatrimestre#7\\Dise-desarrollo\\Main-Proyecto\\sistema_reconocimiento\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
