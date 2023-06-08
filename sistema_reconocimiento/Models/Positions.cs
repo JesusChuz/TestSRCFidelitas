@@ -10,7 +10,8 @@ namespace sistema_reconocimiento.Models
 
         [Required]
         public string Position_Name { get; set; }
+
         //public virtual Engineers engineer { get; set; }
-        //public virtual ICollection<Engineers> engineer { get; set; }
+        public virtual ICollection<Engineers> Engineers { get; set; }
     }
 }

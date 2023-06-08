@@ -1,23 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Users\\XPC\\Documents\\Fidelitas\\Cuatrimestre VIII\\DiseñoyDesarrolloSistemas\\Proyectos\\sistema_reconocimiento\\sistema_reconocimiento.csproj": {}
+    "C:\\Users\\Andiel\\Documents\\Trabajos_de_la_U\\cuatrimestre#7\\Dise-desarrollo\\Main-Proyecto\\sistema_reconocimiento\\sistema_reconocimiento.csproj": {}
   },
   "projects": {
-    "E:\\Users\\XPC\\Documents\\Fidelitas\\Cuatrimestre VIII\\DiseñoyDesarrolloSistemas\\Proyectos\\sistema_reconocimiento\\sistema_reconocimiento.csproj": {
+    "C:\\Users\\Andiel\\Documents\\Trabajos_de_la_U\\cuatrimestre#7\\Dise-desarrollo\\Main-Proyecto\\sistema_reconocimiento\\sistema_reconocimiento.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Users\\XPC\\Documents\\Fidelitas\\Cuatrimestre VIII\\DiseñoyDesarrolloSistemas\\Proyectos\\sistema_reconocimiento\\sistema_reconocimiento.csproj",
+        "projectUniqueName": "C:\\Users\\Andiel\\Documents\\Trabajos_de_la_U\\cuatrimestre#7\\Dise-desarrollo\\Main-Proyecto\\sistema_reconocimiento\\sistema_reconocimiento.csproj",
         "projectName": "sistema_reconocimiento",
-        "projectPath": "E:\\Users\\XPC\\Documents\\Fidelitas\\Cuatrimestre VIII\\DiseñoyDesarrolloSistemas\\Proyectos\\sistema_reconocimiento\\sistema_reconocimiento.csproj",
-        "packagesPath": "C:\\Users\\XPC\\.nuget\\packages\\",
-        "outputPath": "E:\\Users\\XPC\\Documents\\Fidelitas\\Cuatrimestre VIII\\DiseñoyDesarrolloSistemas\\Proyectos\\sistema_reconocimiento\\obj\\",
+        "projectPath": "C:\\Users\\Andiel\\Documents\\Trabajos_de_la_U\\cuatrimestre#7\\Dise-desarrollo\\Main-Proyecto\\sistema_reconocimiento\\sistema_reconocimiento.csproj",
+        "packagesPath": "C:\\Users\\Andiel\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Andiel\\Documents\\Trabajos_de_la_U\\cuatrimestre#7\\Dise-desarrollo\\Main-Proyecto\\sistema_reconocimiento\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\XPC\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Andiel\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -25,7 +26,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\sdk\\7.0.302\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -94,7 +95,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
         }
       }
     }

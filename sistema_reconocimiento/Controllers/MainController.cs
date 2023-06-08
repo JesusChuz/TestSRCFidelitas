@@ -19,16 +19,20 @@ using Microsoft.Extensions.Configuration;
 using sistema_reconocimiento.Interface;
 using System.Configuration;
 using Microsoft.AspNetCore.Http;
+using sistema_reconocimiento.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace sistema_reconocimiento.Controllers
 {
     public class MainController : Controller
     {
+        private readonly ApplicationDbContext _context;
         private readonly ILogger<MainController> _logger;
         private readonly IConfiguration _configuration;
         private readonly string _varConnStr;
-        public MainController(ILogger<MainController> logger, IConfiguration configuration)
+        public MainController(ILogger<MainController> logger, IConfiguration configuration, ApplicationDbContext context)
         {
+            _context = context;
             _logger = logger;
             _configuration = configuration;
             _varConnStr = _configuration.GetValue<string>("ConnectionStrings:DBConnectionString");
@@ -116,14 +120,15 @@ namespace sistema_reconocimiento.Controllers
             return RedirectToAction("Login", "Auth");
         }
         [Authorize(Roles = "admin")]
-        public IActionResult Ingenieros(bool result)
+        public async Task<IActionResult> IngenierosAsync(bool result)
         {
             if (result == false)
             {
                 result = validateAccountEnabled(result);
                 if (result == true)
-                {
-                    return View();
+                {   
+                    var applicationDbContext = _context.Engineers.Include(e => e.Manager).Include(e => e.Positions);
+                    return View(await applicationDbContext.ToListAsync());
                 }
                 else
                 {

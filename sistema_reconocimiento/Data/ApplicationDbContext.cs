@@ -12,6 +12,7 @@ namespace sistema_reconocimiento.Data
         {
 
         }
+        public DbSet<sistema_reconocimiento.Models.Engineers>? Engineers { get; set; }
         /*protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

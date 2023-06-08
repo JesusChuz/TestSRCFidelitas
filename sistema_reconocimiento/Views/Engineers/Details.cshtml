@@ -1,0 +1,63 @@
+﻿@model sistema_reconocimiento.Models.Engineers
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Details</title>
+</head>
+<body>
+
+<div>
+    <h4>Engineers</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name_Engineer)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name_Engineer)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.LastName_Engineer)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.LastName_Engineer)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Points)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Points)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Positions)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Positions.Position_Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ApplicationUser)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ApplicationUser.Id)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Manager)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Manager.LastName_Manager)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.ID_Engineer">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
+</body>
+</html>

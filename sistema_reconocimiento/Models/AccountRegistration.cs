@@ -1,10 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace sistema_reconocimiento.Models
 {
     public class AccountRegistration
     {
-        [Required]
+
+     
         public string Name { get; set; }
 
         [Required]
@@ -22,5 +24,7 @@ namespace sistema_reconocimiento.Models
         public string PasswordConfirm { get; set; }
         [Required] 
         public string? Role { get; set; }
+
+       
     }
 }

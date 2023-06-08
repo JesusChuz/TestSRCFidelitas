@@ -163,6 +163,7 @@ namespace sistema_reconocimiento.Controllers
             var result = await _service.RegistrationAsync(model);
             return Ok(result);
         }
+        
         /* public async Task<IActionResult> UpdatePassword()
          {
              var model = new LoginModel
