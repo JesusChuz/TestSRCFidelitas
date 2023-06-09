@@ -154,12 +154,12 @@ namespace sistema_reconocimiento.Controllers
         {
             var model = new AccountRegistration
             {
-                Username = "Jorge",
-                Name = "Jorge Granados",
-                Email = "jorge.granados@gmail.com",
+                Username = "Lupita",
+                Name = "Lupita Mendez",
+                Email = "lupita.mendez@gmail.com",
                 Password = "Admin@12345#"
             };
-            model.Role = "comun";
+            model.Role = "admin";
             var result = await _service.RegistrationAsync(model);
             return Ok(result);
         }

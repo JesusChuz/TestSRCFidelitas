@@ -5,8 +5,9 @@ namespace sistema_reconocimiento.Models
 {
     public class AccountRegistration
     {
-
-     
+        [Required]
+        [Key]
+        public string id { get; set; }
         public string Name { get; set; }
 
         [Required]
@@ -25,6 +26,8 @@ namespace sistema_reconocimiento.Models
         [Required] 
         public string? Role { get; set; }
 
-       
+        //public virtual ICollection<Engineers> Engineers { get; set; }
+
+
     }
 }

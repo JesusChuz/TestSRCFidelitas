@@ -25,13 +25,17 @@ namespace sistema_reconocimiento.Models
         [ForeignKey("ID_Account")]
         public virtual ApplicationUser ApplicationUser { get; set; }
 
+        //public virtual AccountRegistration AccountRegistration { get; set; }
+
         public int ID_Manager { get; set; }
         [ForeignKey("ID_Manager")]
         public virtual Manager Manager { get; set; }
 
-    
+     
 
-        
+
+
+
 
 
     }

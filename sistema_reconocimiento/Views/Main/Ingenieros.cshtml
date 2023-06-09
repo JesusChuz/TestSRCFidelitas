@@ -73,16 +73,16 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                         @{
-                                          int contador = 1; // Variable para el contador
-                                          }
+                                        @{
+                                            int contador = 1; // Variable para el contador      
+                                        }
                             @foreach (var item in Model) {
-                                        <tr>
-                                            <th scope="row">@contador</th>
+                                            <tr>
+                                                <th scope="row">@contador</th>
                                             <td>@Html.DisplayFor(modelItem => item.Name_Engineer)</td>
-                                            <td></td>
+                                            <td>@Html.DisplayFor(modelItem => item.ApplicationUser.Email)</td>
                                             <td>@Html.DisplayFor(modelItem => item.Manager.Name_Manager)  @Html.DisplayFor(modelItem => item.Manager.LastName_Manager)</td>
-                                            <td></td>
+                                            <td>@Html.DisplayFor(modelItem => item.ApplicationUser.Roles)</td>
                                             <td>@Html.DisplayFor(modelItem => item.Positions.Position_Name)</td>
                                             <td>
                                                 <a class="btn btn-danger" asp-controller="Main" asp-action="Editar_ingeniero" asp-route-id="@item.ID_Engineer"><i class="fas fa-pen"></i></a>

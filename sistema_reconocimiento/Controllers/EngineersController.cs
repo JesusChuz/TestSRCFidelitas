@@ -50,9 +50,9 @@ namespace sistema_reconocimiento.Controllers
         // GET: Engineers/Create
         public IActionResult Create()
         {
-            ViewData["ID_Account"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id");
             ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager");
-            ViewData["Position"] = new SelectList(_context.Set<Positions>(), "ID_Position", "Position_Name");
+            ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name");
             return View();
         }
 
@@ -63,15 +63,15 @@ namespace sistema_reconocimiento.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID_Engineer,Name_Engineer,LastName_Engineer,Position,Points,ID_Account,ID_Manager")] Engineers engineers)
         {
-            if (ModelState.IsValid)
-            {
+            //if (ModelState.IsValid)
+            //{
                 _context.Add(engineers);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-            }
-            ViewData["ID_Account"] = new SelectList(_context.Users, "Id", "Id", engineers.ID_Account);
+            //}
+            ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
             ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
-            ViewData["Position"] = new SelectList(_context.Set<Positions>(), "ID_Position", "Position_Name", engineers.Position);
+            ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
             return View(engineers);
         }
 
@@ -88,9 +88,9 @@ namespace sistema_reconocimiento.Controllers
             {
                 return NotFound();
             }
-            ViewData["ID_Account"] = new SelectList(_context.Users, "Id", "Id", engineers.ID_Account);
+            ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
             ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
-            ViewData["Position"] = new SelectList(_context.Set<Positions>(), "ID_Position", "Position_Name", engineers.Position);
+            ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
             return View(engineers);
         }
 
@@ -126,9 +126,9 @@ namespace sistema_reconocimiento.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ID_Account"] = new SelectList(_context.Users, "Id", "Id", engineers.ID_Account);
+            ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
             ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
-            ViewData["Position"] = new SelectList(_context.Set<Positions>(), "ID_Position", "Position_Name", engineers.Position);
+            ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
             return View(engineers);
         }
 

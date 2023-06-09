@@ -21,21 +21,25 @@ using System.Configuration;
 using Microsoft.AspNetCore.Http;
 using sistema_reconocimiento.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace sistema_reconocimiento.Controllers
 {
     public class MainController : Controller
     {
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext _context;
         private readonly ILogger<MainController> _logger;
         private readonly IConfiguration _configuration;
         private readonly string _varConnStr;
-        public MainController(ILogger<MainController> logger, IConfiguration configuration, ApplicationDbContext context)
+        public MainController(ILogger<MainController> logger, IConfiguration configuration, ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _logger = logger;
+            _userManager = userManager;
             _configuration = configuration;
             _varConnStr = _configuration.GetValue<string>("ConnectionStrings:DBConnectionString");
+            _userManager = userManager;
         }
         public bool validateAccountEnabled(bool result)
         {
@@ -126,8 +130,16 @@ namespace sistema_reconocimiento.Controllers
             {
                 result = validateAccountEnabled(result);
                 if (result == true)
-                {   
-                    var applicationDbContext = _context.Engineers.Include(e => e.Manager).Include(e => e.Positions);
+                {
+
+                    var applicationDbContext = _context.Engineers.Include(e => e.ApplicationUser).Include(e => e.Manager).Include(e => e.Positions);
+                    foreach (var engineer in applicationDbContext)
+                    {
+                        var user = await _userManager.FindByIdAsync(engineer.ApplicationUser.Id);
+                        var roles = await _userManager.GetRolesAsync(user);
+                        // Aquí podrías asignar los roles a un nuevo campo en tu modelo, por ejemplo:
+                        engineer.ApplicationUser.Roles = (List<string>)roles;
+                    }
                     return View(await applicationDbContext.ToListAsync());
                 }
                 else
@@ -145,6 +157,9 @@ namespace sistema_reconocimiento.Controllers
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
+                    ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id");
+                    ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager");
+                    ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name");
                     return View();
                 }
                 else
@@ -154,6 +169,21 @@ namespace sistema_reconocimiento.Controllers
             }
             return RedirectToAction("Login", "Auth");
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Agregar_ingeniero([Bind("ID_Engineer,Name_Engineer,LastName_Engineer,Position,Points,ID_Account,ID_Manager")] Engineers engineers)
+        {
+            
+                _context.Add(engineers);
+                await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+
+            ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
+            ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
+            ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
+            return View(engineers);
+        }
+
         [Authorize(Roles = "admin")]
         public IActionResult Editar_ingeniero(bool result)
         {
@@ -363,6 +393,23 @@ namespace sistema_reconocimiento.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+        [Authorize]
+        public IActionResult Metricas(bool result)
+        {
+            if (result == false)
+            {
+                result = validateAccountEnabled(result);
+                if (result == true)
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Login", "Auth");
+                }
+            }
+            return RedirectToAction("Login", "Auth");
         }
     }
 }
