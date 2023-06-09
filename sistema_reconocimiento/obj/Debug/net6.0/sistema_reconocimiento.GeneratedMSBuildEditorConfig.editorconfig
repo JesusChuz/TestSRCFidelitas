@@ -9,121 +9,157 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = sistema_reconocimiento
 build_property.RootNamespace = sistema_reconocimiento
-build_property.ProjectDir = C:\Users\Andiel\Documents\Trabajos_de_la_U\cuatrimestre#7\Dise-desarrollo\Main-Proyecto\sistema_reconocimiento\
+build_property.ProjectDir = E:\Users\XPC\Documents\Fidelitas\Cuatrimestre VIII\DiseñoyDesarrolloSistemas\Workspace\sistema_reconocimiento\
 build_property.RazorLangVersion = 6.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\Andiel\Documents\Trabajos_de_la_U\cuatrimestre#7\Dise-desarrollo\Main-Proyecto\sistema_reconocimiento
+build_property.MSBuildProjectDirectory = E:\Users\XPC\Documents\Fidelitas\Cuatrimestre VIII\DiseñoyDesarrolloSistemas\Workspace\sistema_reconocimiento
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/Users/Andiel/Documents/Trabajos_de_la_U/cuatrimestre\#7/Dise-desarrollo/Main-Proyecto/sistema_reconocimiento/Views/Auth/Cambio_password.cshtml]
+[E:/Users/XPC/Documents/Fidelitas/Cuatrimestre VIII/DiseñoyDesarrolloSistemas/Workspace/sistema_reconocimiento/Areas/Identity/Pages/Account/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxMb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Users/XPC/Documents/Fidelitas/Cuatrimestre VIII/DiseñoyDesarrolloSistemas/Workspace/sistema_reconocimiento/Areas/Identity/Pages/Account/Logout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxMb2dvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Users/XPC/Documents/Fidelitas/Cuatrimestre VIII/DiseñoyDesarrolloSistemas/Workspace/sistema_reconocimiento/Areas/Identity/Pages/Account/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxfVmlld0ltcG9ydHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Users/XPC/Documents/Fidelitas/Cuatrimestre VIII/DiseñoyDesarrolloSistemas/Workspace/sistema_reconocimiento/Areas/Identity/Pages/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZhbGlkYXRpb25TY3JpcHRzUGFydGlhbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Users/XPC/Documents/Fidelitas/Cuatrimestre VIII/DiseñoyDesarrolloSistemas/Workspace/sistema_reconocimiento/Areas/Identity/Pages/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Users/XPC/Documents/Fidelitas/Cuatrimestre VIII/DiseñoyDesarrolloSistemas/Workspace/sistema_reconocimiento/Areas/Identity/Pages/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Users/XPC/Documents/Fidelitas/Cuatrimestre VIII/DiseñoyDesarrolloSistemas/Workspace/sistema_reconocimiento/Views/Auth/Cambio_password.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXV0aFxDYW1iaW9fcGFzc3dvcmQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Andiel/Documents/Trabajos_de_la_U/cuatrimestre\#7/Dise-desarrollo/Main-Proyecto/sistema_reconocimiento/Views/Auth/Login.cshtml]
+[E:/Users/XPC/Documents/Fidelitas/Cuatrimestre VIII/DiseñoyDesarrolloSistemas/Workspace/sistema_reconocimiento/Views/Auth/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXV0aFxMb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Andiel/Documents/Trabajos_de_la_U/cuatrimestre\#7/Dise-desarrollo/Main-Proyecto/sistema_reconocimiento/Views/Auth/Recuperar_password.cshtml]
+[E:/Users/XPC/Documents/Fidelitas/Cuatrimestre VIII/DiseñoyDesarrolloSistemas/Workspace/sistema_reconocimiento/Views/Auth/Recuperar_password.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXV0aFxSZWN1cGVyYXJfcGFzc3dvcmQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Andiel/Documents/Trabajos_de_la_U/cuatrimestre\#7/Dise-desarrollo/Main-Proyecto/sistema_reconocimiento/Views/Main/Agregar_frase.cshtml]
+[E:/Users/XPC/Documents/Fidelitas/Cuatrimestre VIII/DiseñoyDesarrolloSistemas/Workspace/sistema_reconocimiento/Views/Auth/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXV0aFxfVmFsaWRhdGlvblNjcmlwdHNQYXJ0aWFsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Users/XPC/Documents/Fidelitas/Cuatrimestre VIII/DiseñoyDesarrolloSistemas/Workspace/sistema_reconocimiento/Views/Engineers/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5naW5lZXJzXENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Users/XPC/Documents/Fidelitas/Cuatrimestre VIII/DiseñoyDesarrolloSistemas/Workspace/sistema_reconocimiento/Views/Engineers/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5naW5lZXJzXERlbGV0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Users/XPC/Documents/Fidelitas/Cuatrimestre VIII/DiseñoyDesarrolloSistemas/Workspace/sistema_reconocimiento/Views/Engineers/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5naW5lZXJzXERldGFpbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Users/XPC/Documents/Fidelitas/Cuatrimestre VIII/DiseñoyDesarrolloSistemas/Workspace/sistema_reconocimiento/Views/Engineers/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5naW5lZXJzXEVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Users/XPC/Documents/Fidelitas/Cuatrimestre VIII/DiseñoyDesarrolloSistemas/Workspace/sistema_reconocimiento/Views/Engineers/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW5naW5lZXJzXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Users/XPC/Documents/Fidelitas/Cuatrimestre VIII/DiseñoyDesarrolloSistemas/Workspace/sistema_reconocimiento/Views/Main/Agregar_frase.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFpblxBZ3JlZ2FyX2ZyYXNlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Andiel/Documents/Trabajos_de_la_U/cuatrimestre\#7/Dise-desarrollo/Main-Proyecto/sistema_reconocimiento/Views/Main/Agregar_ingeniero.cshtml]
+[E:/Users/XPC/Documents/Fidelitas/Cuatrimestre VIII/DiseñoyDesarrolloSistemas/Workspace/sistema_reconocimiento/Views/Main/Agregar_ingeniero.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFpblxBZ3JlZ2FyX2luZ2VuaWVyby5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Andiel/Documents/Trabajos_de_la_U/cuatrimestre\#7/Dise-desarrollo/Main-Proyecto/sistema_reconocimiento/Views/Main/Agregar_recompensa.cshtml]
+[E:/Users/XPC/Documents/Fidelitas/Cuatrimestre VIII/DiseñoyDesarrolloSistemas/Workspace/sistema_reconocimiento/Views/Main/Agregar_recompensa.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFpblxBZ3JlZ2FyX3JlY29tcGVuc2EuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Andiel/Documents/Trabajos_de_la_U/cuatrimestre\#7/Dise-desarrollo/Main-Proyecto/sistema_reconocimiento/Views/Main/Editar_frase.cshtml]
+[E:/Users/XPC/Documents/Fidelitas/Cuatrimestre VIII/DiseñoyDesarrolloSistemas/Workspace/sistema_reconocimiento/Views/Main/Editar_frase.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFpblxFZGl0YXJfZnJhc2UuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Andiel/Documents/Trabajos_de_la_U/cuatrimestre\#7/Dise-desarrollo/Main-Proyecto/sistema_reconocimiento/Views/Main/Editar_ingeniero.cshtml]
+[E:/Users/XPC/Documents/Fidelitas/Cuatrimestre VIII/DiseñoyDesarrolloSistemas/Workspace/sistema_reconocimiento/Views/Main/Editar_ingeniero.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFpblxFZGl0YXJfaW5nZW5pZXJvLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Andiel/Documents/Trabajos_de_la_U/cuatrimestre\#7/Dise-desarrollo/Main-Proyecto/sistema_reconocimiento/Views/Main/Editar_recompensa.cshtml]
+[E:/Users/XPC/Documents/Fidelitas/Cuatrimestre VIII/DiseñoyDesarrolloSistemas/Workspace/sistema_reconocimiento/Views/Main/Editar_recompensa.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFpblxFZGl0YXJfcmVjb21wZW5zYS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Andiel/Documents/Trabajos_de_la_U/cuatrimestre\#7/Dise-desarrollo/Main-Proyecto/sistema_reconocimiento/Views/Main/Frases.cshtml]
+[E:/Users/XPC/Documents/Fidelitas/Cuatrimestre VIII/DiseñoyDesarrolloSistemas/Workspace/sistema_reconocimiento/Views/Main/Frases.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFpblxGcmFzZXMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Andiel/Documents/Trabajos_de_la_U/cuatrimestre\#7/Dise-desarrollo/Main-Proyecto/sistema_reconocimiento/Views/Main/Index.cshtml]
+[E:/Users/XPC/Documents/Fidelitas/Cuatrimestre VIII/DiseñoyDesarrolloSistemas/Workspace/sistema_reconocimiento/Views/Main/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFpblxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Andiel/Documents/Trabajos_de_la_U/cuatrimestre\#7/Dise-desarrollo/Main-Proyecto/sistema_reconocimiento/Views/Main/Ingenieros.cshtml]
+[E:/Users/XPC/Documents/Fidelitas/Cuatrimestre VIII/DiseñoyDesarrolloSistemas/Workspace/sistema_reconocimiento/Views/Main/Ingenieros.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFpblxJbmdlbmllcm9zLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Andiel/Documents/Trabajos_de_la_U/cuatrimestre\#7/Dise-desarrollo/Main-Proyecto/sistema_reconocimiento/Views/Main/Mis_Reconocimientos.cshtml]
+[E:/Users/XPC/Documents/Fidelitas/Cuatrimestre VIII/DiseñoyDesarrolloSistemas/Workspace/sistema_reconocimiento/Views/Main/Metricas.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFpblxNZXRyaWNhcy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Users/XPC/Documents/Fidelitas/Cuatrimestre VIII/DiseñoyDesarrolloSistemas/Workspace/sistema_reconocimiento/Views/Main/Mis_Reconocimientos.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFpblxNaXNfUmVjb25vY2ltaWVudG9zLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Andiel/Documents/Trabajos_de_la_U/cuatrimestre\#7/Dise-desarrollo/Main-Proyecto/sistema_reconocimiento/Views/Main/Perfil.cshtml]
+[E:/Users/XPC/Documents/Fidelitas/Cuatrimestre VIII/DiseñoyDesarrolloSistemas/Workspace/sistema_reconocimiento/Views/Main/Perfil.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFpblxQZXJmaWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Andiel/Documents/Trabajos_de_la_U/cuatrimestre\#7/Dise-desarrollo/Main-Proyecto/sistema_reconocimiento/Views/Main/Privacy.cshtml]
+[E:/Users/XPC/Documents/Fidelitas/Cuatrimestre VIII/DiseñoyDesarrolloSistemas/Workspace/sistema_reconocimiento/Views/Main/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFpblxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Andiel/Documents/Trabajos_de_la_U/cuatrimestre\#7/Dise-desarrollo/Main-Proyecto/sistema_reconocimiento/Views/Main/Recompensas.cshtml]
+[E:/Users/XPC/Documents/Fidelitas/Cuatrimestre VIII/DiseñoyDesarrolloSistemas/Workspace/sistema_reconocimiento/Views/Main/Recompensas.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFpblxSZWNvbXBlbnNhcy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Andiel/Documents/Trabajos_de_la_U/cuatrimestre\#7/Dise-desarrollo/Main-Proyecto/sistema_reconocimiento/Views/Main/Reconocer.cshtml]
+[E:/Users/XPC/Documents/Fidelitas/Cuatrimestre VIII/DiseñoyDesarrolloSistemas/Workspace/sistema_reconocimiento/Views/Main/Reconocer.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFpblxSZWNvbm9jZXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Andiel/Documents/Trabajos_de_la_U/cuatrimestre\#7/Dise-desarrollo/Main-Proyecto/sistema_reconocimiento/Views/Main/Reconocimientos.cshtml]
+[E:/Users/XPC/Documents/Fidelitas/Cuatrimestre VIII/DiseñoyDesarrolloSistemas/Workspace/sistema_reconocimiento/Views/Main/Reconocimientos.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFpblxSZWNvbm9jaW1pZW50b3MuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Andiel/Documents/Trabajos_de_la_U/cuatrimestre\#7/Dise-desarrollo/Main-Proyecto/sistema_reconocimiento/Views/Shared/Error.cshtml]
+[E:/Users/XPC/Documents/Fidelitas/Cuatrimestre VIII/DiseñoyDesarrolloSistemas/Workspace/sistema_reconocimiento/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Andiel/Documents/Trabajos_de_la_U/cuatrimestre\#7/Dise-desarrollo/Main-Proyecto/sistema_reconocimiento/Views/Shared/_ValidationScriptsPartial.cshtml]
+[E:/Users/XPC/Documents/Fidelitas/Cuatrimestre VIII/DiseñoyDesarrolloSistemas/Workspace/sistema_reconocimiento/Views/Shared/_LoginPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Mb2dpblBhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Users/XPC/Documents/Fidelitas/Cuatrimestre VIII/DiseñoyDesarrolloSistemas/Workspace/sistema_reconocimiento/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Andiel/Documents/Trabajos_de_la_U/cuatrimestre\#7/Dise-desarrollo/Main-Proyecto/sistema_reconocimiento/Views/UC/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVUNcSW5kZXguY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/Andiel/Documents/Trabajos_de_la_U/cuatrimestre\#7/Dise-desarrollo/Main-Proyecto/sistema_reconocimiento/Views/UC/Mis_Reconocimientos.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVUNcTWlzX1JlY29ub2NpbWllbnRvcy5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/Andiel/Documents/Trabajos_de_la_U/cuatrimestre\#7/Dise-desarrollo/Main-Proyecto/sistema_reconocimiento/Views/UC/Perfil.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVUNcUGVyZmlsLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/Andiel/Documents/Trabajos_de_la_U/cuatrimestre\#7/Dise-desarrollo/Main-Proyecto/sistema_reconocimiento/Views/UC/Reconocer.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVUNcUmVjb25vY2VyLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/Andiel/Documents/Trabajos_de_la_U/cuatrimestre\#7/Dise-desarrollo/Main-Proyecto/sistema_reconocimiento/Views/_ViewImports.cshtml]
+[E:/Users/XPC/Documents/Fidelitas/Cuatrimestre VIII/DiseñoyDesarrolloSistemas/Workspace/sistema_reconocimiento/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Andiel/Documents/Trabajos_de_la_U/cuatrimestre\#7/Dise-desarrollo/Main-Proyecto/sistema_reconocimiento/Views/_ViewStart.cshtml]
+[E:/Users/XPC/Documents/Fidelitas/Cuatrimestre VIII/DiseñoyDesarrolloSistemas/Workspace/sistema_reconocimiento/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Andiel/Documents/Trabajos_de_la_U/cuatrimestre\#7/Dise-desarrollo/Main-Proyecto/sistema_reconocimiento/Views/Shared/_Layout.cshtml]
+[E:/Users/XPC/Documents/Fidelitas/Cuatrimestre VIII/DiseñoyDesarrolloSistemas/Workspace/sistema_reconocimiento/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-bq4b8ewyf7
-
-[C:/Users/Andiel/Documents/Trabajos_de_la_U/cuatrimestre\#7/Dise-desarrollo/Main-Proyecto/sistema_reconocimiento/Views/Shared/_LayoutAdmin.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXRBZG1pbi5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = b-fbx2h8jyyu

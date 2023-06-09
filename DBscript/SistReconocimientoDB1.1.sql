@@ -1,90 +1,113 @@
 CREATE DATABASE SIST_RECONOCIMIENTO;
 USE SIST_RECONOCIMIENTO;
 ----------------------------------------------------------
--- Creación de la tabla "Rol"
-CREATE TABLE Rol (
-    ID_Rol INT PRIMARY KEY,
-    Nombre_Rol VARCHAR(50)
-);
-
 -- Creación de la tabla "Posiciones"
-CREATE TABLE Posiciones (
-    ID_Posicion INT PRIMARY KEY,
-    Nombre_Posicion VARCHAR(50)
+CREATE TABLE Positions (
+    ID_Position INT PRIMARY KEY IDENTITY,
+    Position_Name VARCHAR(50)
 );
 
 -- Creación de la tabla "Recompensas"
-CREATE TABLE Recompensas (
-    ID_Recompensa INT PRIMARY KEY,
-    Nombre_Recompensa VARCHAR(100),
-    Descripcion_Recompensa VARCHAR(1000),
-    Precio INTEGER,
-    Imagen VARBINARY(MAX)
+CREATE TABLE Rewards (
+    ID_Reward INT PRIMARY KEY IDENTITY,
+    Reward_Name VARCHAR(100),
+    Reward_Description VARCHAR(1000),
+    Price INTEGER,
+    Picture VARBINARY(MAX),
 );
-
 -- Creación de la tabla "Ingeniero"
-CREATE TABLE Ingeniero (
-    ID_Ingeniero INT PRIMARY KEY,
-    Email VARCHAR(50),
-    Nombre VARCHAR(50),
-    Apellido VARCHAR(50),
-    Rol INT,
-    Posicion INT,
-    Puntos INT,
-    Password VARCHAR(500),
-    FOREIGN KEY (Rol) REFERENCES Rol(ID_Rol),
-    FOREIGN KEY (Posicion) REFERENCES Posiciones(ID_Posicion)
+CREATE TABLE Engineers (
+    ID_Engineer INT PRIMARY KEY IDENTITY,
+    Name_Engineer VARCHAR(50),
+    LastName_Engineer VARCHAR(50),
+    Position INT,
+    Points INT,
+    Picture VARBINARY(MAX),
+	ID_Account NVARCHAR(450),
+    FOREIGN KEY (Position) REFERENCES Positions(ID_Position) ON DELETE NO ACTION ON UPDATE NO ACTION,
+	FOREIGN KEY (ID_Account) REFERENCES AspNetUsers(Id) ON DELETE CASCADE
 );
 
 -- Creación de la tabla "Log_CambioPassword"
-CREATE TABLE Log_CambioPassword (
-    ID_Cambio INT PRIMARY KEY,
-    Razon VARCHAR(50),
-    ID_Ingeniero INT,
-    FechaCambio DATETIME,
-    FOREIGN KEY (ID_Ingeniero) REFERENCES Ingeniero(ID_Ingeniero)
+CREATE TABLE Log_PasswordUpdate (
+    ID_Change INT PRIMARY KEY IDENTITY,
+    Reason VARCHAR(50),
+    ID_Engineer INT,
+    Change_Date DATETIME,
+    FOREIGN KEY (ID_Engineer) REFERENCES Engineers(ID_Engineer) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
 -- Creación de la tabla "Reconocimientos"
-CREATE TABLE Reconocimientos (
-    ID_Reconocimiento INT PRIMARY KEY,
-    Solicitante INT,
-    Ing_Reconocido INT,
-    Estado VARCHAR(50),
-    Numero_Caso VARCHAR(30),
-    Comentario VARCHAR(500),
-	Administrador INT,
-    FOREIGN KEY (Solicitante) REFERENCES Ingeniero(ID_Ingeniero),
-    FOREIGN KEY (Ing_Reconocido) REFERENCES Ingeniero(ID_Ingeniero),
-	FOREIGN KEY (Administrador) REFERENCES Ingeniero(ID_Ingeniero)
+CREATE TABLE Recognitions (
+    ID_Recognition INT PRIMARY KEY IDENTITY,
+    Petitioner_Eng INT,
+    Recognized_Eng INT,
+    Recognition_State VARCHAR(50),
+    Case_Number VARCHAR(30),
+    Comment VARCHAR(500),
+	Evaluator_Admin INT,
+    FOREIGN KEY (Petitioner_Eng) REFERENCES Engineers(ID_Engineer) ON DELETE NO ACTION ON UPDATE NO ACTION,
+    FOREIGN KEY (Recognized_Eng) REFERENCES Engineers(ID_Engineer) ON DELETE NO ACTION ON UPDATE NO ACTION,
+	FOREIGN KEY (Evaluator_Admin) REFERENCES Engineers(ID_Engineer) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
 -- Creación de la tabla "Canjeos"
-CREATE TABLE Canjeos (
-    ID_Canjeo INT PRIMARY KEY,
-    ID_Ingeniero INT,
-    ID_Recompensa INT,
-    PrecioRecompensa INT,
-    FOREIGN KEY (ID_Ingeniero) REFERENCES Ingeniero(ID_Ingeniero),
-    FOREIGN KEY (ID_Recompensa) REFERENCES Recompensas(ID_Recompensa)
+CREATE TABLE Purchases (
+    ID_Purchase INT PRIMARY KEY IDENTITY,
+    Engineer_ID INT,
+    Reward_ID INT,
+    Reward_Price INT,
+    FOREIGN KEY (Engineer_ID) REFERENCES Engineers(ID_Engineer) ON DELETE NO ACTION ON UPDATE NO ACTION,
+    FOREIGN KEY (Reward_ID) REFERENCES Rewards(ID_Reward) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
 -- Creación de la tabla "CSAT"
 CREATE TABLE CSAT (
-    ID_Survey INT PRIMARY KEY,
-    Puntaje INT,
-    Comentarios VARCHAR(500),
-    Email_Ingeniero VARCHAR(50),
+    ID_Survey INT PRIMARY KEY IDENTITY,
+    Score INT,
+    Comments VARCHAR(500),
+    Email_Engineer VARCHAR(50),
     DTC INT,
-	ID_Ingeniero INT,
-	FOREIGN KEY (ID_Ingeniero) REFERENCES Ingeniero(ID_Ingeniero),
+	Engineer_ID INT,
+	FOREIGN KEY (Engineer_ID) REFERENCES Engineers(ID_Engineer) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
 -- Creación de la tabla "Frases"
-CREATE TABLE Frases (
-    ID_Frase INT PRIMARY KEY,
-    Frase VARCHAR(500),
-    ID_Ingeniero INT,
-    FOREIGN KEY (ID_Ingeniero) REFERENCES Ingeniero(ID_Ingeniero)
+CREATE TABLE Phrases (
+    Phrases_ID INT PRIMARY KEY IDENTITY,
+    Phrase VARCHAR(500),
+    Engineer_ID INT,
+    FOREIGN KEY (Engineer_ID) REFERENCES Engineers(ID_Engineer) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
+
+--Stored Procedures
+CREATE PROCEDURE GetLockoutEnabledAndIsNew
+    @Email VARCHAR(50)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT LockoutEnabled, IsNew
+    FROM AspNetUsers
+    WHERE Email = @Email;
+END;
+
+EXEC GetLockoutEnabledAndIsNew @Email = 'john.wick@gmail.com';
+
+DROP PROCEDURE ChangeIsNew
+
+CREATE PROCEDURE ChangeIsNew
+    @email nvarchar(256),
+    @newValue bit
+AS
+BEGIN
+    UPDATE AspNetUsers
+    SET IsNew = @newValue
+    WHERE Email = @email;
+	UPDATE AspNetUsers
+	SET LockoutEnabled = @newValue
+	WHERE Email = @email;
+END
+
+EXEC ChangeIsNew @email = 'jorge.granados@gmail.com', @newValue = 0;
 

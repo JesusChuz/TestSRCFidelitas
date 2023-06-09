@@ -1,6 +1,8 @@
-﻿@{
+﻿@model IEnumerable<sistema_reconocimiento.Models.Engineers>
+
+@{
     ViewData["Title"] = "Ingenieros";
-    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="app-content content">
     <div class="content-wrapper">
@@ -71,45 +73,26 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <th scope="row">1</th>
-                                            <td>Mark Otto</td>
-                                            <td>mark.otto@tek-experts.com</td>
-                                            <td>John Bread</td>
-                                            <td>Administrator</td>
-                                            <td>Support Engineer S2</td>
+                                        @{
+                                            int contador = 1; // Variable para el contador      
+                                        }
+                            @foreach (var item in Model) {
+                                            <tr>
+                                                <th scope="row">@contador</th>
+                                            <td>@Html.DisplayFor(modelItem => item.Name_Engineer)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.ApplicationUser.Email)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.Manager.Name_Manager)  @Html.DisplayFor(modelItem => item.Manager.LastName_Manager)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.ApplicationUser.Roles)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.Positions.Position_Name)</td>
                                             <td>
-                                                <a class="btn btn-danger" asp-controller="Main" asp-action="Editar_ingeniero"><i class="fas fa-pen"></i></a>
+                                                <a class="btn btn-danger" asp-controller="Main" asp-action="Editar_ingeniero" asp-route-id="@item.ID_Engineer"><i class="fas fa-pen"></i></a>
                                                 <a class="btn btn-danger"><i class="fas fa-trash"></i></a>
                                             </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">2</th>
-                                            <td>Jacob Thornton</td>
-                                            <td>jacob.thornton@tek-experts.com</td>
-                                            <td>Dahiana Kramer</td>
-                                            <td>Common User</td>
-                                            <td>Technical Lead</td>
-                                            <td>
-                                                <a class="btn btn-danger" asp-controller="Main" asp-action="Editar_ingeniero"><i class="fas fa-pen"></i></a>
-                                                <a class="btn btn-danger"><i class="fas fa-trash"></i></a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">3</th>
-                                            <td>Larry Wheels</td>
-                                            <td>larry.wheels@tek-experts.com</td>
-                                            <td>John Bread</td>
-                                            <td>Common User</td>
-                                            <td>Duty Manager</td>
-                                            <td>
-                                                <a class="btn btn-danger" asp-controller="Main" asp-action="Editar_ingeniero"><i class="fas fa-pen"></i></a>
-                                                <a class="btn btn-danger"><i class="fas fa-trash"></i></a>
-                                            </td>
-                                        </tr>
+                                            </tr>
+                                            contador++;
+                                        }
                                     </tbody>
                                 </table>
-
                             </div>
                         </div>
                     </div>
