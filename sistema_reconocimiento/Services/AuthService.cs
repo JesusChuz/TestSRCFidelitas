@@ -4,6 +4,17 @@ using NuGet.Protocol.Plugins;
 using sistema_reconocimiento.Interface;
 using sistema_reconocimiento.Models;
 using System.Security.Claims;
+using MimeKit;
+using MailKit.Net.Smtp;
+using MessagePack;
+using static System.Net.Mime.MediaTypeNames;
+using System.Drawing;
+using System.Net.Mail;
+using System.Text;
+using Microsoft.DotNet.Scaffolding.Shared.Messaging;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.Globalization;
+
 //Se programa toda la logica de los metodos que posteriormente se vuelven a llamar en la interface
 namespace sistema_reconocimiento.Services
 {
@@ -75,11 +86,11 @@ namespace sistema_reconocimiento.Services
         public async Task<Status> RegistrationAsync(AccountRegistration model)
         {
             var status = new Status();
-            var userExists = await userManager.FindByNameAsync(model.Username);
+            var userExists = await userManager.FindByEmailAsync(model.Email);
             if (userExists != null)
             {
                 status.StatusCode = 0;
-                status.Message = "User already exists";
+                status.Message = "Account already exists";
                 return status;
             }
 
@@ -89,12 +100,14 @@ namespace sistema_reconocimiento.Services
                 Email = model.Email,
                 UserName = model.Username
             };
+            bool setIsNew = true;
+            user.IsNew = setIsNew;
 
             var result = await userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
             {
                 status.StatusCode = 0;
-                status.Message = "User creation failed";
+                status.Message = "Account creation failed";
                 return status;
             }
             // role management 
@@ -106,7 +119,7 @@ namespace sistema_reconocimiento.Services
                 await userManager.AddToRoleAsync(user, model.Role);
             }
             status.StatusCode = 1;
-            status.Message = "User has been registered successfully!";
+            status.Message = "Account has been registered successfully!";
             return status;
         }
 
@@ -191,6 +204,96 @@ namespace sistema_reconocimiento.Services
             {
                 status.StatusCode = 0;
                 status.Message = "Error on loggin in";
+                return status;
+            }
+        }
+
+        public static string GenerateNewPassword()
+        {
+            Random random = new Random();
+            string characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()";
+            int length = 10;
+            StringBuilder sb = new StringBuilder(length);
+
+            bool hasDigit = false;
+            bool hasUppercase = false;
+            bool hasLowercase = false;
+            bool hasPunctuation = false;
+
+            while (sb.Length < length || !hasDigit || !hasUppercase || !hasLowercase || !hasPunctuation)
+            {
+                int randomIndex = random.Next(characters.Length);
+                char randomChar = characters[randomIndex];
+                sb.Append(randomChar);
+
+                hasDigit = hasDigit || Char.IsDigit(randomChar);
+                hasUppercase = hasUppercase || Char.IsUpper(randomChar);
+                hasLowercase = hasLowercase || Char.IsLower(randomChar);
+                hasPunctuation = hasPunctuation || IsPunctuation(randomChar);
+            }
+            return sb.ToString();   
+        }
+        private static bool IsPunctuation(char c)
+        {
+            return char.IsPunctuation(c) || char.IsSymbol(c);
+        }
+
+        private static string GetHtmlTemplate(string templateFileName)
+        {
+            // Leer el contenido del archivo de plantilla HTML desde el disco o cualquier otra fuente de datos
+            string templatePath = Path.Combine("Views", "MailTemplates", templateFileName);
+            string htmlTemplate = File.ReadAllText(templatePath);
+            return htmlTemplate;
+        }
+        public async Task<Status> SendResetEmail(LoginModel model)
+        {
+            var status = new Status();
+            try {
+                //primero valida si el correo existe
+                var email_notification = new MimeMessage();
+                string email_from = "src.notificaciones@gmail.com";
+                string email_to = model.Email;
+                string newResettedPasword = GenerateNewPassword();
+
+                model.Password = newResettedPasword;
+                var email_check = await userManager.FindByEmailAsync(model.Email);
+                var token = await userManager.GeneratePasswordResetTokenAsync(email_check);
+                var result = await userManager.ResetPasswordAsync(email_check, token, model.Password);
+
+                email_notification.From.Add(MailboxAddress.Parse(email_from));
+                email_notification.To.Add(MailboxAddress.Parse(email_to));
+                email_notification.Subject = "Password reset request";
+
+                // Cargar la plantilla HTML
+                string htmlBody = GetHtmlTemplate("NewPasswordReset.html");
+
+                // Reemplazar los marcadores de posición en la plantilla con los valores específicos
+                htmlBody = htmlBody.Replace("[NewPassword]", newResettedPasword);
+
+                // Crear el contenido HTML del mensaje
+                var body = new TextPart(MimeKit.Text.TextFormat.Html)
+                {
+                    Text = htmlBody
+                };
+
+                // Adjuntar el contenido al mensaje
+                email_notification.Body = body;
+
+                using var smtp = new MailKit.Net.Smtp.SmtpClient();
+                smtp.Connect("smtp.gmail.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
+                smtp.Authenticate(email_from, "wkwablffrzoeigwz");
+                smtp.Send(email_notification);
+                smtp.Disconnect(true);
+
+                status.StatusCode = 1;
+                status.Message = "email sent!";
+
+                return status;        
+            }
+            catch
+            {
+                status.StatusCode = 0;
+                status.Message = "failed to send email, an error happened";
                 return status;
             }
         }

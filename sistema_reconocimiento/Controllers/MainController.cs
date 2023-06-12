@@ -22,6 +22,9 @@ using Microsoft.AspNetCore.Http;
 using sistema_reconocimiento.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.Globalization;
+using Newtonsoft.Json;
 
 namespace sistema_reconocimiento.Controllers
 {
@@ -108,13 +111,14 @@ namespace sistema_reconocimiento.Controllers
             }
         }
         [Authorize]
-        public IActionResult Index(bool result)
+        public async Task<IActionResult> Index(bool result)
         {
             if (result == false) {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
-                    return View();
+                    var applicationDbContext = _context.Rewards.ToListAsync();
+                    return View(await applicationDbContext);
                 }
                 else
                 {
@@ -174,8 +178,8 @@ namespace sistema_reconocimiento.Controllers
         public async Task<IActionResult> Agregar_ingeniero([Bind("ID_Engineer,Name_Engineer,LastName_Engineer,Position,Points,ID_Account,ID_Manager")] Engineers engineers)
         {
             
-                _context.Add(engineers);
-                await _context.SaveChangesAsync();
+            _context.Add(engineers);
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
 
             ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
@@ -219,7 +223,7 @@ namespace sistema_reconocimiento.Controllers
             return RedirectToAction("Login", "Auth");
         }
         [Authorize(Roles = "admin")]
-        public IActionResult Recompensas(bool result)
+        public async Task<IActionResult> Recompensas(bool result)
         {
             if (result == false)
             {
@@ -252,6 +256,53 @@ namespace sistema_reconocimiento.Controllers
             }
             return RedirectToAction("Login", "Auth");
         }
+        [HttpPost]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> Agregar_recompensa(Rewards rewards, FileUpload fileobj)
+        {
+            var status = new Status();
+            if (rewards.Reward_Name != null && rewards.Reward_Description != null && rewards.Price != null && rewards.PictureFile != null)
+            {
+                if (rewards.PictureFile != null && rewards.PictureFile.Length > 0)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        rewards.PictureFile.CopyTo(memoryStream);
+                        rewards.Picture = memoryStream.ToArray();
+                    }
+                    _context.Add(rewards);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Recompensas");
+                }
+                else
+                {
+                    status.Message = "You need to upload an image";
+                    TempData["msg"] = status.Message;
+                    ModelState.SetModelValue("Reward_Name", new ValueProviderResult(rewards.Reward_Name, CultureInfo.InvariantCulture));
+                    ModelState.SetModelValue("Reward_Description", new ValueProviderResult(rewards.Reward_Description, CultureInfo.InvariantCulture));
+                    return View();
+                }
+            }
+            else
+            {
+                status.Message = "Please fill all the necessary information";
+                TempData["msg"] = status.Message;
+                ModelState.SetModelValue("Reward_Name", new ValueProviderResult(rewards.Reward_Name, CultureInfo.InvariantCulture));
+                ModelState.SetModelValue("Reward_Description", new ValueProviderResult(rewards.Reward_Description, CultureInfo.InvariantCulture));
+                //ModelState.SetModelValue("Price", new ValueProviderResult(rewards.Price, CultureInfo.InvariantCulture)); -- tira error porque el tipo de dato es int, si se pasa a string deja de dar error
+                return View();
+            }
+        }
+        public ActionResult ShowPicture(int id)
+        {
+            var reward = _context.Rewards.FirstOrDefault(i => i.ID_Reward == id);
+            if (reward != null)
+            {
+                return File(reward.Picture, "image/png"); // Ajusta el tipo de contenido según el tipo de imagen que estés almacenando
+            }
+            return View();
+        }
+
         [Authorize(Roles = "admin")]
         public IActionResult Editar_recompensa(bool result)
         {

@@ -1170,3 +1170,8 @@ E:\Users\XPC\Documents\Fidelitas\Cuatrimestre VIII\DiseñoyDesarrolloSistemas\Wo
 E:\Users\XPC\Documents\Fidelitas\Cuatrimestre VIII\DiseñoyDesarrolloSistemas\Workspace\sistema_reconocimiento\obj\Debug\net6.0\sistema_reconocimiento.pdb
 E:\Users\XPC\Documents\Fidelitas\Cuatrimestre VIII\DiseñoyDesarrolloSistemas\Workspace\sistema_reconocimiento\obj\Debug\net6.0\sistema_reconocimiento.genruntimeconfig.cache
 E:\Users\XPC\Documents\Fidelitas\Cuatrimestre VIII\DiseñoyDesarrolloSistemas\Workspace\sistema_reconocimiento\obj\Debug\net6.0\ref\sistema_reconocimiento.dll
+E:\Users\XPC\Documents\Fidelitas\Cuatrimestre VIII\DiseñoyDesarrolloSistemas\Workspace\sistema_reconocimiento\bin\Debug\net6.0\BouncyCastle.Cryptography.dll
+E:\Users\XPC\Documents\Fidelitas\Cuatrimestre VIII\DiseñoyDesarrolloSistemas\Workspace\sistema_reconocimiento\bin\Debug\net6.0\MailKit.dll
+E:\Users\XPC\Documents\Fidelitas\Cuatrimestre VIII\DiseñoyDesarrolloSistemas\Workspace\sistema_reconocimiento\bin\Debug\net6.0\MimeKit.dll
+E:\Users\XPC\Documents\Fidelitas\Cuatrimestre VIII\DiseñoyDesarrolloSistemas\Workspace\sistema_reconocimiento\bin\Debug\net6.0\System.Security.Cryptography.Pkcs.dll
+E:\Users\XPC\Documents\Fidelitas\Cuatrimestre VIII\DiseñoyDesarrolloSistemas\Workspace\sistema_reconocimiento\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Security.Cryptography.Pkcs.dll

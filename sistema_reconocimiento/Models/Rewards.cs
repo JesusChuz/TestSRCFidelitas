@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace sistema_reconocimiento.Models
 {
@@ -15,6 +16,8 @@ namespace sistema_reconocimiento.Models
         [Required]
         public int Price { get; set; }
         [Required]
-        public byte[] Picture { get; set; }
+        public byte[]? Picture { get; set; }
+        [NotMapped]
+        public IFormFile PictureFile { get; set; }
     }
 }
