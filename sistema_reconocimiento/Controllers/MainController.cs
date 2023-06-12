@@ -110,13 +110,50 @@ namespace sistema_reconocimiento.Controllers
                 //}
             }
         }
+        public void LoadPoints(Engineers model)
+        {
+            using (SqlConnection connection = new SqlConnection(_varConnStr))
+            {
+                try
+                {
+                    connection.Open();
+                    // Crear el comando y asignar el stored procedure
+                    using (SqlCommand command = new SqlCommand("ShowPoints", connection))
+                    {
+                        // Obtener el objeto de sesión
+                        ISession session = HttpContext.Session;
+                        //Establecer el valor en la sesión
+                        string email = session.GetString("EmailSession");
+                        command.CommandType = CommandType.StoredProcedure;
+                        // Agregar parámetro de entrada
+                        command.Parameters.AddWithValue("@email", email);
+                        // Ejecutar el stored procedure y leer los resultados
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                model.Points = (int)reader["Points"];
+                                ViewBag.GetPoints = model.Points;
+                            }
+                            connection.Close();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: {ex.Message}");
+                    connection.Close();
+                }
+            }
+        }
         [Authorize]
-        public async Task<IActionResult> Index(bool result)
+        public async Task<IActionResult> Index(bool result, Engineers model)
         {
             if (result == false) {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
+                    LoadPoints(model);
                     var applicationDbContext = _context.Rewards.ToListAsync();
                     return View(await applicationDbContext);
                 }
@@ -128,14 +165,14 @@ namespace sistema_reconocimiento.Controllers
             return RedirectToAction("Login", "Auth");
         }
         [Authorize(Roles = "admin")]
-        public async Task<IActionResult> IngenierosAsync(bool result)
+        public async Task<IActionResult> IngenierosAsync(bool result, Engineers model)
         {
             if (result == false)
             {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
-
+                    LoadPoints(model);
                     var applicationDbContext = _context.Engineers.Include(e => e.ApplicationUser).Include(e => e.Manager).Include(e => e.Positions);
                     foreach (var engineer in applicationDbContext)
                     {
@@ -154,13 +191,14 @@ namespace sistema_reconocimiento.Controllers
             return RedirectToAction("Login", "Auth");
         }
         [Authorize(Roles = "admin")]
-        public IActionResult Agregar_ingeniero(bool result)
+        public IActionResult Agregar_ingeniero(bool result, Engineers model)
         {
             if (result == false)
             {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
+                    LoadPoints(model);
                     ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id");
                     ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager");
                     ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name");
@@ -189,13 +227,14 @@ namespace sistema_reconocimiento.Controllers
         }
 
         [Authorize(Roles = "admin")]
-        public IActionResult Editar_ingeniero(bool result)
+        public IActionResult Editar_ingeniero(bool result, Engineers model)
         {
             if (result == false)
             {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
+                    LoadPoints(model);
                     return View();
                 }
                 else
@@ -206,13 +245,14 @@ namespace sistema_reconocimiento.Controllers
             return RedirectToAction("Login", "Auth");
         }
         [Authorize(Roles = "admin")]
-        public IActionResult Reconocimientos(bool result)
+        public IActionResult Reconocimientos(bool result, Engineers model)
         {
             if (result == false)
             {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
+                    LoadPoints(model);
                     return View();
                 }
                 else
@@ -223,13 +263,14 @@ namespace sistema_reconocimiento.Controllers
             return RedirectToAction("Login", "Auth");
         }
         [Authorize(Roles = "admin")]
-        public async Task<IActionResult> Recompensas(bool result)
+        public async Task<IActionResult> Recompensas(bool result, Engineers model)
         {
             if (result == false)
             {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
+                    LoadPoints(model);
                     return View();
                 }
                 else
@@ -240,13 +281,14 @@ namespace sistema_reconocimiento.Controllers
             return RedirectToAction("Login", "Auth");
         }
         [Authorize(Roles = "admin")]
-        public IActionResult Agregar_recompensa(bool result)
+        public IActionResult Agregar_recompensa(bool result, Engineers model)
         {
             if (result == false)
             {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
+                    LoadPoints(model);
                     return View();
                 }
                 else
@@ -304,13 +346,14 @@ namespace sistema_reconocimiento.Controllers
         }
 
         [Authorize(Roles = "admin")]
-        public IActionResult Editar_recompensa(bool result)
+        public IActionResult Editar_recompensa(bool result, Engineers model)
         {
             if (result == false)
             {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
+                    LoadPoints(model);
                     return View();
                 }
                 else
@@ -321,13 +364,14 @@ namespace sistema_reconocimiento.Controllers
             return RedirectToAction("Login", "Auth");
         }
         [Authorize(Roles = "admin")]
-        public IActionResult Frases(bool result)
+        public IActionResult Frases(bool result, Engineers model)
         {
             if (result == false)
             {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
+                    LoadPoints(model);
                     return View();
                 }
                 else
@@ -338,13 +382,14 @@ namespace sistema_reconocimiento.Controllers
             return RedirectToAction("Login", "Auth");
         }
         [Authorize(Roles = "admin")]
-        public IActionResult Agregar_frase(bool result)
+        public IActionResult Agregar_frase(bool result, Engineers model)
         {
             if (result == false)
             {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
+                    LoadPoints(model);
                     return View();
                 }
                 else
@@ -355,13 +400,14 @@ namespace sistema_reconocimiento.Controllers
             return RedirectToAction("Login", "Auth");
         }
         [Authorize(Roles = "admin")]
-        public IActionResult Editar_frase(bool result)
+        public IActionResult Editar_frase(bool result, Engineers model)
         {
             if (result == false)
             {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
+                    LoadPoints(model);
                     return View();
                 }
                 else
@@ -372,13 +418,14 @@ namespace sistema_reconocimiento.Controllers
             return RedirectToAction("Login", "Auth");
         }
         [Authorize]
-        public IActionResult Mis_Reconocimientos(bool result)
+        public IActionResult Mis_Reconocimientos(bool result, Engineers model)
         {
             if (result == false)
             {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
+                    LoadPoints(model);
                     return View();
                 }
                 else
@@ -389,13 +436,14 @@ namespace sistema_reconocimiento.Controllers
             return RedirectToAction("Login", "Auth");
         }
         [Authorize]
-        public IActionResult Perfil(bool result)
+        public IActionResult Perfil(bool result, Engineers model)
         {
             if (result == false)
             {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
+                    LoadPoints(model);
                     return View();
                 }
                 else
@@ -406,13 +454,14 @@ namespace sistema_reconocimiento.Controllers
             return RedirectToAction("Login", "Auth");
         }
         [Authorize]
-        public IActionResult Reconocer(bool result)
+        public IActionResult Reconocer(bool result, Engineers model)
         {
             if (result == false)
             {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
+                    LoadPoints(model);
                     return View();
                 }
                 else
@@ -423,13 +472,14 @@ namespace sistema_reconocimiento.Controllers
             return RedirectToAction("Login", "Auth");
         }
         [Authorize]
-        public IActionResult Privacy(bool result)
+        public IActionResult Privacy(bool result, Engineers model)
         {
             if (result == false)
             {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
+                    LoadPoints(model);
                     return View();
                 }
                 else
@@ -446,13 +496,14 @@ namespace sistema_reconocimiento.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
         [Authorize]
-        public IActionResult Metricas(bool result)
+        public IActionResult Metricas(bool result, Engineers model)
         {
             if (result == false)
             {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
+                    LoadPoints(model);
                     return View();
                 }
                 else
