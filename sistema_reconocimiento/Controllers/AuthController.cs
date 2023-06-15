@@ -285,7 +285,7 @@ namespace sistema_reconocimiento.Controllers
                         {
                             Console.WriteLine($"Error: {ex.Message}");
                             connection.Close();
-                            status.Message = "An unhandled error has happened: " + ex.Message;
+                            status.Message = "An unhandled error happened: " + ex.Message;
                             TempData["msg"] = status.Message;
                             return View();
                         }

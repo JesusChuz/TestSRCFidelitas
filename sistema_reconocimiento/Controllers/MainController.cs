@@ -30,13 +30,15 @@ namespace sistema_reconocimiento.Controllers
 {
     public class MainController : Controller
     {
+        private readonly INotificationEmailService _service;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext _context;
         private readonly ILogger<MainController> _logger;
         private readonly IConfiguration _configuration;
         private readonly string _varConnStr;
-        public MainController(ILogger<MainController> logger, IConfiguration configuration, ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public MainController(INotificationEmailService service, ILogger<MainController> logger, IConfiguration configuration, ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
+            this._service = service;
             _context = context;
             _logger = logger;
             _userManager = userManager;
@@ -146,6 +148,48 @@ namespace sistema_reconocimiento.Controllers
                 }
             }
         }
+        public void LoadIdEngineer(Engineers model)
+        {
+            using (SqlConnection connection = new SqlConnection(_varConnStr))
+            {
+                try
+                {
+                    connection.Open();
+                    // Crear el comando y asignar el stored procedure
+                    using (SqlCommand command = new SqlCommand("ShowIdEngineer", connection))
+                    {
+                        // Obtener el objeto de sesión
+                        ISession session = HttpContext.Session;
+                        //Establecer el valor en la sesión
+                        string email = session.GetString("EmailSession");
+                        command.CommandType = CommandType.StoredProcedure;
+                        // Agregar parámetro de entrada
+                        command.Parameters.AddWithValue("@email", email);
+                        // Ejecutar el stored procedure y leer los resultados
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                model.ID_Engineer = (int)reader["ID_Engineer"];
+                                ViewBag.GetIdEngineer = model.ID_Engineer;
+                            }
+                            connection.Close();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: {ex.Message}");
+                    connection.Close();
+                }
+            }
+        }
+        public async Task<List<Rewards>> LoadRewards()
+        {
+            List<Rewards> rewards = await _context.Rewards.ToListAsync();
+
+            return rewards;
+        }
         [Authorize]
         public async Task<IActionResult> Index(bool result, Engineers model)
         {
@@ -154,8 +198,19 @@ namespace sistema_reconocimiento.Controllers
                 if (result == true)
                 {
                     LoadPoints(model);
-                    var applicationDbContext = _context.Rewards.ToListAsync();
-                    return View(await applicationDbContext);
+                    LoadIdEngineer(model);
+                    var applicationDbContext = _context.Rewards;
+                    var viewModel = new SubmitPurchaseViewModel
+                    {
+                        Purchases = new Purchases(),
+                        Rewards = await LoadRewards()
+                    };
+                   
+                   // var applicationDbContext = _context.Purchases.Include(e => e.Rewards);
+
+                    //return View(await applicationDbContext.ToListAsync());
+                    return View(viewModel);
+
                 }
                 else
                 {
@@ -512,6 +567,64 @@ namespace sistema_reconocimiento.Controllers
                 }
             }
             return RedirectToAction("Login", "Auth");
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Canjear_Recompensa(Purchases purchases, Engineers engineers)
+        {
+            var status = new Status();
+            var login = new LoginModel();
+            var reward = new Rewards();
+            var manager = new Manager();
+            LoadPoints(engineers);
+            int newPoints = engineers.Points - purchases.Reward_Price;
+            _context.Add(purchases);
+            var result = await _context.SaveChangesAsync();
+            if (result == 1)
+            {
+                using (SqlConnection connection = new SqlConnection(_varConnStr))
+                {
+                    try
+                    {
+                        connection.Open();
+                        using (SqlCommand command_update = new SqlCommand("UpdatePoints", connection))
+                        {
+                            command_update.CommandType = CommandType.StoredProcedure;
+                            command_update.Parameters.AddWithValue("@Engineer_ID", purchases.Engineer_ID);
+                            command_update.Parameters.AddWithValue("@newPoints", newPoints);
+                            command_update.ExecuteNonQuery();
+                            connection.Close();
+                            var resultNotification = await _service.SendNewPurchaseEmail(login, manager, engineers, reward, purchases);
+                            if (resultNotification.StatusCode == 1)
+                            {
+                                status.StatusCode = 1;
+                                status.Message = "Your purchase has been successful";
+                                TempData["msg"] = status.Message;
+                                return RedirectToAction("Index", "Main");
+                            }
+                            else
+                            {
+                                TempData["msg"] = resultNotification.Message;
+                                return RedirectToAction("Index", "Main");
+                            }        
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error: {ex.Message}");
+                        connection.Close();
+                        status.Message = "An unhandled error happened: " + ex.Message;
+                        TempData["msg"] = status.Message;
+                        return View();
+                    }
+                }
+            }
+            else
+            {
+                status.Message = "The purchase failed";
+                TempData["msg"] = status.Message;
+                return RedirectToAction("Index", "Main");
+            }
         }
     }
 }

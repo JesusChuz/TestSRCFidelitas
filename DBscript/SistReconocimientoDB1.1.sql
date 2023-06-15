@@ -111,3 +111,54 @@ END
 
 EXEC ChangeIsNew @email = 'jorge.granados@gmail.com', @newValue = 0;
 
+CREATE PROCEDURE ShowPoints
+    @email nvarchar(256)
+AS
+BEGIN
+	SELECT e.Points
+	FROM Engineers e, AspNetUsers u
+	WHERE u.Email = @email AND e.ID_Account = u.Id;
+END
+
+drop procedure ShowPoints
+SELECT e.Points
+FROM Engineers e, AspNetUsers u
+WHERE u.Email = 'JOEL.JIMENEZ@GMAIL.COM' AND e.ID_Account = u.Id;
+
+EXEC ShowPoints @email='MELANY.QUESADA@GMAIL.COM';
+
+CREATE PROCEDURE ShowIdEngineer
+    @email nvarchar(256)
+AS
+BEGIN
+	SELECT e.ID_Engineer
+	FROM Engineers e, AspNetUsers u
+	WHERE u.Email = @email AND e.ID_Account = u.Id;
+END
+
+EXEC ShowIdEngineer @email='J.MENDEZQUESADA18@GMAIL.COM';
+
+CREATE PROCEDURE UpdatePoints
+    @Engineer_ID int,
+    @newPoints int
+AS
+BEGIN
+    UPDATE Engineers
+    SET Points = @newPoints
+    WHERE ID_Engineer = @Engineer_ID;
+END
+
+EXEC UpdatePoints @Engineer_ID = 10, @newPoints = 10000;
+
+CREATE PROCEDURE SelectMyManager
+    @ID_Engineer int,
+	@Reward_ID int,
+	@ID_Purchase int
+AS
+BEGIN
+	SELECT DISTINCT m.Email, m.Name_Manager, u.Email as EmailE, e.Name_Engineer, CONVERT(VARCHAR(255),e.Points) AS Points, r.Reward_Name, CONVERT(VARCHAR(255),r.Price) AS Price
+	FROM Manager m, Engineers e, AspNetUsers u, Rewards r, Purchases p
+	WHERE m.ID_Manager = e.ID_Manager AND e.ID_Engineer = @ID_Engineer AND u.Id = e.ID_Account AND r.ID_Reward = @Reward_ID AND p.ID_Purchase = @ID_Purchase;
+END
+
+EXEC SelectMyManager @ID_Engineer = 10, @Reward_ID = 4, @ID_Purchase = 6

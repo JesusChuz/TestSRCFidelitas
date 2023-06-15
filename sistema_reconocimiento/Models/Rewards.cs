@@ -19,5 +19,7 @@ namespace sistema_reconocimiento.Models
         public byte[]? Picture { get; set; }
         [NotMapped]
         public IFormFile PictureFile { get; set; }
+
+        public virtual ICollection<Purchases> Purchases { get; set; }
     }
 }

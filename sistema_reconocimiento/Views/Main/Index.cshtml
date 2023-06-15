@@ -1,8 +1,11 @@
-﻿@model IEnumerable<sistema_reconocimiento.Models.Rewards>
+﻿@model sistema_reconocimiento.Models.SubmitPurchaseViewModel
+
 @{
 
     ViewData["Title"] = "Principal";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    int points = ViewBag.GetPoints;
+    int ID_Engineer = ViewBag.GetIdEngineer;
 }
 
 <!-------------rest of the page ------------->
@@ -138,13 +141,14 @@
             </br>
         </div>
         <div class="row mb-5">
-           @foreach (var item in Model) {
+             @foreach (var item in Model.Rewards)
+            {
             <div class="col-md-6 col-xl-4">
                 <div class="card mb-3">
-                <img class="card-img-top" src="@Url.Action("ShowPicture", "Main", new { id = item.ID_Reward })" width="350" height="450" />
+                            <img class="card-img-top" src="@Url.Action("ShowPicture", "Main", new { id = item.ID_Reward })" width="350" height="450" />
                 <div class="card-body">
                     <h5 class="card-title">
-                      @Html.DisplayFor(modelItem => item.Reward_Name)
+                       @Html.DisplayFor(modelItem => item.Reward_Name)
                     </h5>
                     <p class="card-text">
                       @Html.DisplayFor(modelItem => item.Reward_Description)
@@ -156,10 +160,24 @@
                         <circle cx="25" cy="25" r="20" fill="#79d4f7" />
                         <text x="50%" y="60%" text-anchor="middle" fill="white" font-size="16px">@Html.DisplayFor(modelItem => item.Price)</text>
                     </svg>
-                    <div class="navbar-nav align-items-center">
+                    <!-- <div class="navbar-nav align-items-center">
                         <a class="btn btn-danger" href="">Canjear puntos</a>
-                    </div>
-                </div>
+                    </div> -->
+                        @using (Html.BeginForm("Canjear_Recompensa", "Main", FormMethod.Post, new { @class = "submit-purchase", role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="mb-3">
+                                        <input asp-for="Purchases.Engineer_ID" class="form-control disabled" value="@ID_Engineer" />
+                                        <input asp-for="Purchases.Reward_ID" class="form-control txtID_Reward disabled" value="@item.ID_Reward" />
+                                        <input asp-for="Purchases.Reward_Price" class="form-control txtPrice disabled" value="@item.Price" />
+                                        <input asp-for="Purchases.Points" class="form-control txtPoints disabled" value="@points" />
+                            </div>
+                            <div class="navbar-nav align-items-center">
+                                <button type="submit" class="btn btn-danger"> Buy </button>
+                            </div>
+                        }
+                     </div>
                 </div>
             </div>
             }
@@ -169,3 +187,40 @@
 </div>
 </div>
 <!-------------rest of the page ------------->
+<script src="~/theme-assets/vendors/libs/jquery/jquery.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.submit-purchase').click(function (e) {
+            e.preventDefault(); // Evita que el formulario se envíe automáticamente
+
+            var form = $(this).closest('form');
+            let points = parseInt(form.find('.txtPoints').val());
+            let price = parseInt(form.find('.txtPrice').val());
+
+            if (!isNaN(points) && !isNaN(price) && points >= price) {
+                Swal.fire({
+                    title: 'Are you sure that you want to buy this reward?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#79d4f7',
+                    cancelButtonColor: 'red',
+                    confirmButtonText: 'Yes, get this reward',
+                    cancelButtonText: 'No, cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit(); // Envía el formulario más cercano al botón clickeado
+                    }
+                });
+            } else {
+                Swal.fire({
+                    title: 'Insufficient funds',
+                    text: 'You do not have enough money to purchase this reward.',
+                    icon: 'info',
+                    confirmButtonColor: '#79d4f7',
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
+    });
+</script>
+

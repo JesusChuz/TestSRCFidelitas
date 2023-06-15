@@ -27,6 +27,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 builder.Services.ConfigureApplicationCookie(op => op.LoginPath = "/Auth/Login");
 
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<INotificationEmailService, NotificationEmailService>();
 builder.Services.AddDistributedMemoryCache();  // Opcional: Configurar un proveedor de caché distribuida
 builder.Services.AddSession(options =>
 {
