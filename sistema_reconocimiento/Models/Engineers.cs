@@ -31,5 +31,15 @@ namespace sistema_reconocimiento.Models
         [ForeignKey("ID_Manager")]
         public virtual Manager Manager { get; set; }
 
+<<<<<<< HEAD
+=======
+     
+
+
+
+
+
+
+>>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
     }
 }

@@ -111,6 +111,7 @@ END
 
 EXEC ChangeIsNew @email = 'jorge.granados@gmail.com', @newValue = 0;
 
+<<<<<<< HEAD
 CREATE PROCEDURE ShowPoints
     @email nvarchar(256)
 AS
@@ -162,3 +163,5 @@ BEGIN
 END
 
 EXEC SelectMyManager @ID_Engineer = 10, @Reward_ID = 4, @ID_Purchase = 6
+=======
+>>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
