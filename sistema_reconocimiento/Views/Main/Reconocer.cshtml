@@ -1,56 +1,55 @@
-﻿@{
+﻿@model sistema_reconocimiento.Models.SubmitRecognitionViewModel
+
+@{
     ViewData["Title"] = "Reconocer";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    int ID_Engineer = ViewBag.GetIdEngineer;
 }
 <div class="app-content content">
     <div class="card-body">
         <div class="col-md-6" style="float:none;margin:auto;">
             <div class="card mb-2">
                 <div class="card-header d-flex justify-content-between align-items-center navbar-nav align-items-center">
-                    <h5>Complete la siguiente información</h5>
+                    <h5>Complete the following information</h5>
                 </div>
                 <div class="card-body">
-                    <form>
+                    @using (Html.BeginForm("Agregar_Reconocimiento", "Main", FormMethod.Post, new { @class = "submit-recognition", role = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                         <div class="mb-3">
-                            <label class="form-label" for="basic-icon-default-name">Número de caso</label>
+                            <label class="form-label" for="basic-icon-default-name">Case number</label>
                             <div class="input-group input-group-merge">
                                 <span id="basic-icon-default-name" class="input-group-text">
                                     <i class="fas fa-ticket"></i>
                                 </span>
-                                <input type="text"
-                                       class="form-control"
-                                       id="basic-icon-default-name"
-                                       placeholder="20023412220044" />
+                                <input asp-for="Recognitions.Case_Number" type="text" class="form-control" placeholder="20023412220044" />
                             </div>
                         </div>
                         <div class="mb-3">
                             <div class="input-group">
                                 <label class="input-group-text" for="inputGroupSelect01">
-                                    ¿A quién quieres reconocer?
+                                    Who would you like to recognize?
                                     <i class="bx bx-buildings"></i>
                                 </label>
-                                <select class="form-select" id="inputGroupSelect01">
-                                    <option selected>Seleccionar...</option>
-                                    <option value="1">Luis Pereira</option>
-                                    <option value="2">Manuel Rodriguez</option>
-                                    <option value="3">Todd Biston</option>
-                                    <option value="4">Natalie Murphy</option>
-                                    <option value="5">Ana Ruiz</option>
-                                </select>
+                                <select asp-for="Recognitions.Recognized_Eng" class="form-select" asp-items="ViewBag.ID_EngineerToRecognize"></select>
+                                <input asp-for="Recognitions.Petitioner_Eng" class="form-control hidden disabled" value="@ID_Engineer" />
+                                <input asp-for="Recognitions.Recognition_State" class="form-control txtPoints hidden disabled" value="Pending" />
+                                <input asp-for="Recognitions.Evaluator_Admin" class="form-control txtPoints hidden disabled" value="10" />
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" for="basic-icon-default-email">Comentarios</label>
+                            <label class="form-label" for="basic-icon-default-email">Comments</label>
                             <div class="input-group input-group-merge">
                                 <span class="input-group-text"><i class="fas fa-heart"></i></span>
-                                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                <input asp-for="Recognitions.Comment" class="form-control" rows="3" />
                             </div>
                         </div>
-                        </br>
+                        <br/>
                         <div class="navbar-nav align-items-center">
-                            <button type="submit" class="btn btn-primary">Enviar Reconocimiento</button>
+                            <button type="submit" class="btn btn-primary">Submit Recognition</button>
                         </div>
-                    </form>
+                     }
                 </div>
             </div>
         </div>

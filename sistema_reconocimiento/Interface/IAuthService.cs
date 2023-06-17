@@ -8,9 +8,6 @@ namespace sistema_reconocimiento.Interface
         Task<Status> RegistrationAsync(AccountRegistration model);
         Task LogoutAsync();
         Task<Status> UpdatePasswordAsync(LoginModel model);
-<<<<<<< HEAD
         Task<Status> SendResetEmail(LoginModel model);
-=======
->>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
     }
 }

@@ -4,7 +4,6 @@ using NuGet.Protocol.Plugins;
 using sistema_reconocimiento.Interface;
 using sistema_reconocimiento.Models;
 using System.Security.Claims;
-<<<<<<< HEAD
 using MimeKit;
 using MailKit.Net.Smtp;
 using MessagePack;
@@ -16,8 +15,6 @@ using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Globalization;
 
-=======
->>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
 //Se programa toda la logica de los metodos que posteriormente se vuelven a llamar en la interface
 namespace sistema_reconocimiento.Services
 {
@@ -89,19 +86,11 @@ namespace sistema_reconocimiento.Services
         public async Task<Status> RegistrationAsync(AccountRegistration model)
         {
             var status = new Status();
-<<<<<<< HEAD
             var userExists = await userManager.FindByEmailAsync(model.Email);
             if (userExists != null)
             {
                 status.StatusCode = 0;
                 status.Message = "Account already exists";
-=======
-            var userExists = await userManager.FindByNameAsync(model.Username);
-            if (userExists != null)
-            {
-                status.StatusCode = 0;
-                status.Message = "User already exists";
->>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
                 return status;
             }
 
@@ -111,21 +100,14 @@ namespace sistema_reconocimiento.Services
                 Email = model.Email,
                 UserName = model.Username
             };
-<<<<<<< HEAD
             bool setIsNew = true;
             user.IsNew = setIsNew;
-=======
->>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
 
             var result = await userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
             {
                 status.StatusCode = 0;
-<<<<<<< HEAD
                 status.Message = "Account creation failed";
-=======
-                status.Message = "User creation failed";
->>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
                 return status;
             }
             // role management 
@@ -137,11 +119,7 @@ namespace sistema_reconocimiento.Services
                 await userManager.AddToRoleAsync(user, model.Role);
             }
             status.StatusCode = 1;
-<<<<<<< HEAD
             status.Message = "Account has been registered successfully!";
-=======
-            status.Message = "User has been registered successfully!";
->>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
             return status;
         }
 
@@ -229,7 +207,6 @@ namespace sistema_reconocimiento.Services
                 return status;
             }
         }
-<<<<<<< HEAD
 
         public static string GenerateNewPassword()
         {
@@ -320,7 +297,5 @@ namespace sistema_reconocimiento.Services
                 return status;
             }
         }
-=======
->>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
     }
 }

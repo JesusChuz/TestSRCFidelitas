@@ -16,17 +16,17 @@ CREATE TABLE Rewards (
     Picture VARBINARY(MAX),
 );
 -- Creación de la tabla "Ingeniero"
-CREATE TABLE Engineers (
-    ID_Engineer INT PRIMARY KEY IDENTITY,
-    Name_Engineer VARCHAR(50),
-    LastName_Engineer VARCHAR(50),
-    Position INT,
-    Points INT,
-    Picture VARBINARY(MAX),
-	ID_Account NVARCHAR(450),
-    FOREIGN KEY (Position) REFERENCES Positions(ID_Position) ON DELETE NO ACTION ON UPDATE NO ACTION,
-	FOREIGN KEY (ID_Account) REFERENCES AspNetUsers(Id) ON DELETE CASCADE
-);
+	CREATE TABLE Engineers (
+		ID_Engineer INT PRIMARY KEY IDENTITY,
+		Name_Engineer VARCHAR(50),
+		LastName_Engineer VARCHAR(50),
+		Position INT,
+		Points INT,
+		Picture VARBINARY(MAX),
+		ID_Account NVARCHAR(450),
+		FOREIGN KEY (Position) REFERENCES Positions(ID_Position) ON DELETE NO ACTION ON UPDATE NO ACTION,
+		FOREIGN KEY (ID_Account) REFERENCES AspNetUsers(Id) ON DELETE CASCADE
+	);
 
 -- Creación de la tabla "Log_CambioPassword"
 CREATE TABLE Log_PasswordUpdate (
@@ -111,7 +111,6 @@ END
 
 EXEC ChangeIsNew @email = 'jorge.granados@gmail.com', @newValue = 0;
 
-<<<<<<< HEAD
 CREATE PROCEDURE ShowPoints
     @email nvarchar(256)
 AS
@@ -163,5 +162,41 @@ BEGIN
 END
 
 EXEC SelectMyManager @ID_Engineer = 10, @Reward_ID = 4, @ID_Purchase = 6
-=======
->>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
+
+CREATE PROCEDURE GetEngineerEmail
+    @ID_Engineer int
+AS
+BEGIN
+	SELECT u.Email, CONCAT(e.Name_Engineer,' ',e.LastName_Engineer) as FullName
+	FROM AspNetUsers u, Engineers e
+	WHERE e.ID_Engineer = @ID_Engineer AND e.ID_Account = u.Id;
+END
+
+EXEC GetEngineerEmail @ID_Engineer = 10
+
+CREATE PROCEDURE SelectManagerforRecognition
+    @ID_Engineer int,
+	@ID_Recognition int
+AS
+BEGIN
+	SELECT DISTINCT m.Email, m.Name_Manager, u.Email as EmailE, e.Name_Engineer, CONVERT(VARCHAR(255),r.ID_Recognition) AS ID_Recognition, r.Case_Number, r.Comment
+	FROM Manager m, Engineers e, AspNetUsers u, Recognitions r
+	WHERE m.ID_Manager = e.ID_Manager AND e.ID_Engineer = @ID_Engineer AND u.Id = e.ID_Account AND r.ID_Recognition = @ID_Recognition;
+END
+
+EXEC SelectManagerforRecognition @ID_Engineer = 8, @ID_Recognition = 2
+
+
+CREATE PROCEDURE UpdateRecognitionState
+    @ID_Recognition int,
+    @newState varchar(500)
+AS
+BEGIN
+    UPDATE Recognitions
+    SET Recognition_State = @newState
+    WHERE ID_Recognition = @ID_Recognition;
+END
+
+EXEC UpdateRecognitionState @ID_Recognition = 11, @newState = Pending;
+
+	

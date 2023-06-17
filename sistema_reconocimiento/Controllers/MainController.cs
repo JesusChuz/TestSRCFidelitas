@@ -22,34 +22,23 @@ using Microsoft.AspNetCore.Http;
 using sistema_reconocimiento.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
-<<<<<<< HEAD
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Globalization;
 using Newtonsoft.Json;
-=======
->>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
 
 namespace sistema_reconocimiento.Controllers
 {
     public class MainController : Controller
     {
-<<<<<<< HEAD
         private readonly INotificationEmailService _service;
-=======
->>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext _context;
         private readonly ILogger<MainController> _logger;
         private readonly IConfiguration _configuration;
         private readonly string _varConnStr;
-<<<<<<< HEAD
         public MainController(INotificationEmailService service, ILogger<MainController> logger, IConfiguration configuration, ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             this._service = service;
-=======
-        public MainController(ILogger<MainController> logger, IConfiguration configuration, ApplicationDbContext context, UserManager<ApplicationUser> userManager)
-        {
->>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
             _context = context;
             _logger = logger;
             _userManager = userManager;
@@ -123,7 +112,6 @@ namespace sistema_reconocimiento.Controllers
                 //}
             }
         }
-<<<<<<< HEAD
         public void LoadPoints(Engineers model)
         {
             using (SqlConnection connection = new SqlConnection(_varConnStr))
@@ -148,6 +136,40 @@ namespace sistema_reconocimiento.Controllers
                             {
                                 model.Points = (int)reader["Points"];
                                 ViewBag.GetPoints = model.Points;
+                            }
+                            connection.Close();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: {ex.Message}");
+                    connection.Close();
+                }
+            }
+        }
+        public void LoadRecognizedPoints(Engineers model, SubmitStateRecognition recognitions)
+        {
+            using (SqlConnection connection = new SqlConnection(_varConnStr))
+            {
+                try
+                {
+                    connection.Open();
+                    // Crear el comando y asignar el stored procedure
+                    using (SqlCommand command = new SqlCommand("ShowPoints", connection))
+                    {
+                        //Establecer el valor en la sesión
+                        string email = recognitions.RecognitionsPOST.Recognized_EngEmail;
+                        command.CommandType = CommandType.StoredProcedure;
+                        // Agregar parámetro de entrada
+                        command.Parameters.AddWithValue("@email", email);
+                        // Ejecutar el stored procedure y leer los resultados
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                model.Points = (int)reader["Points"];
+                                ViewBag.GetPointsRecognized = model.Points;
                             }
                             connection.Close();
                         }
@@ -204,16 +226,11 @@ namespace sistema_reconocimiento.Controllers
         }
         [Authorize]
         public async Task<IActionResult> Index(bool result, Engineers model)
-=======
-        [Authorize]
-        public IActionResult Index(bool result)
->>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
         {
             if (result == false) {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
-<<<<<<< HEAD
                     LoadPoints(model);
                     LoadIdEngineer(model);
                     var applicationDbContext = _context.Rewards;
@@ -228,9 +245,6 @@ namespace sistema_reconocimiento.Controllers
                     //return View(await applicationDbContext.ToListAsync());
                     return View(viewModel);
 
-=======
-                    return View();
->>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
                 }
                 else
                 {
@@ -240,22 +254,14 @@ namespace sistema_reconocimiento.Controllers
             return RedirectToAction("Login", "Auth");
         }
         [Authorize(Roles = "admin")]
-<<<<<<< HEAD
         public async Task<IActionResult> IngenierosAsync(bool result, Engineers model)
-=======
-        public async Task<IActionResult> IngenierosAsync(bool result)
->>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
         {
             if (result == false)
             {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
-<<<<<<< HEAD
                     LoadPoints(model);
-=======
-
->>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
                     var applicationDbContext = _context.Engineers.Include(e => e.ApplicationUser).Include(e => e.Manager).Include(e => e.Positions);
                     foreach (var engineer in applicationDbContext)
                     {
@@ -274,21 +280,14 @@ namespace sistema_reconocimiento.Controllers
             return RedirectToAction("Login", "Auth");
         }
         [Authorize(Roles = "admin")]
-<<<<<<< HEAD
         public IActionResult Agregar_ingeniero(bool result, Engineers model)
-=======
-        public IActionResult Agregar_ingeniero(bool result)
->>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
         {
             if (result == false)
             {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
-<<<<<<< HEAD
                     LoadPoints(model);
-=======
->>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
                     ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id");
                     ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager");
                     ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name");
@@ -306,13 +305,8 @@ namespace sistema_reconocimiento.Controllers
         public async Task<IActionResult> Agregar_ingeniero([Bind("ID_Engineer,Name_Engineer,LastName_Engineer,Position,Points,ID_Account,ID_Manager")] Engineers engineers)
         {
             
-<<<<<<< HEAD
             _context.Add(engineers);
             await _context.SaveChangesAsync();
-=======
-                _context.Add(engineers);
-                await _context.SaveChangesAsync();
->>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
             return RedirectToAction(nameof(Index));
 
             ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
@@ -322,21 +316,14 @@ namespace sistema_reconocimiento.Controllers
         }
 
         [Authorize(Roles = "admin")]
-<<<<<<< HEAD
         public IActionResult Editar_ingeniero(bool result, Engineers model)
-=======
-        public IActionResult Editar_ingeniero(bool result)
->>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
         {
             if (result == false)
             {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
-<<<<<<< HEAD
                     LoadPoints(model);
-=======
->>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
                     return View();
                 }
                 else
@@ -345,18 +332,47 @@ namespace sistema_reconocimiento.Controllers
                 }
             }
             return RedirectToAction("Login", "Auth");
-<<<<<<< HEAD
+        }
+        public async Task<List<Recognitions>> LoadRecognitionsPending(String recognitionState)
+        {
+            List<Recognitions> recognitions = await _context.Recognitions
+                .Include(e => e.PetitionerEngineer)
+                .Include(e => e.RecognizedEngineer)
+                .Where(e => e.Recognition_State == recognitionState)
+                .ToListAsync();
+
+            return recognitions;
+        }
+        public async Task<List<Recognitions>> LoadRecognitionsAR(String recognitionState)
+        {
+            List<Recognitions> recognitions = await _context.Recognitions
+                .Include(e => e.PetitionerEngineer)
+                .Include(e => e.RecognizedEngineer)
+                .Where(e => e.Recognition_State != recognitionState)
+                .ToListAsync();
+
+            return recognitions;
         }
         [Authorize(Roles = "admin")]
-        public IActionResult Reconocimientos(bool result, Engineers model)
+        public async Task<IActionResult> Reconocimientos(bool result, Engineers modelE, SubmitStateRecognition model, int? page)
         {
             if (result == false)
             {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
-                    LoadPoints(model);
-                    return View();
+                    LoadPoints(modelE);
+                    LoadIdEngineer(modelE);
+                    // LoadRecognizedPoints(modelE, model);
+                    int pageSize = 10; // Número de elementos por página
+                    int pageNumber = page ?? 1; // Número de página actual
+                    var viewModel = new SubmitStateRecognition
+                    {
+                        RecognitionsPOST = new Recognitions(),
+                        RecognitionsP = await LoadRecognitionsPending("Pending"),
+                        RecognitionsAR = await LoadRecognitionsAR("Pending")
+                    };
+                    return View(viewModel);
                 }
                 else
                 {
@@ -364,6 +380,142 @@ namespace sistema_reconocimiento.Controllers
                 }
             }
             return RedirectToAction("Login", "Auth");
+        }
+        [HttpPost]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> Aprobar_Reconocimiento(bool result, Engineers engineers, SubmitStateRecognition strecognitions)
+        {
+            var status = new Status();
+            var login = new LoginModel();
+            var manager = new Manager();
+            using (SqlConnection connection = new SqlConnection(_varConnStr))
+            {
+                try
+                {
+                    connection.Open();
+                    using (SqlCommand command_update = new SqlCommand("UpdateRecognitionState", connection))
+                    {
+                        command_update.CommandType = CommandType.StoredProcedure;
+                        command_update.Parameters.AddWithValue("@ID_Recognition", strecognitions.RecognitionsPOST.ID_Recognition);
+                        command_update.Parameters.AddWithValue("@newState", "Approved");
+                        command_update.ExecuteNonQuery();
+                        strecognitions.RecognitionsPOST.Recognition_State = "Approved";
+                        var resultNotification = await _service.SendStateRecognition(login, engineers, strecognitions, manager);
+                        if (resultNotification.StatusCode == 1)
+                        {
+                            if (resultNotification.StatusCode == 1)
+                            {
+                                LoadRecognizedPoints(engineers, strecognitions);
+                                status.StatusCode = 1;
+                                int newPoints = engineers.Points + 100;
+                                using (SqlCommand points_update = new SqlCommand("UpdatePoints", connection))
+                                {
+                                    points_update.CommandType = CommandType.StoredProcedure;
+                                    points_update.Parameters.AddWithValue("@Engineer_ID", strecognitions.RecognitionsPOST.ID_EngineerRec);
+                                    points_update.Parameters.AddWithValue("@newPoints", newPoints);
+                                    points_update.ExecuteNonQuery();
+                                    connection.Close();
+                                }
+                                status.Message = "The recognition has been approved";
+                                
+                                return RedirectToAction("Reconocimientos", "Main");
+                            }
+                            else
+                            {
+                                TempData["msg"] = resultNotification.Message;
+                                return RedirectToAction("Index", "Main");
+                            }
+                        }
+                        else
+                        {
+                            TempData["msg"] = resultNotification.Message;
+                            return RedirectToAction("Index", "Main");
+                        }
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: {ex.Message}");
+                    connection.Close();
+                    status.Message = "An unhandled error happened: " + ex.Message;
+                    TempData["msg"] = status.Message;
+                    return RedirectToAction("Reconocimientos", "Main");
+                }
+            }
+        }
+        [HttpPost]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> Rechazar_Reconocimiento(bool result, Engineers engineers, SubmitStateRecognition strecognitions)
+        {
+            var status = new Status();
+            var login = new LoginModel();
+            var manager = new Manager();
+            using (SqlConnection connection = new SqlConnection(_varConnStr))
+            {
+                try
+                {
+                    connection.Open();
+                    using (SqlCommand command_update = new SqlCommand("UpdateRecognitionState", connection))
+                    {
+                        command_update.CommandType = CommandType.StoredProcedure;
+                        command_update.Parameters.AddWithValue("@ID_Recognition", strecognitions.RecognitionsPOST.ID_Recognition);
+                        command_update.Parameters.AddWithValue("@newState", "Rejected");
+                        command_update.ExecuteNonQuery();
+                        connection.Close();
+                        strecognitions.RecognitionsPOST.Recognition_State = "Rejected";
+                        var resultNotification = await _service.SendStateRecognition(login, engineers, strecognitions, manager);
+                        if (resultNotification.StatusCode == 1)
+                        {
+
+                            if (resultNotification.StatusCode == 1)
+                            {
+                                status.StatusCode = 1;
+                                status.Message = "The recognition has been rejected";
+                                return RedirectToAction("Reconocimientos", "Main");
+                            }
+                            else
+                            {
+                                TempData["msg"] = resultNotification.Message;
+                                return RedirectToAction("Index", "Main");
+                            }
+                        }
+                        else
+                        {
+                            TempData["msg"] = resultNotification.Message;
+                            return RedirectToAction("Index", "Main");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: {ex.Message}");
+                    connection.Close();
+                    status.Message = "An unhandled error happened: " + ex.Message;
+                    TempData["msg"] = status.Message;
+                    return View();
+                }
+            }
+        }
+        [HttpPost]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> Eliminar_Reconocimiento(SubmitStateRecognition strecognitions)
+        {
+            var status = new Status();
+            var login = new LoginModel();
+            var manager = new Manager();
+            if (_context.Recognitions == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.Recognitions'  is null.");
+            }
+            var recognitions = await _context.Recognitions.FindAsync(strecognitions.RecognitionsPOST.ID_Recognition);
+            if (recognitions != null)
+            {
+                _context.Recognitions.Remove(recognitions);
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Reconocimientos));
         }
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> Recompensas(bool result, Engineers model)
@@ -403,7 +555,7 @@ namespace sistema_reconocimiento.Controllers
         }
         [HttpPost]
         [Authorize(Roles = "admin")]
-        public async Task<IActionResult> Agregar_recompensa(Rewards rewards, FileUpload fileobj)
+        public async Task<IActionResult> Agregar_recompensa(Rewards rewards)
         {
             var status = new Status();
             if (rewards.Reward_Name != null && rewards.Reward_Description != null && rewards.Price != null && rewards.PictureFile != null)
@@ -450,21 +602,13 @@ namespace sistema_reconocimiento.Controllers
 
         [Authorize(Roles = "admin")]
         public IActionResult Editar_recompensa(bool result, Engineers model)
-=======
-        }
-        [Authorize(Roles = "admin")]
-        public IActionResult Reconocimientos(bool result)
->>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
         {
             if (result == false)
             {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
-<<<<<<< HEAD
                     LoadPoints(model);
-=======
->>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
                     return View();
                 }
                 else
@@ -475,21 +619,14 @@ namespace sistema_reconocimiento.Controllers
             return RedirectToAction("Login", "Auth");
         }
         [Authorize(Roles = "admin")]
-<<<<<<< HEAD
         public IActionResult Frases(bool result, Engineers model)
-=======
-        public IActionResult Recompensas(bool result)
->>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
         {
             if (result == false)
             {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
-<<<<<<< HEAD
                     LoadPoints(model);
-=======
->>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
                     return View();
                 }
                 else
@@ -500,21 +637,14 @@ namespace sistema_reconocimiento.Controllers
             return RedirectToAction("Login", "Auth");
         }
         [Authorize(Roles = "admin")]
-<<<<<<< HEAD
         public IActionResult Agregar_frase(bool result, Engineers model)
-=======
-        public IActionResult Agregar_recompensa(bool result)
->>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
         {
             if (result == false)
             {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
-<<<<<<< HEAD
                     LoadPoints(model);
-=======
->>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
                     return View();
                 }
                 else
@@ -525,21 +655,14 @@ namespace sistema_reconocimiento.Controllers
             return RedirectToAction("Login", "Auth");
         }
         [Authorize(Roles = "admin")]
-<<<<<<< HEAD
         public IActionResult Editar_frase(bool result, Engineers model)
-=======
-        public IActionResult Editar_recompensa(bool result)
->>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
         {
             if (result == false)
             {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
-<<<<<<< HEAD
                     LoadPoints(model);
-=======
->>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
                     return View();
                 }
                 else
@@ -549,23 +672,15 @@ namespace sistema_reconocimiento.Controllers
             }
             return RedirectToAction("Login", "Auth");
         }
-<<<<<<< HEAD
         [Authorize]
         public IActionResult Mis_Reconocimientos(bool result, Engineers model)
-=======
-        [Authorize(Roles = "admin")]
-        public IActionResult Frases(bool result)
->>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
         {
             if (result == false)
             {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
-<<<<<<< HEAD
                     LoadPoints(model);
-=======
->>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
                     return View();
                 }
                 else
@@ -575,23 +690,15 @@ namespace sistema_reconocimiento.Controllers
             }
             return RedirectToAction("Login", "Auth");
         }
-<<<<<<< HEAD
         [Authorize]
         public IActionResult Perfil(bool result, Engineers model)
-=======
-        [Authorize(Roles = "admin")]
-        public IActionResult Agregar_frase(bool result)
->>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
         {
             if (result == false)
             {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
-<<<<<<< HEAD
                     LoadPoints(model);
-=======
->>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
                     return View();
                 }
                 else
@@ -601,23 +708,27 @@ namespace sistema_reconocimiento.Controllers
             }
             return RedirectToAction("Login", "Auth");
         }
-<<<<<<< HEAD
         [Authorize]
         public IActionResult Reconocer(bool result, Engineers model)
-=======
-        [Authorize(Roles = "admin")]
-        public IActionResult Editar_frase(bool result)
->>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
         {
             if (result == false)
             {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
-<<<<<<< HEAD
                     LoadPoints(model);
-=======
->>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
+                    LoadIdEngineer(model);
+                    var engineers = _context.Engineers
+                    .Select(e => new
+                    {
+                        ID_Engineer = e.ID_Engineer,
+                        FullName = e.Name_Engineer + " " + e.LastName_Engineer
+                    })
+                    .ToList();
+
+                    ViewData["ID_EngineerToRecognize"] = new SelectList(engineers, "ID_Engineer", "FullName");
+
+                   // ViewData["ID_EngineerToRecognize"] = new SelectList(_context.Engineers, "ID_Engineer", "Name_Engineer");
                     return View();
                 }
                 else
@@ -627,73 +738,36 @@ namespace sistema_reconocimiento.Controllers
             }
             return RedirectToAction("Login", "Auth");
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Agregar_Reconocimiento(bool result, Engineers engineers, Recognitions recognitions)
+        {
+            var status = new Status();
+            var login = new LoginModel();
+            var manager = new Manager();
+            _context.Add(recognitions);
+            await _context.SaveChangesAsync();
+            var resultNotification = await _service.SendNewRecognition(login, engineers, recognitions, manager);
+            if (resultNotification.StatusCode == 1)
+            {
+                status.StatusCode = 1;
+                return RedirectToAction("Mis_Reconocimientos", "Main");
+            }
+            else
+            {
+                TempData["msg"] = resultNotification.Message;
+                return RedirectToAction("Index", "Main");
+            }
+        }
         [Authorize]
-<<<<<<< HEAD
         public IActionResult Privacy(bool result, Engineers model)
-=======
-        public IActionResult Mis_Reconocimientos(bool result)
->>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
         {
             if (result == false)
             {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
-<<<<<<< HEAD
                     LoadPoints(model);
-=======
-                    return View();
-                }
-                else
-                {
-                    return RedirectToAction("Login", "Auth");
-                }
-            }
-            return RedirectToAction("Login", "Auth");
-        }
-        [Authorize]
-        public IActionResult Perfil(bool result)
-        {
-            if (result == false)
-            {
-                result = validateAccountEnabled(result);
-                if (result == true)
-                {
-                    return View();
-                }
-                else
-                {
-                    return RedirectToAction("Login", "Auth");
-                }
-            }
-            return RedirectToAction("Login", "Auth");
-        }
-        [Authorize]
-        public IActionResult Reconocer(bool result)
-        {
-            if (result == false)
-            {
-                result = validateAccountEnabled(result);
-                if (result == true)
-                {
-                    return View();
-                }
-                else
-                {
-                    return RedirectToAction("Login", "Auth");
-                }
-            }
-            return RedirectToAction("Login", "Auth");
-        }
-        [Authorize]
-        public IActionResult Privacy(bool result)
-        {
-            if (result == false)
-            {
-                result = validateAccountEnabled(result);
-                if (result == true)
-                {
->>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
                     return View();
                 }
                 else
@@ -710,21 +784,14 @@ namespace sistema_reconocimiento.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
         [Authorize]
-<<<<<<< HEAD
         public IActionResult Metricas(bool result, Engineers model)
-=======
-        public IActionResult Metricas(bool result)
->>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
         {
             if (result == false)
             {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
-<<<<<<< HEAD
                     LoadPoints(model);
-=======
->>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
                     return View();
                 }
                 else
@@ -734,7 +801,6 @@ namespace sistema_reconocimiento.Controllers
             }
             return RedirectToAction("Login", "Auth");
         }
-<<<<<<< HEAD
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Canjear_Recompensa(Purchases purchases, Engineers engineers)
@@ -793,7 +859,5 @@ namespace sistema_reconocimiento.Controllers
                 return RedirectToAction("Index", "Main");
             }
         }
-=======
->>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
     }
 }

@@ -9,37 +9,35 @@ namespace sistema_reconocimiento.Models
         [Key]
         [Required]
         public int ID_Engineer { get; set; }
-      
         public string Name_Engineer { get; set; }
    
         public string LastName_Engineer { get; set; }
         //public int Position_ID { get; set; } //charge in the company: manager, TL, SME, etc...
-      
-        public int Position { get; set; }
-       
+
         public int Points { get; set; }
+
+        public int Position { get; set; }
         [ForeignKey("Position")]
         public virtual Positions Positions { get; set; }
         //public byte[] Picture { get; set; }
+
         public String ID_Account { get; set; }
         [ForeignKey("ID_Account")]
         public virtual ApplicationUser ApplicationUser { get; set; }
-
         //public virtual AccountRegistration AccountRegistration { get; set; }
 
         public int ID_Manager { get; set; }
         [ForeignKey("ID_Manager")]
         public virtual Manager Manager { get; set; }
+        [NotMapped]
+        public virtual ICollection<Recognitions> PetitionerRecognitions { get; set; }
+        [NotMapped]
+        public virtual ICollection<Recognitions> RecognizedRecognitions { get; set; }
+        [NotMapped]
+        public virtual ICollection<Recognitions> Evaluator_Admin { get; set; }
 
-<<<<<<< HEAD
-=======
-     
+        [NotMapped]
+        public string Email { get; set; }
 
-
-
-
-
-
->>>>>>> 5214b57e3f10b832105456c72dacff5b1de60d2b
     }
 }
