@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "BV/BDr72eGyIBLTtLnysVbGOFVITw5dZalzMDBU2fvek0zW7MRZ0883NrrZgpP0cYfJmm71UYGrh9lzew6ZMLQ==",
+  "dgSpecHash": "xPKTzAh1D3R4+negBBsodpstvybsMdSLBJF6rktCdBorOJU5QPPkggRYK2FnjeYSE0WheCSvjL7a42wDP/VJPg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Andiel\\Documents\\Trabajos_de_la_U\\cuatrimestre#7\\Dise-desarrollo\\Main-Proyecto\\sistema_reconocimiento\\sistema_reconocimiento.csproj",
+  "projectFilePath": "C:\\Users\\Andiel\\Documents\\Trabajos_de_la_U\\cuatrimestre#7\\Dise-desarrollo\\Jorge-Rama\\sistema_reconocimiento\\sistema_reconocimiento.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Andiel\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\Andiel\\.nuget\\packages\\messagepack\\2.1.152\\messagepack.2.1.152.nupkg.sha512",
