@@ -1,0 +1,73 @@
+﻿@model IEnumerable<sistema_reconocimiento.Models.Engineers>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name_Engineer)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName_Engineer)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Points)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Positions)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ApplicationUser)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Manager)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name_Engineer)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName_Engineer)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Points)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Positions.Position_Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ApplicationUser.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Manager.LastName_Manager)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ID_Engineer">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ID_Engineer">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ID_Engineer">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+</body>
+</html>

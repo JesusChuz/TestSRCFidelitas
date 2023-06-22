@@ -1,13 +1,17 @@
-﻿@{
+﻿@model sistema_reconocimiento.Models.SubmitStateRecognition
+@{
     ViewData["Title"] = "Reconocimientos";
-    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var pointsR = ViewBag.GetPointsRecognized;
+    int ID_Engineer = ViewBag.GetIdEngineer;
 }
 <div class="app-content content">
     <div class="content-wrapper">
         <div class="content-wrapper-before"></div>
         <div class="content-header row">
             <div class="content-header-left col-md-4 col-12 mb-2">
-                <h3 class="content-header-title">Reconocimientos</h3>
+                <h3 class="content-header-title">Recognitions</h3>
             </div>
             <div class="content-header-right col-md-8 col-12">
                 <div class="breadcrumbs-top float-md-right">
@@ -17,7 +21,7 @@
                                 <a href="index.html">Principal</a>
                             </li>
                             <li class="breadcrumb-item active">
-                                Reconocimientos
+                                Recognitions
                             </li>
                         </ol>
                     </div>
@@ -26,12 +30,13 @@
         </div>
         <div class="content-body">
             <!-- Table reconocimientos pendings -->
+
             <div class="row">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
                             <div class="navbar-nav align-items-center">
-                                <h3 class="content-header-right">Reconocimientos pendientes de revisión</h3>
+                                <h3 class="content-header-right">Pending Recognitions</h3>
                             </div>
                             <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
                             <div class="heading-elements">
@@ -44,7 +49,8 @@
                                                 <input type="text"
                                                        class="form-control border-0 shadow-none"
                                                        placeholder="Buscar"
-                                                       aria-label="Buscar" />
+                                                       aria-label="Buscar" 
+                                                       id="searchInputP" />
                                             </div>
                                         </div>
                                         <!-- /Search -->
@@ -59,73 +65,87 @@
                             <div class="card-body">
                             </div>
                             <div class="table-responsive">
-                                <table class="table">
+                                <table class="table" id="myTableP">
                                     <thead class="thead-default">
                                         <tr>
-                                            <th scope="col">Número de Reconocimiento</th>
-                                            <th scope="col">Número de Caso</th>
-                                            <th scope="col">Solicitante</th>
-                                            <th scope="col">Ingeniero reconocido</th>
-                                            <th scope="col">Estado</th>
-                                            <th scope="col">Comentarios</th>
+                                            <th scope="col">ID Recognition</th>
+                                            <th scope="col">Case number</th>
+                                            <th scope="col">Petitioner Engineer</th>
+                                            <th scope="col">Recognized Engineer</th>
+                                            <th scope="col">State</th>
+                                            <th scope="col">Comments</th>
                                             <th scope="col">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>004</td>
-                                            <td>212343436008</t>
-                                            <td>Juan</td>
-                                            <td>Andres</td>
-                                            <td>Pending</td>
-                                            <td>Me ayudo mucho y logramos resolver el problema</td>
-                                            <td>
-                                                <a class="btn btn-danger" href=""><i class="fas fa-check"></i></a>
-                                                <a class="btn btn-danger" href=""><i class="fas fa-cancel"></i></a>
-                                                <a class="btn btn-danger" href=""><i class="fas fa-trash"></i></a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>005</td>
-                                            <td>2123434360223</td>
-                                            <td>Pedro</td>
-                                            <td>Pablo</td>
-                                            <td>Pending</td>
-                                            <td>Thanks to him, we were able to move forward with the case</td>
-                                            <td>
-                                                <a class="btn btn-danger" href=""><i class="fas fa-check"></i></a>
-                                                <a class="btn btn-danger" href=""><i class="fas fa-cancel"></i></a>
-                                                <a class="btn btn-danger" href=""><i class="fas fa-trash"></i></a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>006</td>
-                                            <td>212343436008</td>
-                                            <td>Diana</td>
-                                            <td>Todd</td>
-                                            <td>Pending</td>
-                                            <td>Todd me ayudo aclarando muchas dudas que tenia con el caso y gracias a el obtuvimos una buena reseña por parte del cliente</td>
-                                            <td>
-                                                <a class="btn btn-danger" href=""><i class="fas fa-check"></i></a>
-                                                <a class="btn btn-danger" href=""><i class="fas fa-cancel"></i></a>
-                                                <a class="btn btn-danger" href=""><i class="fas fa-trash"></i></a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                    </tbody>
+                                        @foreach (var item in Model.RecognitionsP)
+                                        {
+                                            <tr>
+                                                <td>@Html.DisplayFor(modelItem => item.ID_Recognition)</td>
+                                                <td>@Html.DisplayFor(modelItem => item.Case_Number)</td>
+                                                <td>@Html.DisplayFor(modelItem => item.PetitionerEngineer.Name_Engineer)  @Html.DisplayFor(modelItem => item.PetitionerEngineer.LastName_Engineer)</td>
+                                                <td>@Html.DisplayFor(modelItem => item.RecognizedEngineer.Name_Engineer)  @Html.DisplayFor(modelItem => item.RecognizedEngineer.LastName_Engineer)</td>
+                                                <td>@Html.DisplayFor(modelItem => item.Recognition_State)</td>
+                                                <td>@Html.DisplayFor(modelItem => item.Comment)</td>
+                                                <td>
+                                                    @using (Html.BeginForm("Aprobar_Reconocimiento", "Main", FormMethod.Post, new { @class = "submit-approval", role = "form" }))
+                                                    {
+                                                        @Html.AntiForgeryToken()
+                                                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                                        <input asp-for="RecognitionsPOST.ID_Recognition" class="form-control hidden disabled" value="@item.ID_Recognition" />
+                                                        <input asp-for="RecognitionsPOST.Petitioner_Eng" class="form-control hidden disabled" value="@item.Petitioner_Eng" />
+                                                        <input asp-for="RecognitionsPOST.Recognized_Eng" class="form-control hidden disabled" value="@item.Recognized_Eng" />
+                                                        <input asp-for="RecognitionsPOST.ID_EngineerRec" class="form-control hidden disabled" value="@item.Recognized_Eng" />
+                                                        <input asp-for="RecognitionsPOST.Points_EngineerRec" class="form-control hidden disabled" value="@pointsR" />
+                                                        <div class="navbar-nav align-items-center">
+                                                            <button type="submit" class="btn btn-danger"><i class="fas fa-check"></i></button>
+                                                        </div>
+                                                    }
+                                                    @using (Html.BeginForm("Rechazar_Reconocimiento", "Main", FormMethod.Post, new { @class = "submit-rejection", role = "form" }))
+                                                    {
+                                                        @Html.AntiForgeryToken()
+                                                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                                        <input asp-for="RecognitionsPOST.ID_Recognition" class="form-control hidden disabled" value="@item.ID_Recognition" />
+                                                        <input asp-for="RecognitionsPOST.Petitioner_Eng" class="form-control hidden disabled" value="@item.Petitioner_Eng" />
+                                                        <input asp-for="RecognitionsPOST.Recognized_Eng" class="form-control hidden disabled" value="@item.Recognized_Eng" />
+                                                        <div class="navbar-nav align-items-center">
+                                                            <button type="submit" class="btn btn-danger"><i class="fas fa-cancel"></i></button>
+                                                        </div>
+                                                    }
+@*                                                    <a class="btn btn-danger" href=""><i class="fas fa-check"></i></a>
+                                                    <a class="btn btn-danger" href=""><i class="fas fa-cancel"></i></a>
+                                                    <a class="btn btn-danger" href=""><i class="fas fa-trash"></i></a>*@
+                                                </td>
+                                            </tr>
+                                        }
                                 </table>
-                            </div>
+                        </div>
+                        </div>
+                        <div id="paginationP" class="pagination-container navbar-nav align-items-center">
+                            <ul class="pagination">
+                                <li class="page-item prev-page"><a class="btn btn-danger" href="#">Previous</a></li>
+                                <li class="page-item">
+                                    @*<span class="page-link">*@
+                                        <svg width="40" height="40">
+                                            <circle cx="20" cy="20" r="15" fill="#79d4f7" />
+                                            <text class="current-page" x="50%" y="55%" text-anchor="middle" fill="white" font-size="12px">1</text>
+                                        </svg>
+                                    @*</span>*@
+                                </li>
+                                <li class="page-item next-page"><a class="btn btn-danger" href="#">Next</a></li>
+                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
+
             <!-- Table Historial de reconocimientos -->
             <div class="row">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
                             <div class="navbar-nav align-items-center">
-                                <h3 class="content-header-left">Historial Reconocimientos</h3>
+                                <h3 class="content-header-left">Recognitions History</h3>
                             </div>
                             <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
                             <div class="heading-elements">
@@ -138,7 +158,8 @@
                                                 <input type="text"
                                                        class="form-control border-0 shadow-none"
                                                        placeholder="Buscar"
-                                                       aria-label="Buscar" />
+                                                       aria-label="Buscar"
+                                                       id="searchInputAR" />
                                             </div>
                                         </div>
                                         <!-- /Search -->
@@ -153,53 +174,228 @@
                             <div class="card-body">
                             </div>
                             <div class="table-responsive text-nowrap">
-                                <table class="table">
-                                    <thead class="thead-default text-nowrap">
+                                <table class="table" id="myTableAR">
+                                    <thead class="thead-default">
                                         <tr>
-                                            <th scope="col">Número de Reconocimiento</th>
-                                            <th scope="col">Número de Caso</th>
-                                            <th scope="col">Solicitante</th>
-                                            <th scope="col">Ingeniero reconocido</th>
-                                            <th scope="col">Estado</th>
-                                            <th scope="col">Comentarios</th>
-                                            <th scope="col">Acciones</th>
+                                            <th scope="col">ID Recognition</th>
+                                            <th scope="col">Case number</th>
+                                            <th scope="col">Petitioner Engineer</th>
+                                            <th scope="col">Recognized Engineer</th>
+                                            <th scope="col">State</th>
+                                            <th scope="col">Comments</th>
+                                            <th scope="col">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>001</td>
-                                            <td>21223243436008</td>
-                                            <td>Andrey</td>
-                                            <td>Andres</td>
-                                            <td>Aprobado</td>
-                                            <td>Me ayudo mucho</td>
-                                            <td><a class="btn btn-danger" href=""><i class="fas fa-trash"></i></a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>002</td>
-                                            <td>212343436338</td>
-                                            <td>Priscilla</td>
-                                            <td>Todd</td>
-                                            <td>Aprobado</td>
-                                            <td>Gracias!!</td>
-                                            <td><a class="btn btn-danger" href=""><i class="fas fa-trash"></i></a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>003</td>
-                                            <td>2123320036008</td>
-                                            <td>Andres</td>
-                                            <td>Todd</td>
-                                            <td>Aprobado</td>
-                                            <td>We are stronger together!</td>
-                                            <td><a class="btn btn-danger" href=""><i class="fas fa-trash"></i></a></td>
-                                        </tr>
-                                    </tbody>
+                                        @foreach (var item in Model.RecognitionsAR)
+                                        {
+                                            <tr>
+                                                <td>@Html.DisplayFor(modelItem => item.ID_Recognition)</td>
+                                                <td>@Html.DisplayFor(modelItem => item.Case_Number)</td>
+                                                <td>@Html.DisplayFor(modelItem => item.PetitionerEngineer.Name_Engineer)  @Html.DisplayFor(modelItem => item.PetitionerEngineer.LastName_Engineer)</td>
+                                                <td>@Html.DisplayFor(modelItem => item.RecognizedEngineer.Name_Engineer)  @Html.DisplayFor(modelItem => item.RecognizedEngineer.LastName_Engineer)</td>
+                                                <td>@Html.DisplayFor(modelItem => item.Recognition_State)</td>
+                                                <td>@Html.DisplayFor(modelItem => item.Comment)</td>
+                                                <td>
+                                                    @using (Html.BeginForm("Eliminar_Reconocimiento", "Main", FormMethod.Post, new { @class = "submit-delete", role = "form" }))
+                                                    {
+                                                        @Html.AntiForgeryToken()
+                                                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                                        <input asp-for="RecognitionsPOST.ID_Recognition" class="form-control hidden disabled" value="@item.ID_Recognition" />
+                                                        <div class="navbar-nav align-items-center">
+                                                            <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                                                        </div>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
                                 </table>
                             </div>
+                        </div>
+                        <div id="paginationAR" class="pagination-container navbar-nav align-items-center">
+                            <ul class="pagination">
+                                <li class="page-item prev-page"><a class="btn btn-danger" href="#">Previous</a></li>
+                                <li class="page-item">
+                                    @*<span class="page-link">*@
+                                    <svg width="40" height="40">
+                                        <circle cx="20" cy="20" r="15" fill="#79d4f7" />
+                                        <text class="current-page" x="50%" y="55%" text-anchor="middle" fill="white" font-size="12px">1</text>
+                                    </svg>
+                                    @*</span>*@
+                                </li>
+                                <li class="page-item next-page"><a class="btn btn-danger" href="#">Next</a></li>
+                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
+<script src="~/theme-assets/vendors/libs/jquery/jquery.js"></script>
+<script>
+    // Función para filtrar las tablas por la búsqueda
+    function filterTable(tableId, searchInputId) {
+        let input, filter, table, tr, td, i, j, txtValue;
+        input = document.getElementById(searchInputId);
+        filter = input.value.toUpperCase();
+        table = document.getElementById(tableId);
+        tr = table.getElementsByTagName("tr");
+
+        // Iterar sobre las filas de la tabla y mostrar/ocultar según el filtro de búsqueda
+        for (i = 0; i < tr.length; i++) {
+            if (i === 0) {
+                // Saltar la primera fila (títulos de las columnas)
+                continue;
+            }
+            let found = false;
+            td = tr[i].getElementsByTagName("td");
+
+            for (j = 0; j < td.length; j++) {
+                txtValue = td[j].textContent || td[j].innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (found) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+
+
+    // Evento para ejecutar la búsqueda al escribir en la barra de búsqueda
+    document.getElementById("searchInputP").addEventListener("keyup", function () {
+        filterTable("myTableP", "searchInputP"); // Modificar los valores según el ID de tus tablas y la barra de búsqueda
+    });
+        // Evento para ejecutar la búsqueda al escribir en la barra de búsqueda
+    document.getElementById("searchInputAR").addEventListener("keyup", function () {
+        filterTable("myTableAR", "searchInputAR");
+    });
+</script>
+<script>
+    // Función para mostrar los elementos correspondientes a la página actual
+    function showPage(page, tableId, paginationContainerId) {
+        var rowsPerPage = 3; // Número de filas por página
+        var startIndex = (page - 1) * rowsPerPage;
+        var endIndex = startIndex + rowsPerPage;
+
+        // Ocultar todas las filas de la tabla
+        $('#' + tableId + ' tbody tr').hide();
+
+        // Mostrar las filas de la página actual
+        $('#' + tableId + ' tbody tr').slice(startIndex, endIndex).show();
+
+        // Actualizar el número de página actual en el elemento correspondiente
+        $('#' + paginationContainerId + ' .current-page').text(page);
+    }
+
+    $(document).ready(function () {
+        var currentPageP = 1; // Página actual inicial para la tabla reconocimientos pendings
+        var currentPageAR = 1; // Página actual inicial para la tabla Historial de reconocimientos
+
+        // Mostrar la página actual al cargar la página
+        showPage(currentPageP, 'myTableP', 'paginationP');
+        showPage(currentPageAR, 'myTableAR', 'paginationAR');
+
+        // Evento de clic para el botón "Anterior" de la tabla reconocimientos pendings
+        $('#paginationP .prev-page').click(function () {
+            if (currentPageP > 1) {
+                currentPageP--;
+                showPage(currentPageP, 'myTableP', 'paginationP');
+            }
+        });
+
+        // Evento de clic para el botón "Siguiente" de la tabla reconocimientos pendings
+        $('#paginationP .next-page').click(function () {
+            var totalPagesP = Math.ceil($('#myTableP tbody tr').length / 3); // Calcular el número total de páginas
+            if (currentPageP < totalPagesP) {
+                currentPageP++;
+                showPage(currentPageP, 'myTableP', 'paginationP');
+            }
+        });
+
+        // Evento de clic para el botón "Anterior" de la tabla Historial de reconocimientos
+        $('#paginationAR .prev-page').click(function () {
+            if (currentPageAR > 1) {
+                currentPageAR--;
+                showPage(currentPageAR, 'myTableAR', 'paginationAR');
+            }
+        });
+
+        // Evento de clic para el botón "Siguiente" de la tabla Historial de reconocimientos
+        $('#paginationAR .next-page').click(function () {
+            var totalPagesAR = Math.ceil($('#myTableAR tbody tr').length / 3); // Calcular el número total de páginas
+            if (currentPageAR < totalPagesAR) {
+                currentPageAR++;
+                showPage(currentPageAR, 'myTableAR', 'paginationAR');
+            }
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $('.submit-approval').click(function (e) {
+            e.preventDefault(); // Evita que el formulario se envíe automáticamente
+
+            var form = $(this).closest('form');
+
+            Swal.fire({
+                title: 'Are you sure that you want to approve this recognition?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#79d4f7',
+                cancelButtonColor: 'red',
+                confirmButtonText: 'Yes, approve it',
+                cancelButtonText: 'No, cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit(); // Envía el formulario más cercano al botón clickeado
+                }
+            });
+        });
+        $('.submit-rejection').click(function (e) {
+            e.preventDefault(); // Evita que el formulario se envíe automáticamente
+
+            var form = $(this).closest('form');
+
+            Swal.fire({
+                title: 'Are you sure that you want to reject this recognition?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#79d4f7',
+                cancelButtonColor: 'red',
+                confirmButtonText: 'Yes, reject it',
+                cancelButtonText: 'No, cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit(); // Envía el formulario más cercano al botón clickeado
+                }
+            });
+        });
+        $('.submit-delete').click(function (e) {
+            e.preventDefault(); // Evita que el formulario se envíe automáticamente
+
+            var form = $(this).closest('form');
+
+            Swal.fire({
+                title: 'Are you sure that you want to delete this recognition?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#79d4f7',
+                cancelButtonColor: 'red',
+                confirmButtonText: 'Yes, delete it',
+                cancelButtonText: 'No, cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit(); // Envía el formulario más cercano al botón clickeado
+                }
+            });
+        });
+    });
+</script>

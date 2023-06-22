@@ -1,5 +1,6 @@
-﻿@{
-    ViewData["Title"] = "Principal";
+﻿@model sistema_reconocimiento.Models.LoginModel
+@{
+    ViewData["Title"] = "Login";
     Layout = "";
 }
 
@@ -57,12 +58,12 @@
     <script src="https://kit.fontawesome.com/c776b3f0ad.js" crossorigin="anonymous"> </script>
     <!-- End Font Awesome library -->
 </head>
-<body style="background-image: url('theme-assets/images/backgrounds/bg-celeste.jpg')">
+<body style="background-image: url('/theme-assets/images/backgrounds/bg-celeste.jpg')">
     <!-- Content -->
     <div class="container-xxl">
         <div class="authentication-wrapper authentication-basic container-p-y">
-            <div class="authentication-inner">
-                <!-- Register -->
+            <div class="authentication-inner py-4">
+                <!-- Forgot Password -->
                 <div class="card">
                     <div class="card-body">
                         <!-- Logo -->
@@ -72,69 +73,69 @@
                             </div>
                             </br>
                             <div class="navbar-nav align-items-center">
-                                <a asp-controller="Main" asp-action="Index" class="app-brand-link gap-2">
-                                    <h3 class="content-header-right">Sistema de Reconocimiento</h3>
+                                <a asp-controller="Auth" asp-action="Login" class="app-brand-link gap-2">
+                                    <h3 class="content-header-right">Sistema de Reconocimiento de Compañerismo</h3>
                                 </a>
                             </div>
                         </div>
+                        <!-- /Logo -->
+                        <div class="navbar-nav align-items-center">
+                            <h4 class="mb-2">Welcome 👋</h4>
+                        </div>
+                        @using (Html.BeginForm("Login", "Auth", FormMethod.Post, new { @class = "form-signin", role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            @if (TempData["msg"] != null)
+                            {
+                                <div class="text-center msg">
+                                    <span class="text-danger">@TempData["msg"]</span>
+                                </div>
+                            }
+                            <div class="mb-3">
+                                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email", value="@Model.Email"})
+                                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="mb-3">
+                                @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password" })
+                                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="mb-3">
+                                <button id="send-email" type="submit" class="w-100 btn btn-lg btn-primary"> Log in </button>
+                            </div>
+                        }
+                        <div class="text-center">
+                            <a asp-controller="Auth" asp-action="Recuperar_password" class="d-flex align-items-center justify-content-center">
+                                <i class="bx bx-chevron-left scaleX-n1-rtl bx-sm"></i>
+                                Forgot your password?
+                            </a>
+                        </div>
                     </div>
-                    <!-- /Logo -->
-                    <div class="navbar-nav align-items-center">
-                        <h4 class="mb-2">Bienvenido 👋</h4>
-                    </div>
-                    <form id="formAuthentication" class="mb-3" action="index.html" method="POST">
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="text" class="form-control" id="email" name="email-username" placeholder="Ingresa tu correo" autofocus />
-                        </div>
-                        <div class="mb-3 form-password-toggle">
-                            <div class="d-flex justify-content-between">
-                                <label class="form-label" for="password">Contraseña</label>
-                                <a asp-controller="Auth" asp-action="Recuperar_password">
-                                    <small>Olvidó su contrasena?</small>
-                                </a>
-                            </div>
-                            <div class="input-group input-group-merge">
-                                <input type="password"
-                                       id="password"
-                                       class="form-control"
-                                       name="password"
-                                       placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                                       aria-describedby="password" />
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="remember-me" />
-                                <label class="form-check-label" for="remember-me"> Recuerdame </label>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <button class="btn btn-danger btn-block btn-glow" type="submit" asp-controller="Main" asp-action="Index">Ingresar</button>
-                        </div>
-                    </form>
                 </div>
+                <!-- /Forgot Password -->
             </div>
         </div>
-
-        <!-- / Content -->
-        <!-- Core JS -->
-        <!-- build:js assets/vendor/js/core.js -->
-        <script src="~/assets/vendor/libs/jquery/jquery.js"></script>
-        <script src="~/assets/vendor/libs/popper/popper.js"></script>
-        <script src="~/assets/vendor/js/bootstrap.js"></script>
-        <script src="~/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
-
-        <script src="~/assets/vendor/js/menu.js"></script>
-        <!-- endbuild -->
-        <!-- Vendors JS -->
-        <!-- Main JS -->
-        <script src="~/assets/js/main.js"></script>
-
-        <!-- Page JS -->
-        <!-- Place this tag in your head or just before your close body tag. -->
-        <script async defer src="https://buttons.github.io/buttons.js"></script>
     </div>
-    <!-- Content -->
+
+    <!-- / Content -->
+    <!-- Core JS -->
+    <!-- build:js assets/vendor/js/core.js -->
+    <script src="~/assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="~/assets/vendor/libs/popper/popper.js"></script>
+    <script src="~/assets/vendor/js/bootstrap.js"></script>
+    <script src="~/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+
+    <script src="~/assets/vendor/js/menu.js"></script>
+    <!-- endbuild -->
+    <!-- Vendors JS -->
+    <!-- Main JS -->
+    <script src="~/assets/js/main.js"></script>
+
+    <!-- Page JS -->
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
 </body>
 </html>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

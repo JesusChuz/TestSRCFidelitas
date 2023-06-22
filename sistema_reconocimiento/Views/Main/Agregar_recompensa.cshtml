@@ -1,6 +1,8 @@
-﻿@{
+﻿@model sistema_reconocimiento.Models.Rewards
+
+@{
     ViewData["Title"] = "Agregar Recompensa";
-    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="app-content content">
     <div class="card-body">
@@ -10,53 +12,50 @@
                     <h5 class="mb-0">Complete la siguiente información</h5>
                 </div>
                 <div class="card-body">
-                    <form>
+                    @using (Html.BeginForm("Agregar_recompensa", "Main", FormMethod.Post, new { enctype = "multipart/form-data"}))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @if (TempData["msg"] != null)
+                        {
+                            <div class="text-center msg">
+                                <span class="text-danger">@TempData["msg"]</span>
+                            </div>
+                        }
                         <div class="mb-3">
-                            <label class="form-label" for="basic-icon-default-name">Título</label>
+                            <label class="form-label" for="basic-icon-default-name">Title</label>
                             <div class="input-group input-group-merge">
                                 <span id="basic-icon-default-name" class="input-group-text">
                                     <i class="fas fa-pen"></i>
                                 </span>
-                                <input type="text"
-                                       class="form-control"
-                                       id="basic-icon-default-name"
-                                       placeholder="Día Libre" />
+                                @Html.TextBoxFor(m => m.Reward_Name, new { @class = "form-control", value="@Model.Reward_Name"})
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" for="basic-icon-default-lastname">Descripción</label>
+                            <label class="form-label" for="basic-icon-default-lastname">Description</label>
                             <div class="input-group input-group-merge">
                                 <span id="basic-icon-default-lastname" class="input-group-text">
                                     <i class="fas fa-book"></i>
                                 </span>
-                                <input type="text"
-                                       class="form-control"
-                                       id="basic-icon-default-lastname"
-                                       placeholder="Este día libre no sera descontado de tus vacaciones." />
+                                @Html.TextBoxFor(m => m.Reward_Description, new { @class = "form-control", value="@Model.Reward_Description"})
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" for="basic-icon-default-email">Precio</label>
+                            <label class="form-label" for="basic-icon-default-email">Price</label>
                             <div class="input-group input-group-merge">
                                 <span class="input-group-text"><i class="fas fa-money"></i></span>
-                                <input type="text"
-                                       id="basic-icon-default-email"
-                                       class="form-control"
-                                       placeholder="3000" />
+                                @Html.TextBoxFor(m => m.Price, new { @class = "form-control", value="@Model.Price"})
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" for="basic-icon-default-email">Imágen</label>
+                            <label class="form-label" for="basic-icon-default-email">Image</label>
                             <div class="input-group input-group-merge">
                                 <span class="input-group-text"><i class="fas fa-photo"></i></span>
-                                <input type="file"
-                                       class="account-file-input"
-                                       accept="image/png, image/jpeg" />
+                                @Html.TextBoxFor(m => m.PictureFile, new { @class = "form-control", type="file", name = "PictureFile"})
                             </div>
                         </div>
-                        </br>
-                        <button type="submit" class="btn btn-primary">Crear Recompensa</button>
-                    </form>
+                        <button id="saveRewards" type="submit" class="btn btn-primary">Create Reward</button>
+                    }
                 </div>
             </div>
         </div>

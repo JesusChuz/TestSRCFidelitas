@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{
+    string username = User.Identity.Name;
+    int points = ViewBag.GetPoints;
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -46,6 +50,8 @@
      <link rel="stylesheet" href="~/sistema_reconocimiento.styles.css" asp-append-version="true" /> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://kit.fontawesome.com/c776b3f0ad.js" crossorigin="anonymous"> </script>
+    <!--Sweetalerts-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="vertical-layout vertical-menu 2-columns menu-expanded fixed-navbar" data-open="click" data-menu="vertical-menu" data-color="bg-chartbg" data-col="2-columns">
     <!-- fixed-top-->
@@ -55,9 +61,13 @@
                 <div class="collapse navbar-collapse show" id="navbar-mobile">
                     <ul class="nav navbar-nav mr-auto float-left">
                         <li class="nav-item d-block d-md-none"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="ft-menu"></i></a></li>
-                        <a class="btn btn-danger btn-block btn-glow" asp-controller="UC" asp-action="Reconocer" target="_blank">Dar un reconocimiento</a>
+                        <a class="btn btn-danger btn-block btn-glow" asp-controller="Main" asp-action="Reconocer" target="_blank">Dar un reconocimiento</a>
                     </ul>
-                    <span><i class="fas fa-wallet"></i> 5000 pts</span>
+                    <ul class="nav navbar-nav mr-auto float-left">
+                        <li class="nav-item d-block d-md-none"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="ft-menu"></i></a></li>
+                        <span><i class="fas fa-smile"></i> Hola @username ! </span>
+                    </ul>
+                    <span><i class="fas fa-wallet"></i> @points pts</span>
                     <ul class="nav navbar-nav float-right">
                         <li class="dropdown dropdown-user nav-item">
                             <a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
@@ -71,8 +81,8 @@
                                             <span class="user-name text-bold-700 ml-1">John Doe</span>
                                         </span>
                                     </a>
-                                    <div class="dropdown-divider"></div><a class="dropdown-item" asp-controller="UC" asp-action="Perfil"><i class="ft-user"></i> Editar Perfil</a>
-                                    <div class="dropdown-divider"></div><a class="dropdown-item" asp-controller="Auth" asp-action="Login"><i class="ft-power"></i> Cerrar Sesion </a>
+                                    <div class="dropdown-divider"></div><a class="dropdown-item" asp-controller="UC" asp-action="Perfil"><i class="ft-user"></i> Edit Profile</a>
+                                    <div class="dropdown-divider"></div><a class="dropdown-item" asp-controller="Auth" asp-action="Logout"><i class="ft-power"></i> Sign out</a>
                                 </div>
                             </div>
                         </li>
@@ -87,7 +97,7 @@
         <div class="navbar-header">
             <ul class="nav navbar-nav flex-row">
                 <li class="nav-item mr-auto">
-                    <a class="navbar-brand" asp-controller="UC" asp-action="Index">
+                    <a class="navbar-brand" asp-controller="Main" asp-action="Reconocer">
                         <img class="brand-logo" src="~/theme-assets/images/logo/SRC-logo.png" />
                         <h3 class="brand-text">SRC</h3>
                     </a>
@@ -97,14 +107,29 @@
         </div>
         <div class="main-menu-content">
             <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
-                <li class="active">
-                    <a asp-controller="UC" asp-action="Index"><i class="ft-home"></i><span class="menu-title" data-i18n="">Principal</span></a>
-                </li>
+                @if (User.IsInRole("admin"))
+                {
+                    <li class="active">
+                        <a asp-controller="Main" asp-action="Index"><i class="ft-home"></i><span class="menu-title" data-i18n="">Main</span></a>
+                    </li>
+                    <li class=" nav-item">
+                        <a asp-controller="Main" asp-action="Ingenieros"><i class="ft-user"></i><span class="menu-title">Engineers</span></a>
+                    </li>
+                    <li class=" nav-item">
+                        <a asp-controller="Main" asp-action="Reconocimientos"><i class="ft-activity"></i><span class="menu-title">Recognitions</span></a>
+                    </li>
+                    <li class=" nav-item">
+                        <a asp-controller="Main" asp-action="Recompensas"><i class="fas fa-gift"></i><span class="menu-title">Rewards</span></a>
+                    </li>
+                    <li class=" nav-item">
+                        <a asp-controller="Main" asp-action="Frases"><i class="fas fa-book"></i><span class="menu-title" data-i18n="">Phrases</span></a>
+                    </li>
+                }
                 <li class=" nav-item">
-                    <a asp-controller="UC" asp-action="Mis_Reconocimientos"><i class="fas fa-history"></i><span class="menu-title" data-i18n>Mi historial</span></a>
+                    <a asp-controller="Main" asp-action="Mis_Reconocimientos"><i class="fas fa-history"></i><span class="menu-title" data-i18n>My history</span></a>
                 </li>
             </ul>
-        </div><a class="btn btn-danger btn-block btn-glow btn-upgrade-pro mx-1" href="" target="_blank"><i class="fas fa-star"></i>CSAT<i class="fas fa-star"></i></a>
+        </div><a class="btn btn-danger btn-block btn-glow btn-upgrade-pro mx-1" href="Metricas" target=""><i class="fas fa-star"></i>CSAT<i class="fas fa-star"></i></a>
         <div class="navigation-background"></div>
     </div>
     <!-------------- Left menu -------------->

@@ -1,0 +1,9 @@
+﻿@model sistema_reconocimiento.Models.Engineers
+
+@if (ViewBag.GetPoints != null)
+{
+    foreach (var item in ViewBag.GetPoints)
+    {
+        <span><i class="fas fa-wallet"></i> @item pts</span>
+    }
+}
