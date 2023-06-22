@@ -413,7 +413,7 @@ namespace sistema_reconocimiento.Controllers
                 ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
                 ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
                 ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
-                return RedirectToAction("Index", "Main");
+                return RedirectToAction("Ingenieros", "Main");
             }
 
 
@@ -607,7 +607,7 @@ namespace sistema_reconocimiento.Controllers
                 }
             }
             TempData["IngenieroModificado"] = true;
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Ingenieros", "Main");
         }
 
         private bool EngineersExists(int iD_Engineer)
@@ -655,7 +655,7 @@ namespace sistema_reconocimiento.Controllers
             }
             await _context.SaveChangesAsync();
             TempData["IngenieroEliminado"] = true;
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Ingenieros","Main");
 
         }
         public async Task<List<Recognitions>> LoadRecognitionsPending(String recognitionState)
@@ -1325,5 +1325,9 @@ namespace sistema_reconocimiento.Controllers
         {
             return (_context.Rewards?.Any(e => e.ID_Reward == id)).GetValueOrDefault();
         }
+        //private bool EngineersExists(int id)
+        //{
+        //    return (_context.Engineers?.Any(e => e.ID_Engineer == id)).GetValueOrDefault();
+        //}
     }
 }

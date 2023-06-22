@@ -4,8 +4,8 @@
 
     ViewData["Title"] = "Principal";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    int points = ViewBag.GetPoints;
-    int ID_Engineer = ViewBag.GetIdEngineer;
+    int points = ViewBag.GetPoints ?? 0;
+    int ID_Engineer = ViewBag.GetIdEngineer ?? 0;
 }
 
 <!-------------rest of the page ------------->
