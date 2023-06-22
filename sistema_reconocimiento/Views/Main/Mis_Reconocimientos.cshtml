@@ -1,13 +1,17 @@
-﻿@{
+﻿@model IEnumerable<sistema_reconocimiento.Models.Recognitions>
+
+@{
     ViewData["Title"] = "Mis Reconocimientos";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    int points = ViewBag.GetPoints;
+    int ID_Engineer = ViewBag.GetIdEngineer;
 }
 <div class="app-content content">
     <div class="content-wrapper">
         <div class="content-wrapper-before"></div>
         <div class="content-header row">
             <div class="content-header-left col-md-4 col-12 mb-2">
-                <h3 class="content-header-title">Mi Historial de Reconocimientos</h3>
+                <h3 class="content-header-title">My history</h3>
             </div>
             <div class="content-header-right col-md-8 col-12">
                 <div class="breadcrumbs-top float-md-right">
@@ -16,7 +20,7 @@
                             <li class="breadcrumb-item">
                                 <a href="index.html">Principal</a>
                             </li>
-                            <li class="breadcrumb-item active">Mi Historial de Reconocimientos</li>
+                            <li class="breadcrumb-item active">My recognitions history</li>
                         </ol>
                     </div>
                 </div>
@@ -30,53 +34,24 @@
                         <div class="demo-inline-spacing mt-2">
                             <div class="list-group">
                                 <a href="" class="list-group-item list-group-item-action flex-column align-items-start active">
-                                    <h3 class="content-header-right">Cuando reconocí a alguien</h3>
+                                    <h3 class="content-header-right">When I recognized someone</h3>
                                 </a>
-                                <a href="" class="list-group-item list-group-item-action flex-column align-items-start">
-                                    <div class="d-flex justify-content-between w-100">
-                                        <p class="mb-1">
-                                            "Me ayudo mucho y logramos resolver el problema"
-                                        </p>
-                                        <small>Enviado a: Raul</small>
-                                        <small>Fecha: 02/Febrero/2023</small>
-                                    </div>
-                                </a>
-                                <a href="" class="list-group-item list-group-item-action flex-column align-items-start">
-                                    <div class="d-flex justify-content-between w-100">
-                                        <p class="mb-1">
-                                            "Me ayudo mucho y logramos resolver el problema"
-                                        </p>
-                                        <small>Enviado a: Raul</small>
-                                        <small>Fecha: 02/Febrero/2023</small>
-                                    </div>
-                                </a>
-                                <a href="" class="list-group-item list-group-item-action flex-column align-items-start">
-                                    <div class="d-flex justify-content-between w-100">
-                                        <p class="mb-1">
-                                            "Me ayudo mucho y logramos resolver el problema"
-                                        </p>
-                                        <small>Enviado a: Raul</small>
-                                        <small>Fecha: 02/Febrero/2023</small>
-                                    </div>
-                                </a>
-                                <a href="" class="list-group-item list-group-item-action flex-column align-items-start">
-                                    <div class="d-flex justify-content-between w-100">
-                                        <p class="mb-1">
-                                            "Me ayudo mucho y logramos resolver el problema"
-                                        </p>
-                                        <small>Enviado a: Raul</small>
-                                        <small>Fecha: 02/Febrero/2023</small>
-                                    </div>
-                                </a>
-                                <a href="" class="list-group-item list-group-item-action flex-column align-items-start">
-                                    <div class="d-flex justify-content-between w-100">
-                                        <p class="mb-1">
-                                            "Me ayudo mucho y logramos resolver el problema"
-                                        </p>
-                                        <small>Enviado a: Raul</small>
-                                        <small>Fecha: 02/Febrero/2023</small>
-                                    </div>
-                                </a>
+                                @foreach (var item in Model)
+                                {
+                                    if (item.Petitioner_Eng == (int?)ViewData["Login"] && (item.Recognition_State == "Approved" || item.Recognition_State == "Rejected"))
+                                    {
+                                        <a href="" class="list-group-item list-group-item-action flex-column align-items-start">
+                                            <div class="d-flex justify-content-between w-100">
+                                                <p class="mb-1">
+                                                    "@Html.DisplayFor(modelItem => item.Comment)"
+                                                </p>
+                                                <small>Enviado a: @ViewData[$"RecognizedEngineerName_{item.ID_Recognition}"]</small>
+                                                <small>Fecha: @item.Recognition_Date.ToString("dd/MMM/yyyy")</small>
+                                                <small>@Html.DisplayFor(modelItem => item.Recognition_State)</small>
+                                            </div>
+                                        </a>
+                                    }
+                                }
                             </div>
                         </div>
                     </div>
@@ -85,26 +60,24 @@
                         <div class="demo-inline-spacing mt-2">
                             <div class="list-group">
                                 <a href="" class="list-group-item list-group-item-action flex-column align-items-start active">
-                                    <h3 class="content-header-right">Cuando me reconocieron</h3>
+                                    <h3 class="content-header-right">When I was recognized by someone</h3>
                                 </a>
-                                <a href="" class="list-group-item list-group-item-action flex-column align-items-start">
-                                    <div class="d-flex justify-content-between w-100">
-                                        <p class="mb-1">
-                                            "Gracias por el esfuerzo constante para salir adelante"
-                                        </p>
-                                        <small>Enviado por: Jose</small>
-                                        <small>Fecha: 02/Febrero/2023</small>
-                                    </div>
-                                </a>
-                                <a href="" class="list-group-item list-group-item-action flex-column align-items-start">
-                                    <div class="d-flex justify-content-between w-100">
-                                        <p class="mb-1">
-                                            "Gracias por el esfuerzo constante para salir adelante"
-                                        </p>
-                                        <small>Enviado por: Jose</small>
-                                        <small>Fecha: 22/Febrero/2023</small>
-                                    </div>
-                                </a>
+                                @foreach (var item in Model)
+                                {
+                                    if (item.Recognized_Eng == (int?)ViewData["Login"] && (item.Recognition_State == "Approved" || item.Recognition_State == "Rejected"))
+                                    {
+                                        <a href="" class="list-group-item list-group-item-action flex-column align-items-start">
+                                            <div class="d-flex justify-content-between w-100">
+                                                <p class="mb-1">
+                                                    "@Html.DisplayFor(modelItem => item.Comment)"
+                                                </p>
+                                                <small>Enviado por: @ViewData[$"PetitionerEngineerName_{item.ID_Recognition}"]</small>
+                                                <small>Fecha: @item.Recognition_Date.ToString("dd/MMM/yyyy")</small>
+                                                <small>@Html.DisplayFor(modelItem => item.Recognition_State)</small>
+                                            </div>
+                                        </a>
+                                    }
+                                }
                             </div>
                         </div>
                     </div>

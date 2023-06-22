@@ -1,6 +1,10 @@
-﻿@{
+﻿@model IEnumerable<sistema_reconocimiento.Models.Rewards>
+
+@{
     ViewData["Title"] = "Recompensas";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    int points = ViewBag.GetPoints;
+    int ID_Engineer = ViewBag.GetIdEngineer;
 }
 <div class="app-content content">
     <div class="content-wrapper">
@@ -70,52 +74,30 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>001</td>
-                                            <td>Dia libre</td>
-                                            <td>Cualquier dia libre de la semana</td>
-                                            <td>
-                                                <svg width="50" height="50">
-                                                    <circle cx="25" cy="25" r="20" fill="#79d4f7" />
-                                                    <text x="50%" y="60%" text-anchor="middle" fill="white" font-size="16px">5000</text>
-                                                </svg>
-                                            </td>
-                                            <td>
-                                                <a class="btn btn-danger" asp-controller="Main" asp-action="Editar_recompensa"><i class="fas fa-pen"></i></a>
-                                                <a class="btn btn-danger" href=""><i class="fas fa-trash"></i></a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>002</td>
-                                            <td>Medio dia</td>
-                                            <td>Trabajar hasta el medio dia</td>
-                                            <td>
-                                                <svg width="50" height="50">
-                                                    <circle cx="25" cy="25" r="20" fill="#79d4f7" />
-                                                    <text x="50%" y="60%" text-anchor="middle" fill="white" font-size="16px">600</text>
-                                                </svg>
-                                            </td>
-                                            <td>
-                                                <a class="btn btn-danger" asp-controller="Main" asp-action="Editar_recompensa"><i class="fas fa-pen"></i></a>
-                                                <a class="btn btn-danger" href=""><i class="fas fa-trash"></i></a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>003</td>
-                                            <td>Salir temprano</td>
-                                            <td>Salir antes de la hora establecida</td>
-                                            <td>
-                                                <svg width="50" height="50">
-                                                    <circle cx="25" cy="25" r="20" fill="#79d4f7" />
-                                                    <text x="50%" y="60%" text-anchor="middle" fill="white" font-size="16px">500</text>
-                                                </svg>
-                                            </td>
-                                            <td>
-                                                <a class="btn btn-danger" asp-controller="Main" asp-action="Editar_recompensa"><i class="fas fa-pen"></i></a>
-                                                <a class="btn btn-danger" href=""><i class="fas fa-trash"></i></a>
-                                            </td>
-                                        </tr>
-                                        <tr>
+                                        @{
+                                            int contador = 1; // Variable para el contador
+                                        }
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td>@contador</td>
+                                                <td>@Html.DisplayFor(modelItem => item.Reward_Name)</td>
+                                                <td>@Html.DisplayFor(modelItem => item.Reward_Description)</td>
+                                                <td>
+                                                    <svg width="50" height="50">
+                                                        <circle cx="25" cy="25" r="20" fill="#79d4f7" />
+                                                        <text x="50%" y="50%" text-anchor="middle" fill="white" font-size="12px" dy=".3em">
+                                                            @Html.DisplayFor(modelItem => item.Price)
+                                                        </text>
+                                                    </svg>
+                                                </td>
+                                                <td>
+                                                    <a class="btn btn-danger" asp-controller="Main" asp-action="Editar_recompensa" asp-route-id="@item.ID_Reward"><i class="fas fa-pen"></i></a>
+                                                    <a class="btn btn-danger" asp-controller="Main" asp-action="Eliminar_recompensa" asp-route-id="@item.ID_Reward" onclick="return confirm('¿Estás seguro de que quieres eliminar este elemento?');"><i class="fas fa-trash"></i></a>
+                                                </td>
+                                            </tr>
+                                            contador++;
+                                        }
                                     </tbody>
                                 </table>
                             </div>
@@ -126,3 +108,74 @@
         </div>
     </div>
 </div>
+
+@section scripts {
+    <script>
+        var RenCreado = '@TempData["RenCreado"]';
+        if (RenCreado === "True") {
+            // Mostrar notificación de éxito
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toast-top-center",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+            toastr["success"]("Recompensa creada", "Recompensa");
+        }
+        var RenEliminada = '@TempData["RenEliminada"]';
+        if (RenEliminada === "True") {
+            // Mostrar notificación de éxito
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toast-top-center",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+            toastr["error"]("Recompensa eliminada", "Recompensa");
+        }
+        var RenM = '@TempData["RenM"]';
+        if (RenM === "True") {
+            // Mostrar notificación de éxito
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toast-top-center",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+            toastr["info"]("Recompensa Modificada", "Recompensa");
+        }
+    </script>
+}

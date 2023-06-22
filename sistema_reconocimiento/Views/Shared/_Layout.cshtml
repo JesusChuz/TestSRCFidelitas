@@ -81,8 +81,8 @@
                                             <span class="user-name text-bold-700 ml-1">John Doe</span>
                                         </span>
                                     </a>
-                                    <div class="dropdown-divider"></div><a class="dropdown-item" asp-controller="UC" asp-action="Perfil"><i class="ft-user"></i> Editar Perfil</a>
-                                    <div class="dropdown-divider"></div><a class="dropdown-item" asp-controller="Auth" asp-action="Logout"><i class="ft-power"></i> Cerrar Sesion </a>
+                                    <div class="dropdown-divider"></div><a class="dropdown-item" asp-controller="UC" asp-action="Perfil"><i class="ft-user"></i> Edit Profile</a>
+                                    <div class="dropdown-divider"></div><a class="dropdown-item" asp-controller="Auth" asp-action="Logout"><i class="ft-power"></i> Sign out</a>
                                 </div>
                             </div>
                         </li>
@@ -110,23 +110,23 @@
                 @if (User.IsInRole("admin"))
                 {
                     <li class="active">
-                        <a asp-controller="Main" asp-action="Index"><i class="ft-home"></i><span class="menu-title" data-i18n="">Principal</span></a>
+                        <a asp-controller="Main" asp-action="Index"><i class="ft-home"></i><span class="menu-title" data-i18n="">Main</span></a>
                     </li>
                     <li class=" nav-item">
-                        <a asp-controller="Main" asp-action="Ingenieros"><i class="ft-user"></i><span class="menu-title">Ingenieros</span></a>
+                        <a asp-controller="Main" asp-action="Ingenieros"><i class="ft-user"></i><span class="menu-title">Engineers</span></a>
                     </li>
                     <li class=" nav-item">
-                        <a asp-controller="Main" asp-action="Reconocimientos"><i class="ft-activity"></i><span class="menu-title">Reconocimientos</span></a>
+                        <a asp-controller="Main" asp-action="Reconocimientos"><i class="ft-activity"></i><span class="menu-title">Recognitions</span></a>
                     </li>
                     <li class=" nav-item">
-                        <a asp-controller="Main" asp-action="Recompensas"><i class="fas fa-gift"></i><span class="menu-title">Recompensas</span></a>
+                        <a asp-controller="Main" asp-action="Recompensas"><i class="fas fa-gift"></i><span class="menu-title">Rewards</span></a>
                     </li>
                     <li class=" nav-item">
-                        <a asp-controller="Main" asp-action="Frases"><i class="fas fa-book"></i><span class="menu-title" data-i18n="">Frases</span></a>
+                        <a asp-controller="Main" asp-action="Frases"><i class="fas fa-book"></i><span class="menu-title" data-i18n="">Phrases</span></a>
                     </li>
                 }
                 <li class=" nav-item">
-                    <a asp-controller="Main" asp-action="Mis_Reconocimientos"><i class="fas fa-history"></i><span class="menu-title" data-i18n>Mi historial</span></a>
+                    <a asp-controller="Main" asp-action="Mis_Reconocimientos"><i class="fas fa-history"></i><span class="menu-title" data-i18n>My history</span></a>
                 </li>
             </ul>
         </div><a class="btn btn-danger btn-block btn-glow btn-upgrade-pro mx-1" href="Metricas" target=""><i class="fas fa-star"></i>CSAT<i class="fas fa-star"></i></a>

@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Agregar Ingeniero";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    int points = ViewBag.GetPoints;
 }
 <div class="app-content content">
     <div class="card-body">
@@ -13,25 +14,25 @@
                 </div>
                 <div class="card-body">
                     @using (Html.BeginForm("Agregar_ingeniero", "Main", FormMethod.Post, new { @class = "form-signin", role = "form" }))
-                     {
+                    {
                         @Html.AntiForgeryToken()
                         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                         @if (TempData["msg"] != null)
                         {
-                                    <div class="msg">
-                                        <span class="text-danger">@TempData["msg"]</span>
-                                    </div>
-                        }                        
+                            <div class="msg">
+                                <span class="text-danger">@TempData["msg"]</span>
+                            </div>
+                        }
                         <div class="mb-3">
                             <label class="form-label" for="basic-icon-default-name">Nombre</label>
                             <div class="input-group input-group-merge">
                                 <span id="basic-icon-default-name" class="input-group-text">
                                     <i class="bx bx-user"></i>
                                 </span>
-                                @Html.TextBoxFor(m => m.Name_Engineer, new { @class = "form-control", placeholder = "Nombre", id="basic-icon-default-name"})
-                                @Html.ValidationMessageFor(m => m.Name_Engineer,"", new { @class = "text-danger" })
-                          
+                                @Html.TextBoxFor(m => m.Name_Engineer, new { @class = "form-control", placeholder = "Nombre", id="basic-icon-default-name"/*,required = "required", maxlength = "30",minlength = "3"*/})
+
                             </div>
+                            @Html.ValidationMessageFor(m => m.Name_Engineer,"", new { @class = "text-danger" })
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="basic-icon-default-lastname">Apellido</label>
@@ -39,7 +40,7 @@
                                 <span id="basic-icon-default-lastname" class="input-group-text">
                                     <i class="bx bx-user"></i>
                                 </span>
-                                @Html.TextBoxFor(m => m.LastName_Engineer, new { @class = "form-control", placeholder = "Nombre", id="basic-icon-default-name"})
+                                @Html.TextBoxFor(m => m.LastName_Engineer, new { @class = "form-control", placeholder = "Apellido", id="basic-icon-default-name"})
                                 @Html.ValidationMessageFor(m => m.LastName_Engineer, "", new { @class = "text-danger" })
                             </div>
                         </div>
@@ -47,17 +48,20 @@
                             <label class="form-label" for="basic-icon-default-email">Email</label>
                             <div class="input-group input-group-merge">
                                 <span class="input-group-text"><i class="bx bx-envelope"></i></span>
-                                @Html.TextBoxFor(m => m.ApplicationUser.Email, new { @class = "form-control", placeholder = "Email", id="basic-icon-default-name"})
-                                @Html.ValidationMessageFor(m => m.ApplicationUser.Email, "", new { @class = "text-danger" }) <span id="basic-icon-default-email2" class="input-group-text">tek-experts.com</span>
+                                <input type="text" class="form-control" placeholder="Email" id="basic-icon-default-name" name="EmailA">
+                                <span class="text-danger" id="email-validation-message"></span>
+                                <span id="basic-icon-default-email2" class="input-group-text">tek-experts.com</span>
                             </div>
+                            @Html.ValidationMessage("EmailA", "", new { @class = "text-danger" })
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="basic-default-password12">Password</label>
                             <div class="input-group input-group-merge">
                                 <span class="input-group-text"><i class="bx bx-envelope"></i></span>
-                                @Html.TextBoxFor(m => m.ApplicationUser.PasswordHash, new { @class = "form-control", placeholder = "Password", id="basic-icon-default-name"})
-                                @Html.ValidationMessageFor(m => m.ApplicationUser.PasswordHash, "", new { @class = "text-danger" })
+                                <input type="password" class="form-control" placeholder="Password" id="basic-icon-default-name" name="PasswordA">
+                                <span class="text-danger" id="password-validation-message"></span>
                             </div>
+                            @Html.ValidationMessage("PasswordA", "", new { @class = "text-danger" })
                         </div>
                         <div class="mb-3">
                             <div class="input-group">
@@ -65,8 +69,9 @@
                                     Posición
                                     <i class="bx bx-buildings"></i>
                                 </label>
-                                <select asp-for="Position" class ="form-control" asp-items="ViewBag.Position"></select>
+                                <select asp-for="Position" class="form-control" asp-items="ViewBag.Position"></select>
                             </div>
+                            @Html.ValidationMessageFor(m => m.Position, "", new { @class = "text-danger" })
                         </div>
                         <div class="mb-3">
                             <div class="input-group">
@@ -74,12 +79,12 @@
                                     Rol del usuario
                                     <i class="bx bx-buildings"></i>
                                 </label>
-                                   <select class="form-select" id="inputGroupSelect01">
-                                   <option selected>Seleccionar...</option>
-                                   <option value="1">Usuario Común</option>
-                                   <option value="2">Administrador</option>
-                                   </select>
-                          
+                                <select class="form-select" id="inputGroupSelect01" name="UserRole">
+                                    <option selected>Seleccionar...</option>
+                                    <option value="comun">Común</option>
+                                    <option value="admin">Administrador</option>
+                                </select>
+                                @Html.ValidationMessage("UserRole", "", new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="mb-3">
@@ -88,12 +93,14 @@
                                     Manager
                                     <i class="bx bx-buildings"></i>
                                 </label>
-                                <select asp-for="ID_Manager" class ="form-control" asp-items="ViewBag.ID_Manager"></select>
+                                <select asp-for="ID_Manager" class="form-control" asp-items="ViewBag.ID_Manager"></select>
                             </div>
+                            @Html.ValidationMessageFor(m => m.ID_Manager, "", new { @class = "text-danger" })
                         </div>
+                        <a class="btn btn-danger" asp-controller="Main" asp-action="Ingenieros">Regresar</a>
                         <button type="submit" class="btn btn-primary">Crear cuenta</button>
-                      }
-                      <!-- </form>  -->
+                    }
+                    <!-- </form>  -->
                 </div>
             </div>
         </div>

@@ -1,6 +1,9 @@
-﻿@{
+﻿@model sistema_reconocimiento.Models.Engineers
+
+@{
     ViewData["Title"] = "Editar ingeniero";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    int points = ViewBag.GetPoints;
 }
 <div class="app-content content">
     <div class="content-wrapper">
@@ -13,17 +16,27 @@
                             <div class="card mb-2">
                                 <h5 class="mb-0">Complete la información del ingeniero</h5>
                                 <div class="card-body">
-                                    <form>
+                                    <form asp-action="Editar_ingeniero">
+                                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                        <input type="hidden" asp-for="ID_Engineer" />
+                                        <input type="hidden" asp-for="ID_Account" />
                                         <div class="mb-3">
                                             <label class="form-label" for="basic-icon-default-name">Nombre</label>
                                             <div class="input-group input-group-merge">
                                                 <span id="basic-icon-default-name" class="input-group-text">
                                                     <i class="bx bx-user"></i>
                                                 </span>
-                                                <input type="text"
+                                                @if (TempData["msg"] != null)
+                                                {
+                                                    <div class="msg">
+                                                        <span class="text-danger">@TempData["msg"]</span>
+                                                    </div>
+                                                }
+                                                <input asp-for="Name_Engineer"
+                                                       type="text"
                                                        class="form-control"
-                                                       id="basic-icon-default-name"
-                                                       placeholder="John" />
+                                                       id="basic-icon-default-name" />
+                                                @Html.ValidationMessageFor(m => m.Name_Engineer,"", new { @class = "text-danger" })
                                             </div>
                                         </div>
                                         <div class="mb-3">
@@ -32,10 +45,11 @@
                                                 <span id="basic-icon-default-lastname" class="input-group-text">
                                                     <i class="bx bx-user"></i>
                                                 </span>
-                                                <input type="text"
+                                                <input asp-for="LastName_Engineer"
+                                                       type="text"
                                                        class="form-control"
-                                                       id="basic-icon-default-lastname"
-                                                       placeholder="Rodriguez" />
+                                                       id="basic-icon-default-lastname" />
+                                                @Html.ValidationMessageFor(m => m.LastName_Engineer, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
                                         <div class="mb-3">
@@ -45,9 +59,10 @@
                                                 <input type="text"
                                                        id="basic-icon-default-email"
                                                        class="form-control"
-                                                       placeholder="john.rodriguez@tek-experts.com" />
+                                                       value="@ViewData["Email"]" name="EmailM" />
                                                 <span id="basic-icon-default-email2" class="input-group-text">tek-experts.com</span>
                                             </div>
+                                            @Html.ValidationMessage("EmailM", "", new { @class = "text-danger" })
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="basic-default-password12">Password</label>
@@ -56,38 +71,35 @@
                                                 <input type="password"
                                                        class="form-control"
                                                        id="basic-default-password12"
-                                                       placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                                                       aria-describedby="basic-default-password2" />
+                                                       aria-describedby="basic-default-password2" name="PassM" />
                                             </div>
+                                            @Html.ValidationMessage("PassM", "", new { @class = "text-danger" })
                                         </div>
                                         <div class="mb-3">
                                             <div class="input-group">
-                                                <label class="input-group-text" for="inputGroupSelect01">
+                                                <label class="input-group-text" asp-for="Position">
                                                     Position
                                                     <i class="bx bx-buildings"></i>
                                                 </label>
-                                                <select class="form-select" id="inputGroupSelect01">
-                                                    <option selected>Seleccionar...</option>
-                                                    <option value="1">Team Manager</option>
-                                                    <option value="2">Subject Matter Expert</option>
-                                                    <option value="3">Technical Lead</option>
-                                                    <option value="4">Support Enginer Stage 3</option>
-                                                    <option value="5">Support Enginer Stage 2</option>
-                                                </select>
+                                                <select asp-for="Position" class="form-select" asp-items="ViewBag.Position"></select>
+                                                <span asp-validation-for="Position" class="text-danger"></span>
                                             </div>
+                                            @Html.ValidationMessageFor(m => m.Position, "", new { @class = "text-danger" })
                                         </div>
                                         <div class="mb-3">
                                             <div class="input-group">
                                                 <label class="input-group-text" for="inputGroupSelect01">
-                                                    User rol
+                                                    Rol del usuario
                                                     <i class="bx bx-buildings"></i>
                                                 </label>
-                                                <select class="form-select" id="inputGroupSelect01">
+                                                <select class="form-select" id="inputGroupSelect01" name="UserRoleM" required>
                                                     <option selected>Seleccionar...</option>
-                                                    <option value="1">Usuario Común</option>
-                                                    <option value="2">Administrador</option>
+                                                    <option value="comun">Común</option>
+                                                    <option value="admin">Administrador</option>
                                                 </select>
+                                                @Html.ValidationMessage("UserRoleM", "", new { @class = "text-danger" })
                                             </div>
+
                                         </div>
                                         <div class="mb-3">
                                             <div class="input-group">
@@ -95,11 +107,8 @@
                                                     Manager
                                                     <i class="bx bx-buildings"></i>
                                                 </label>
-                                                <select class="form-select" id="inputGroupSelect01">
-                                                    <option selected>Seleccionar...</option>
-                                                    <option value="1">John Bread</option>
-                                                    <option value="2">Dahiana Kramer</option>
-                                                </select>
+                                                <select asp-for="ID_Manager" class="form-select" asp-items="ViewBag.ID_Manager" id="inputGroupSelectManager"></select>
+                                                <span asp-validation-for="ID_Manager" class="text-danger"></span>
                                             </div>
                                         </div>
                                         </br>
@@ -125,10 +134,12 @@
                                     <span id="basic-icon-default-name" class="input-group-text">
                                         <i class="bx bx-user"></i>
                                     </span>
-                                    <input type="text"
+                                    <input asp-for="Name_Engineer"
+                                           type="text"
                                            class="form-control"
                                            id="basic-icon-default-name"
-                                           placeholder="John" disabled />
+                                           readonly />
+
                                 </div>
                             </div>
                             <div class="mb-3">
@@ -137,10 +148,11 @@
                                     <span id="basic-icon-default-lastname" class="input-group-text">
                                         <i class="bx bx-user"></i>
                                     </span>
-                                    <input type="text"
+                                    <input asp-for="LastName_Engineer"
+                                           type="text"
                                            class="form-control"
                                            id="basic-icon-default-lastname"
-                                           placeholder="Rodriguez" disabled />
+                                           readonly />
                                 </div>
                             </div>
                             <div class="mb-3">
@@ -150,7 +162,7 @@
                                     <input type="text"
                                            id="basic-icon-default-email"
                                            class="form-control"
-                                           placeholder="john.rodriguez@tek-experts.com" disabled />
+                                           value="@ViewData["Email"]" readonly />
                                     <span id="basic-icon-default-email2" class="input-group-text">tek-experts.com</span>
                                 </div>
                             </div>
@@ -162,23 +174,17 @@
                                            class="form-control"
                                            id="basic-default-password12"
                                            placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                                           aria-describedby="basic-default-password2" disabled />
+                                           aria-describedby="basic-default-password2" readonly />
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <div class="input-group">
-                                    <label class="input-group-text" for="inputGroupSelect01">
-                                        Posición
+                                    <label class="input-group-text" asp-for="Position" readonly>
+                                        Position
                                         <i class="bx bx-buildings"></i>
                                     </label>
-                                    <select class="form-select" id="inputGroupSelect01" disabled>
-                                        <option selected>Seleccionar...</option>
-                                        <option value="1">Team Manager</option>
-                                        <option value="2">Subject Matter Expert</option>
-                                        <option value="3">Technical Lead</option>
-                                        <option value="4">Support Enginer Stage 3</option>
-                                        <option value="5">Support Enginer Stage 2</option>
-                                    </select>
+                                    <select asp-for="Position" class="form-select" asp-items="ViewBag.Position" readonly disabled></select>
+                                    <span asp-validation-for="Position" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="mb-3">
@@ -187,24 +193,21 @@
                                         Rol de usuario
                                         <i class="bx bx-buildings"></i>
                                     </label>
-                                    <select class="form-select" id="inputGroupSelect01" disabled>
+                                    <select class="form-select" id="inputGroupSelect01" readonly disabled>
                                         <option selected>Seleccionar...</option>
-                                        <option value="1">Common User</option>
+                                        <option value="1" selected>@ViewData["Rol"]</option>
                                         <option value="2">Administrator</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <div class="input-group">
-                                    <label class="input-group-text" for="inputGroupSelect01">
+                                    <label class="input-group-text" for="inputGroupSelect01" readonly disabled>
                                         Manager
                                         <i class="bx bx-buildings"></i>
                                     </label>
-                                    <select class="form-select" id="inputGroupSelect01" disabled>
-                                        <option selected>Seleccionar...</option>
-                                        <option value="1">John Bread</option>
-                                        <option value="2">Dahiana Kramer</option>
-                                    </select>
+                                    <select asp-for="ID_Manager" class="form-select" asp-items="ViewBag.ID_Manager" id="inputGroupSelectManager" readonly disabled></select>
+                                    <span asp-validation-for="ID_Manager" class="text-danger"></span>
                                 </div>
                             </div>
                         </form>

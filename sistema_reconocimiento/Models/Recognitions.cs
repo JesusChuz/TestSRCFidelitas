@@ -18,9 +18,9 @@ namespace sistema_reconocimiento.Models
         public virtual Engineers RecognizedEngineer { get; set; }
 
         public string Recognition_State { get; set; }
-      
+        [Required(ErrorMessage = "Case number required")]
         public string Case_Number { get; set; }
-     
+        [Required(ErrorMessage = "Comments are requred")]
         public string Comment { get; set; }
 
         public int Evaluator_Admin { get; set; }
@@ -36,6 +36,8 @@ namespace sistema_reconocimiento.Models
         public int ID_EngineerRec { get; set; }
         [NotMapped]
         public int Points_EngineerRec { get; set; }
+
+        public DateTime Recognition_Date { get; set; }
 
     }
 }

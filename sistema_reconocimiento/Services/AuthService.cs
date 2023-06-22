@@ -82,15 +82,14 @@ namespace sistema_reconocimiento.Services
         {
             await signInManager.SignOutAsync();
         }
-
         public async Task<Status> RegistrationAsync(AccountRegistration model)
         {
             var status = new Status();
-            var userExists = await userManager.FindByEmailAsync(model.Email);
+            var userExists = await userManager.FindByNameAsync(model.Username);
             if (userExists != null)
             {
                 status.StatusCode = 0;
-                status.Message = "Account already exists";
+                status.Message = "User already exists";
                 return status;
             }
 
@@ -100,16 +99,22 @@ namespace sistema_reconocimiento.Services
                 Email = model.Email,
                 UserName = model.Username
             };
-            bool setIsNew = true;
-            user.IsNew = setIsNew;
 
             var result = await userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
             {
                 status.StatusCode = 0;
-                status.Message = "Account creation failed";
+                status.Message = "User creation failed";
                 return status;
             }
+            if (!result.Succeeded)
+            {
+                status.StatusCode = 0;
+                status.Message = "User creation failed";
+                status.IsSuccess = false;
+                return status;
+            }
+            status.AccountId = user.Id;
             // role management 
             if (!await roleManager.RoleExistsAsync(model.Role))
                 await roleManager.CreateAsync(new IdentityRole(model.Role));
@@ -119,7 +124,8 @@ namespace sistema_reconocimiento.Services
                 await userManager.AddToRoleAsync(user, model.Role);
             }
             status.StatusCode = 1;
-            status.Message = "Account has been registered successfully!";
+            status.Message = "User has been registered successfully!";
+            status.IsSuccess = true;
             return status;
         }
 

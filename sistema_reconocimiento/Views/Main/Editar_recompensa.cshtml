@@ -1,6 +1,10 @@
-﻿@{
+﻿@model sistema_reconocimiento.Models.Rewards
+
+
+@{
     ViewData["Title"] = "Editar Recompensa";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    int points = ViewBag.GetPoints;
 }
 <div class="app-content content">
     <div class="content-wrapper">
@@ -13,18 +17,20 @@
                             <div class="card mb-2">
                                 <h5 class="mb-0">Complete las información de la recompensa</h5>
                                 <div class="card-body">
-                                    <form>
+                                    <form asp-action="Editar_recompensa" enctype="multipart/form-data">
+                                        <input type="hidden" asp-for="ID_Reward" />
                                         <div class="mb-3">
                                             <label class="form-label" for="basic-icon-default-name">Título</label>
                                             <div class="input-group input-group-merge">
                                                 <span id="basic-icon-default-name" class="input-group-text">
                                                     <i class="fas fa-pen"></i>
                                                 </span>
-                                                <input type="text"
+                                                <input asp-for="Reward_Name"
+                                                       type="text"
                                                        class="form-control"
-                                                       id="basic-icon-default-name"
-                                                       placeholder="Dia libre" />
+                                                       id="basic-icon-default-name" />
                                             </div>
+                                            <span asp-validation-for="Reward_Name" class="text-danger"></span>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="basic-icon-default-lastname">Descripción</label>
@@ -32,33 +38,35 @@
                                                 <span id="basic-icon-default-lastname" class="input-group-text">
                                                     <i class="fas fa-book"></i>
                                                 </span>
-                                                <input type="text"
+                                                <input asp-for="Reward_Description"
+                                                       type="text"
                                                        class="form-control"
-                                                       id="basic-icon-default-lastname"
-                                                       placeholder="Este dia libre no se descontara de tus vacaciones" />
+                                                       id="basic-icon-default-lastname" />
                                             </div>
+                                            <span asp-validation-for="Reward_Description" class="text-danger"></span>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="basic-icon-default-email">Precio</label>
                                             <div class="input-group input-group-merge">
                                                 <span class="input-group-text"><i class="fas fa-money"></i></span>
-                                                <input type="text"
+                                                <input asp-for="Price"
+                                                       type="text"
                                                        id="basic-icon-default-email"
-                                                       class="form-control"
-                                                       placeholder="3000" />
+                                                       class="form-control" />
                                             </div>
+                                            <span class="text-danger">@ViewData["PriceE"]</span>
+                                            <span asp-validation-for="Price" class="text-danger"></span>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="basic-icon-default-email">Imágen</label>
                                             <div class="input-group input-group-merge">
                                                 <span class="input-group-text"><i class="fas fa-photo"></i></span>
-                                                <input type="file"
-                                                       class="account-file-input"
-                                                       accept="image/png, image/jpeg" />
+                                                <input type="file" class="account-file-input" accept="image/png, image/jpeg" name="picture" />
                                             </div>
+                                            @Html.ValidationMessageFor(model => model.PictureFile, "", new { @class = "text-danger" })
                                         </div>
                                         </br>
-                                        <a class="btn btn-danger" asp-controller="Main" asp-action="Ingenieros"> Regresar</a>
+                                        <a class="btn btn-danger" asp-controller="Main" asp-action="Recompensas">Regresar</a>
                                         <button type="submit" class="btn btn-primary">Actualizar</button>
                                     </form>
                                 </div>
@@ -80,10 +88,11 @@
                                     <span id="basic-icon-default-name" class="input-group-text">
                                         <i class="fas fa-pen"></i>
                                     </span>
-                                    <input type="text"
+                                    <input asp-for="Reward_Name"
+                                           type="text"
                                            class="form-control"
                                            id="basic-icon-default-name"
-                                           placeholder="Día Libre" disabled />
+                                           disabled />
                                 </div>
                             </div>
                             <div class="mb-3">
@@ -92,25 +101,35 @@
                                     <span id="basic-icon-default-lastname" class="input-group-text">
                                         <i class="fas fa-book"></i>
                                     </span>
-                                    <input type="text"
+                                    <input asp-for="Reward_Description"
+                                           type="text"
                                            class="form-control"
                                            id="basic-icon-default-lastname"
-                                           placeholder="Este día libre nos se descontara de tus vacaciones" disabled />
+                                           disabled />
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label" for="basic-icon-default-email">Precio</label>
                                 <div class="input-group input-group-merge">
                                     <span class="input-group-text"><i class="fas fa-money"></i></span>
-                                    <input type="text"
+                                    <input asp-for="Price"
+                                           type="text"
                                            id="basic-icon-default-email"
                                            class="form-control"
-                                           placeholder="3000" disabled />
+                                           disabled />
                                 </div>
                                 <br />
                                 <div class="mb-3">
                                     <label class="form-label" for="basic-icon-default-email">Imágen actual</label>
-                                    <img class="card-img" src="~/theme-assets/images/rewards/freeday.PNG" width="400" height="500" alt="Card image" />
+                                    <br />
+                                    @if (!string.IsNullOrEmpty(Model.Base64Image))
+                                    {
+                                        <img class="card-img" src="data:image;base64,@Model.Base64Image" width="400" height="500" alt="Card image" />
+                                    }
+                                    else
+                                    {
+                                        <span>No se encontró ninguna imagen.</span>
+                                    }
                                 </div>
                             </div>
                         </form>
@@ -119,4 +138,3 @@
             </div>
         </div>
     </div>
-</div>

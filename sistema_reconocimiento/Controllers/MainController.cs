@@ -25,20 +25,24 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Globalization;
 using Newtonsoft.Json;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using System.Text.RegularExpressions;
 
 namespace sistema_reconocimiento.Controllers
 {
     public class MainController : Controller
     {
         private readonly INotificationEmailService _service;
+        private readonly IAuthService _serviceAuth;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext _context;
         private readonly ILogger<MainController> _logger;
         private readonly IConfiguration _configuration;
         private readonly string _varConnStr;
-        public MainController(INotificationEmailService service, ILogger<MainController> logger, IConfiguration configuration, ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public MainController(INotificationEmailService service, IAuthService serviceAuth, ILogger<MainController> logger, IConfiguration configuration, ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             this._service = service;
+            _serviceAuth = serviceAuth;
             _context = context;
             _logger = logger;
             _userManager = userManager;
@@ -262,6 +266,7 @@ namespace sistema_reconocimiento.Controllers
                 if (result == true)
                 {
                     LoadPoints(model);
+                    LoadIdEngineer(model);
                     var applicationDbContext = _context.Engineers.Include(e => e.ApplicationUser).Include(e => e.Manager).Include(e => e.Positions);
                     foreach (var engineer in applicationDbContext)
                     {
@@ -288,6 +293,7 @@ namespace sistema_reconocimiento.Controllers
                 if (result == true)
                 {
                     LoadPoints(model);
+                    LoadIdEngineer(model);
                     ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id");
                     ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager");
                     ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name");
@@ -302,36 +308,355 @@ namespace sistema_reconocimiento.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Agregar_ingeniero([Bind("ID_Engineer,Name_Engineer,LastName_Engineer,Position,Points,ID_Account,ID_Manager")] Engineers engineers)
+        public async Task<IActionResult> Agregar_ingeniero([Bind("ID_Engineer,Name_Engineer,LastName_Engineer,Position,Points,ID_Account,ID_Manager")] Engineers engineers, string UserRole, string EmailA, string PasswordA)
         {
-            
-            _context.Add(engineers);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                LoadPoints(engineers);
+                if (string.IsNullOrWhiteSpace(engineers.Name_Engineer) || engineers.Name_Engineer.Length < 3 || engineers.Name_Engineer.Length > 30)
+                {
+                    ModelState.AddModelError("Name_Engineer", "El nombre del ingeniero es requerido y debe tener entre 3 y 30 caracteres.");
+                    ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
+                    ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
+                    ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
+                    return View(engineers);
+                }
+                if (_context.ApplicationUser.Any(u => u.Email == EmailA))
+                {
+                    ModelState.AddModelError(string.Empty, "Ya existe un ingeniero con el correo electrónico proporcionado.");
+                    ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
+                    ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
+                    ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
+                    return View(engineers);
+                }
+                if (string.IsNullOrWhiteSpace(engineers.LastName_Engineer) || engineers.LastName_Engineer.Length < 3 || engineers.LastName_Engineer.Length > 30)
+                {
+                    ModelState.AddModelError("LastName_Engineer", "El apellido del ingeniero es requerido y debe tener entre 3 y 30 caracteres.");
+                    ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
+                    ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
+                    ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
+                    return View(engineers);
+                }
+                if (string.IsNullOrWhiteSpace(EmailA))
+                {
+                    ModelState.AddModelError("EmailA", "El email es requerido.");
+                    ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
+                    ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
+                    ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
+                    return View(engineers);
+                }
+                if (string.IsNullOrWhiteSpace(PasswordA) || PasswordA.Length < 6 || !Regex.IsMatch(PasswordA, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).{6,}$"))
+                {
+                    ModelState.AddModelError("PasswordA", "La contraseña es requerida y debe tener al menos 6 caracteres, una minúscula, una mayúscula, un símbolo especial y almenos un número.");
+                    ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
+                    ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
+                    ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
+                    return View(engineers);
+                }
+                else
+                {
+                    var emailAttribute = new EmailAddressAttribute();
+                    if (!emailAttribute.IsValid(EmailA))
+                    {
+                        ModelState.AddModelError("EmailA", "El formato del email no es válido.");
+                        ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
+                        ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
+                        ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
+                        return View(engineers);
+                    }
+                }
+                if (engineers.Position <= 0)
+                {
+                    ModelState.AddModelError("Position", "La posición es requerida.");
+                    ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
+                    ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
+                    ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
+                    return View(engineers);
+                }
+
+                if (engineers.ID_Manager <= 0)
+                {
+                    ModelState.AddModelError("ID_Manager", "El manager es requerido.");
+                    ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
+                    ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
+                    ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
+                    return View(engineers);
+                }
+                if (string.IsNullOrWhiteSpace(UserRole) || (UserRole != "comun" && UserRole != "admin"))
+                {
+                    ModelState.AddModelError("UserRole", "El rol del usuario es requerido'.");
+                    ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
+                    ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
+                    ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
+                    return View(engineers);
+                }
+                var model = new AccountRegistration
+                {
+                    Username = engineers.Name_Engineer,
+                    Name = engineers.Name_Engineer + "  " + engineers.LastName_Engineer,
+                    Email = EmailA,
+                    Password = (string)(TempData["PasswordA"] = PasswordA),
+                    Role = UserRole
+                };
+
+                var accountResult = await _serviceAuth.RegistrationAsync(model);
+                engineers.ID_Account = accountResult.AccountId; // Asigna el ID de la cuenta recién creada.
+                engineers.Points = 0;
+
+                _context.Add(engineers);
+                await _context.SaveChangesAsync();
+                TempData["IngenieroCreado"] = true;
+                return RedirectToAction("Ingenieros", "Main");
+            }
+            catch
+            {
+                ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
+                ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
+                ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
+                return RedirectToAction("Index", "Main");
+            }
+
+
+        }
+
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> Editar_ingeniero(int? id, Engineers model)
+        {
+            LoadPoints(model);
+            LoadIdEngineer(model);
+            if (id == null || _context.Engineers == null)
+            {
+                return NotFound();
+            }
+
+            var engineers = await _context.Engineers.FindAsync(id);
+            if (engineers == null)
+            {
+                return NotFound();
+            }
+
+
+            var applicationUser = await _userManager.FindByIdAsync(engineers.ID_Account);
+
+            if (applicationUser == null)
+            {
+                return NotFound();
+            }
+
+            // Pasar el email al ViewData.
+            ViewData["Email"] = applicationUser.Email;
+
+            var user = await _userManager.FindByIdAsync(engineers.ID_Account);
+
+            // Obtener el rol del usuario
+            var roles = await _userManager.GetRolesAsync(user);
+
+            // Asignar el rol al ViewData
+            if (roles.Count > 0)
+            {
+                ViewData["Rol"] = roles[0];
+            }
+            else
+            {
+                ViewData["Rol"] = "No asignado";
+            }
+
 
             ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
             ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
             ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
             return View(engineers);
         }
-
-        [Authorize(Roles = "admin")]
-        public IActionResult Editar_ingeniero(bool result, Engineers model)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Editar_ingeniero(int id, [Bind("ID_Engineer,Name_Engineer,LastName_Engineer,Position,ID_Account,ID_Manager")] Engineers engineers, string EmailM, string PassM, string UserRoleM)
         {
-            if (result == false)
+            LoadPoints(engineers);
+
+            try
             {
-                result = validateAccountEnabled(result);
-                if (result == true)
+                if (string.IsNullOrWhiteSpace(engineers.Name_Engineer) || engineers.Name_Engineer.Length < 3 || engineers.Name_Engineer.Length > 30)
                 {
-                    LoadPoints(model);
-                    return View();
+                    ModelState.AddModelError("Name_Engineer", "El nombre del ingeniero es requerido y debe tener entre 3 y 30 caracteres.");
+                    ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
+                    ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
+                    ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
+
+                    return View(engineers);
+                }
+                //if (_context.ApplicationUser.Any(u => u.Email == EmailM))
+                //{
+                //    ModelState.AddModelError(string.Empty, "Ya existe un ingeniero con el correo electrónico proporcionado.");
+                //    ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
+                //    ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
+                //    ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
+                //    return View(engineers);
+                //}
+                if (string.IsNullOrWhiteSpace(engineers.LastName_Engineer) || engineers.LastName_Engineer.Length < 3 || engineers.LastName_Engineer.Length > 30)
+                {
+                    ModelState.AddModelError("LastName_Engineer", "El apellido del ingeniero es requerido y debe tener entre 3 y 30 caracteres.");
+                    ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
+                    ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
+                    ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
+                    return View(engineers);
+                }
+                if (string.IsNullOrWhiteSpace(EmailM))
+                {
+                    ModelState.AddModelError("EmailM", "El Email es requerido.");
+                    ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
+                    ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
+                    ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
+                    return View(engineers);
+                }
+                if (string.IsNullOrWhiteSpace(PassM) || PassM.Length < 6 || !Regex.IsMatch(PassM, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).{6,}$"))
+                {
+                    ModelState.AddModelError("PassM", "La contraseña es requerida y debe tener al menos 6 caracteres, una minúscula, una mayúscula, un símbolo especial y almenos un número.");
+                    ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
+                    ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
+                    ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
+                    return View(engineers);
                 }
                 else
                 {
-                    return RedirectToAction("Login", "Auth");
+                    var emailAttribute = new EmailAddressAttribute();
+                    if (!emailAttribute.IsValid(EmailM))
+                    {
+                        ModelState.AddModelError("EmailM", "El formato del email no es válido.");
+                        ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
+                        ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
+                        ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
+                        return View(engineers);
+                    }
+                }
+                if (engineers.Position <= 0)
+                {
+                    ModelState.AddModelError("Position", "La posición es requerida.");
+                    ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
+                    ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
+                    ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
+                    return View(engineers);
+                }
+
+                if (engineers.ID_Manager <= 0)
+                {
+                    ModelState.AddModelError("ID_Manager", "El manager es requerido.");
+                    ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
+                    ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
+                    ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
+                    return View(engineers);
+                }
+                if (string.IsNullOrWhiteSpace(UserRoleM) || (UserRoleM != "comun" && UserRoleM != "admin"))
+                {
+                    ModelState.AddModelError("UserRole", "El rol del usuario es requerido");
+                    ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
+                    ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
+                    ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
+                    return View(engineers);
+                }
+
+                // Cargar el ApplicationUser relacionado.
+                var applicationUser = await _userManager.FindByIdAsync(engineers.ID_Account);
+
+                // Modificar las propiedades.
+                applicationUser.Name = engineers.Name_Engineer + "  " + engineers.LastName_Engineer;
+                applicationUser.UserName = engineers.Name_Engineer;
+                applicationUser.Email = EmailM;
+                applicationUser.PasswordHash = _userManager.PasswordHasher.HashPassword(applicationUser, PassM);
+
+                // Actualizar el ApplicationUser en la base de datos.
+                var updateResult = await _userManager.UpdateAsync(applicationUser);
+
+                // Asegúrar de que el rol existe.
+                var user = await _userManager.FindByIdAsync(engineers.ID_Account);
+
+                if (user == null)
+                {
+                    return NotFound();
+                }
+
+                var roles = await _userManager.GetRolesAsync(user);
+                if (roles.Any())
+                {
+                    // Eliminar todos los roles existentes.
+                    var removeResult = await _userManager.RemoveFromRolesAsync(user, roles);
+                    if (!removeResult.Succeeded)
+                    {
+                        // Manejar los errores.
+                        foreach (var error in removeResult.Errors)
+                        {
+                            ModelState.AddModelError(string.Empty, error.Description);
+                        }
+                        return View(engineers);
+                    }
+                }
+                // Añadir el nuevo rol.
+                var addResult = await _userManager.AddToRoleAsync(user, UserRoleM);
+
+                _context.Update(engineers);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!EngineersExists(engineers.ID_Engineer))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
                 }
             }
-            return RedirectToAction("Login", "Auth");
+            TempData["IngenieroModificado"] = true;
+            return RedirectToAction(nameof(Index));
+        }
+
+        private bool EngineersExists(int iD_Engineer)
+        {
+            throw new NotImplementedException();
+        }
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> Eliminar_Ingeniero(int? id)
+        {
+            if (id == null || _context.Engineers == null)
+            {
+                return NotFound();
+            }
+
+            var engineers = await _context.Engineers
+                .Include(e => e.ApplicationUser)
+                .Include(e => e.Manager)
+                .Include(e => e.Positions)
+                .FirstOrDefaultAsync(m => m.ID_Engineer == id);
+            if (engineers == null)
+            {
+                return NotFound();
+            }
+            if (_context.Engineers == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.Engineers'  is null.");
+            }
+            var engineer = await _context.Engineers.FindAsync(id);
+            if (engineers != null)
+            {
+                _context.Engineers.Remove(engineers);
+            }
+            var user = await _userManager.FindByIdAsync(engineer.ID_Account);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            // Eliminar el usuario de la tabla AspNetUsers
+            var result = await _userManager.DeleteAsync(user);
+            if (!result.Succeeded)
+            {
+                // Ocurrió un error al eliminar el usuario, manejarlo según sea necesario
+                return Problem("Error al eliminar el usuario");
+            }
+            await _context.SaveChangesAsync();
+            TempData["IngenieroEliminado"] = true;
+            return RedirectToAction(nameof(Index));
+
         }
         public async Task<List<Recognitions>> LoadRecognitionsPending(String recognitionState)
         {
@@ -364,8 +689,6 @@ namespace sistema_reconocimiento.Controllers
                     LoadPoints(modelE);
                     LoadIdEngineer(modelE);
                     // LoadRecognizedPoints(modelE, model);
-                    int pageSize = 10; // Número de elementos por página
-                    int pageNumber = page ?? 1; // Número de página actual
                     var viewModel = new SubmitStateRecognition
                     {
                         RecognitionsPOST = new Recognitions(),
@@ -518,7 +841,7 @@ namespace sistema_reconocimiento.Controllers
             return RedirectToAction(nameof(Reconocimientos));
         }
         [Authorize(Roles = "admin")]
-        public async Task<IActionResult> Recompensas(bool result, Engineers model)
+        public async Task<IActionResult> RecompensasAsync(bool result, Engineers model)
         {
             if (result == false)
             {
@@ -526,7 +849,10 @@ namespace sistema_reconocimiento.Controllers
                 if (result == true)
                 {
                     LoadPoints(model);
-                    return View();
+                    LoadIdEngineer(model);
+                    List<Rewards> rewards = await _context.Rewards.ToListAsync();
+
+                    return View(rewards);
                 }
                 else
                 {
@@ -555,9 +881,10 @@ namespace sistema_reconocimiento.Controllers
         }
         [HttpPost]
         [Authorize(Roles = "admin")]
-        public async Task<IActionResult> Agregar_recompensa(Rewards rewards)
+        public async Task<IActionResult> Agregar_recompensa(Rewards rewards, Engineers model)
         {
             var status = new Status();
+            LoadPoints(model);
             if (rewards.Reward_Name != null && rewards.Reward_Description != null && rewards.Price != null && rewards.PictureFile != null)
             {
                 if (rewards.PictureFile != null && rewards.PictureFile.Length > 0)
@@ -601,7 +928,7 @@ namespace sistema_reconocimiento.Controllers
         }
 
         [Authorize(Roles = "admin")]
-        public IActionResult Editar_recompensa(bool result, Engineers model)
+        public async Task<IActionResult> Editar_recompensa(bool result, Engineers model, int? id)
         {
             if (result == false)
             {
@@ -609,7 +936,27 @@ namespace sistema_reconocimiento.Controllers
                 if (result == true)
                 {
                     LoadPoints(model);
-                    return View();
+                    if (id == null || _context.Rewards == null)
+                    {
+                        return NotFound();
+                    }
+
+                    var rewards = await _context.Rewards.FindAsync(id);
+
+                    if (rewards == null)
+                    {
+                        return NotFound();
+                    }
+                    // Obtener la imagen actual desde la base de datos
+                    byte[] imageData = rewards.Picture;
+
+                    // Convertir los datos binarios de la imagen a una cadena Base64
+                    string base64Image = imageData != null ? Convert.ToBase64String(imageData) : "";
+
+                    // Asignar la cadena Base64 a una propiedad del modelo para mostrarla en la vista
+                    rewards.Base64Image = base64Image;
+
+                    return View(rewards);
                 }
                 else
                 {
@@ -617,6 +964,75 @@ namespace sistema_reconocimiento.Controllers
                 }
             }
             return RedirectToAction("Login", "Auth");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Editar_recompensa(int id, [Bind("ID_Reward,Reward_Name,Reward_Description,Price,Picture")] Rewards rewards, IFormFile picture)
+        {
+            if (id != rewards.ID_Reward)
+            {
+                return NotFound();
+            }
+
+            //if (ModelState.IsValid)
+            //{
+            try
+            {
+                if (picture == null || picture.Length == 0)
+                {
+                    ModelState.AddModelError("PictureFile", "Se debe seleccionar una imagen.");
+                    return View(rewards);
+                }
+                if (rewards.Price < 1 || rewards.Price > 75000)
+                {
+                    ViewData["PriceE"] = "El precio debe estar entre 1 y 75000.";
+                    return View(rewards);
+                }
+                if (picture != null && picture.Length > 0)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await picture.CopyToAsync(memoryStream);
+                        rewards.Picture = memoryStream.ToArray();
+                    }
+                }
+                _context.Update(rewards);
+                await _context.SaveChangesAsync();
+                TempData["RenM"] = true;
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!RewardsExists(rewards.ID_Reward))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction("Recompensas", "Main");
+            //}
+            //return View(rewards);
+        }
+        [Authorize(Roles = "admin")]
+        public IActionResult Eliminar_Recompensa(int id)
+        {
+            var rewards = _context.Rewards.FirstOrDefault(r => r.ID_Reward == id);
+            if (rewards == null)
+            {
+                // Si no se encuentra la recompensa, muestra una vista de error o redirige a una página de error
+                return View("Error");
+            }
+
+            // Elimina el recompensa de la base de datos
+            _context.Rewards.Remove(rewards);
+            _context.SaveChanges();
+            TempData["RenEliminada"] = true;
+
+            // Redirige a la acción principal
+            return RedirectToAction("Recompensas", "Main");
         }
         [Authorize(Roles = "admin")]
         public IActionResult Frases(bool result, Engineers model)
@@ -672,23 +1088,52 @@ namespace sistema_reconocimiento.Controllers
             }
             return RedirectToAction("Login", "Auth");
         }
-        [Authorize]
-        public IActionResult Mis_Reconocimientos(bool result, Engineers model)
+        public async Task<IActionResult> Mis_ReconocimientosAsync(bool result, Engineers model)
         {
             if (result == false)
             {
+                LoadPoints(model);
+                LoadIdEngineer(model);
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
-                    LoadPoints(model);
-                    return View();
+                    var currentUser = await _userManager.GetUserAsync(User);
+                    var engineers = await _context.Engineers
+                        .Include(e => e.ApplicationUser)
+                        .Include(e => e.Manager)
+                        .Include(e => e.Positions)
+                        .FirstOrDefaultAsync(m => m.ID_Account == currentUser.Id);
+
+                    if (engineers != null)
+                    {
+                        var engineerId = engineers.ID_Engineer; // Obtén el ID del ingeniero logueado
+                        ViewData["Login"] = engineerId;
+                        var recognitions = await _context.Recognitions.ToListAsync();
+                        foreach (var recognition in recognitions)
+                        {
+                            var petitionerEngineer = await _context.Engineers.FindAsync(recognition.Petitioner_Eng);
+                            var evaluatorEngineer = await _context.Engineers.FindAsync(recognition.Evaluator_Admin);
+                            var recognizedEngineer = await _context.Engineers.FindAsync(recognition.Recognized_Eng);
+
+                            ViewData[$"PetitionerEngineerName_{recognition.ID_Recognition}"] = petitionerEngineer?.Name_Engineer;
+                            ViewData[$"EvaluatorEngineerName_{recognition.ID_Recognition}"] = evaluatorEngineer?.Name_Engineer;
+                            ViewData[$"RecognizedEngineerName_{recognition.ID_Recognition}"] = recognizedEngineer?.Name_Engineer;
+                        }
+
+                        return View(recognitions);
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index");
+                    }
                 }
                 else
                 {
-                    return RedirectToAction("Login", "Auth");
+                    return RedirectToAction("Index");
                 }
             }
-            return RedirectToAction("Login", "Auth");
+
+            return RedirectToAction("Index");
         }
         [Authorize]
         public IActionResult Perfil(bool result, Engineers model)
@@ -745,19 +1190,36 @@ namespace sistema_reconocimiento.Controllers
             var status = new Status();
             var login = new LoginModel();
             var manager = new Manager();
-            _context.Add(recognitions);
-            await _context.SaveChangesAsync();
-            var resultNotification = await _service.SendNewRecognition(login, engineers, recognitions, manager);
-            if (resultNotification.StatusCode == 1)
+            DateTime fechaActual = DateTime.Now;
+            if (string.IsNullOrWhiteSpace(recognitions.Case_Number))
             {
-                status.StatusCode = 1;
-                return RedirectToAction("Mis_Reconocimientos", "Main");
+                ModelState.AddModelError("Case_Number", "Case number ios required");
+                return RedirectToAction("Reconocer", "Main");
+            }
+            if (string.IsNullOrWhiteSpace(recognitions.Comment))
+            {
+                ModelState.AddModelError("Comment", "Comments are required");
+                return RedirectToAction("Reconocer", "Main");
             }
             else
             {
-                TempData["msg"] = resultNotification.Message;
-                return RedirectToAction("Index", "Main");
+                recognitions.Recognition_Date = fechaActual;
+                _context.Add(recognitions);
+                await _context.SaveChangesAsync();
+                var resultNotification = await _service.SendNewRecognition(login, engineers, recognitions, manager);
+                if (resultNotification.StatusCode == 1)
+                {
+                    status.StatusCode = 1;
+                    return RedirectToAction("Mis_Reconocimientos", "Main");
+                }
+                else
+                {
+                    status.Message = "We were unable to send the recognition";
+                    TempData["msg"] = resultNotification.Message;
+                    return RedirectToAction("Index", "Main");
+                }
             }
+
         }
         [Authorize]
         public IActionResult Privacy(bool result, Engineers model)
@@ -858,6 +1320,10 @@ namespace sistema_reconocimiento.Controllers
                 TempData["msg"] = status.Message;
                 return RedirectToAction("Index", "Main");
             }
+        }
+        private bool RewardsExists(int id)
+        {
+            return (_context.Rewards?.Any(e => e.ID_Reward == id)).GetValueOrDefault();
         }
     }
 }

@@ -24,6 +24,7 @@
                                     <i class="fas fa-ticket"></i>
                                 </span>
                                 <input asp-for="Recognitions.Case_Number" type="text" class="form-control" placeholder="20023412220044" />
+                                @Html.ValidationMessageFor(m => m.Recognitions.Case_Number, "", new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="mb-3">
@@ -43,6 +44,7 @@
                             <div class="input-group input-group-merge">
                                 <span class="input-group-text"><i class="fas fa-heart"></i></span>
                                 <input asp-for="Recognitions.Comment" class="form-control" rows="3" />
+                                @Html.ValidationMessageFor(m => m.Recognitions.Comment, "", new { @class = "text-danger" })
                             </div>
                         </div>
                         <br/>
