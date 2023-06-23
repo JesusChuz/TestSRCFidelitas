@@ -4,6 +4,7 @@ using NuGet.Protocol.Plugins;
 using sistema_reconocimiento.Interface;
 using sistema_reconocimiento.Models;
 using System.Security.Claims;
+<<<<<<< HEAD
 using MimeKit;
 using MailKit.Net.Smtp;
 using MessagePack;
@@ -15,6 +16,8 @@ using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Globalization;
 
+=======
+>>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
 //Se programa toda la logica de los metodos que posteriormente se vuelven a llamar en la interface
 namespace sistema_reconocimiento.Services
 {
@@ -82,6 +85,10 @@ namespace sistema_reconocimiento.Services
         {
             await signInManager.SignOutAsync();
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
         public async Task<Status> RegistrationAsync(AccountRegistration model)
         {
             var status = new Status();
@@ -107,6 +114,7 @@ namespace sistema_reconocimiento.Services
                 status.Message = "User creation failed";
                 return status;
             }
+<<<<<<< HEAD
             if (!result.Succeeded)
             {
                 status.StatusCode = 0;
@@ -115,6 +123,8 @@ namespace sistema_reconocimiento.Services
                 return status;
             }
             status.AccountId = user.Id;
+=======
+>>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
             // role management 
             if (!await roleManager.RoleExistsAsync(model.Role))
                 await roleManager.CreateAsync(new IdentityRole(model.Role));
@@ -125,7 +135,10 @@ namespace sistema_reconocimiento.Services
             }
             status.StatusCode = 1;
             status.Message = "User has been registered successfully!";
+<<<<<<< HEAD
             status.IsSuccess = true;
+=======
+>>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
             return status;
         }
 
@@ -213,6 +226,7 @@ namespace sistema_reconocimiento.Services
                 return status;
             }
         }
+<<<<<<< HEAD
 
         public static string GenerateNewPassword()
         {
@@ -303,5 +317,7 @@ namespace sistema_reconocimiento.Services
                 return status;
             }
         }
+=======
+>>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
     }
 }

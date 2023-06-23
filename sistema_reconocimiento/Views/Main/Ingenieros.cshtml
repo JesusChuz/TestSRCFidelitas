@@ -3,8 +3,11 @@
 @{
     ViewData["Title"] = "Ingenieros";
     Layout = "~/Views/Shared/_Layout.cshtml";
+<<<<<<< HEAD
     int points = ViewBag.GetPoints;
     int ID_Engineer = ViewBag.GetIdEngineer;
+=======
+>>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
 }
 <div class="app-content content">
     <div class="content-wrapper">
@@ -76,6 +79,7 @@
                                     </thead>
                                     <tbody>
                                         @{
+<<<<<<< HEAD
                                             int contador = 1; // Variable para el contador
                                         }
                                         @foreach (var item in Model)
@@ -91,6 +95,22 @@
                                                     <a class="btn btn-danger" asp-controller="Main" asp-action="Editar_ingeniero" asp-route-id="@item.ID_Engineer"><i class="fas fa-pen"></i></a>
                                                     <a class="btn btn-danger" asp-controller="Main" asp-action="Eliminar_ingeniero" asp-route-id="@item.ID_Engineer" onclick="return confirm('Are you sure you want to delete this engineer?')"> <i class="fas fa-trash"></i></a>
                                                 </td>
+=======
+                                            int contador = 1; // Variable para el contador      
+                                        }
+                            @foreach (var item in Model) {
+                                            <tr>
+                                                <th scope="row">@contador</th>
+                                            <td>@Html.DisplayFor(modelItem => item.Name_Engineer)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.ApplicationUser.Email)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.Manager.Name_Manager)  @Html.DisplayFor(modelItem => item.Manager.LastName_Manager)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.ApplicationUser.Roles)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.Positions.Position_Name)</td>
+                                            <td>
+                                                <a class="btn btn-danger" asp-controller="Main" asp-action="Editar_ingeniero" asp-route-id="@item.ID_Engineer"><i class="fas fa-pen"></i></a>
+                                                <a class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                                            </td>
+>>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
                                             </tr>
                                             contador++;
                                         }

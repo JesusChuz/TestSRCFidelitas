@@ -1,6 +1,9 @@
 ﻿@{
     string username = User.Identity.Name;
+<<<<<<< HEAD
     int points = ViewBag.GetPoints;
+=======
+>>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -65,9 +68,15 @@
                     </ul>
                     <ul class="nav navbar-nav mr-auto float-left">
                         <li class="nav-item d-block d-md-none"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="ft-menu"></i></a></li>
+<<<<<<< HEAD
                         <span><i class="fas fa-smile"></i> Hey @username ! </span>
                     </ul>
                     <span><i class="fas fa-wallet"></i> @points pts</span>
+=======
+                        <span><i class="fas fa-smile"></i> Hola @username ! </span>
+                    </ul>
+                    <span><i class="fas fa-wallet"></i> 5000 pts</span>
+>>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
                     <ul class="nav navbar-nav float-right">
                         <li class="dropdown dropdown-user nav-item">
                             <a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
@@ -81,8 +90,13 @@
                                             <span class="user-name text-bold-700 ml-1">John Doe</span>
                                         </span>
                                     </a>
+<<<<<<< HEAD
                                     <div class="dropdown-divider"></div><a class="dropdown-item" asp-controller="UC" asp-action="Perfil"><i class="ft-user"></i> Edit Profile</a>
                                     <div class="dropdown-divider"></div><a class="dropdown-item" asp-controller="Auth" asp-action="Logout"><i class="ft-power"></i> Sign out</a>
+=======
+                                    <div class="dropdown-divider"></div><a class="dropdown-item" asp-controller="UC" asp-action="Perfil"><i class="ft-user"></i> Editar Perfil</a>
+                                    <div class="dropdown-divider"></div><a class="dropdown-item" asp-controller="Auth" asp-action="Logout"><i class="ft-power"></i> Cerrar Sesion </a>
+>>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
                                 </div>
                             </div>
                         </li>
@@ -110,6 +124,7 @@
                 @if (User.IsInRole("admin"))
                 {
                     <li class="active">
+<<<<<<< HEAD
                         <a asp-controller="Main" asp-action="Index"><i class="ft-home"></i><span class="menu-title" data-i18n="">Main</span></a>
                     </li>
                     <li class=" nav-item">
@@ -127,6 +142,25 @@
                 }
                 <li class=" nav-item">
                     <a asp-controller="Main" asp-action="Mis_Reconocimientos"><i class="fas fa-history"></i><span class="menu-title" data-i18n>My history</span></a>
+=======
+                        <a asp-controller="Main" asp-action="Index"><i class="ft-home"></i><span class="menu-title" data-i18n="">Principal</span></a>
+                    </li>
+                    <li class=" nav-item">
+                        <a asp-controller="Main" asp-action="Ingenieros"><i class="ft-user"></i><span class="menu-title">Ingenieros</span></a>
+                    </li>
+                    <li class=" nav-item">
+                        <a asp-controller="Main" asp-action="Reconocimientos"><i class="ft-activity"></i><span class="menu-title">Reconocimientos</span></a>
+                    </li>
+                    <li class=" nav-item">
+                        <a asp-controller="Main" asp-action="Recompensas"><i class="fas fa-gift"></i><span class="menu-title">Recompensas</span></a>
+                    </li>
+                    <li class=" nav-item">
+                        <a asp-controller="Main" asp-action="Frases"><i class="fas fa-book"></i><span class="menu-title" data-i18n="">Frases</span></a>
+                    </li>
+                }
+                <li class=" nav-item">
+                    <a asp-controller="Main" asp-action="Mis_Reconocimientos"><i class="fas fa-history"></i><span class="menu-title" data-i18n>Mi historial</span></a>
+>>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
                 </li>
             </ul>
         </div><a class="btn btn-danger btn-block btn-glow btn-upgrade-pro mx-1" href="Metricas" target=""><i class="fas fa-star"></i>CSAT<i class="fas fa-star"></i></a>
