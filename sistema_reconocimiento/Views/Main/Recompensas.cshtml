@@ -18,10 +18,10 @@
                     <div class="breadcrumb-wrapper mr-1">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item">
-                                <a asp-controller="Main" asp-action="Index"> Principal</a>
+                                <a asp-controller="Main" asp-action="Index"> Main</a>
                             </li>
                             <li class="breadcrumb-item active">
-                                Recompensas
+                                Rewards
                             </li>
                         </ol>
                     </div>
@@ -35,7 +35,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <a asp-controller="Main" asp-action="Agregar_recompensa" class="btn btn-danger"><i class="fas fa-plus"></i>Agregar Recompensa</a>
+                            <a asp-controller="Main" asp-action="Agregar_recompensa" class="btn btn-danger"><i class="fas fa-plus"></i>Add Reward</a>
 
                             <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
                             <div class="heading-elements">
@@ -47,8 +47,8 @@
                                                 <i class="bx bx-search fs-4 lh-0"></i>
                                                 <input type="text"
                                                        class="form-control border-0 shadow-none"
-                                                       placeholder="Buscar"
-                                                       aria-label="Buscar" />
+                                                       placeholder="Search"
+                                                       aria-label="Search" />
                                             </div>
                                         </div>
                                         <!-- /Search -->
@@ -66,11 +66,11 @@
                                 <table class="table">
                                     <thead class="thead-default">
                                         <tr>
-                                            <th scope="col">Numero de recompensa</th>
-                                            <th scope="col">Nombre</th>
-                                            <th scope="col">Descripción</th>
-                                            <th scope="col">Precio</th>
-                                            <th scope="col">Acciones</th>
+                                            <th scope="col">Reward number</th>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Description</th>
+                                            <th scope="col">Price</th>
+                                            <th scope="col">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -93,7 +93,7 @@
                                                 </td>
                                                 <td>
                                                     <a class="btn btn-danger" asp-controller="Main" asp-action="Editar_recompensa" asp-route-id="@item.ID_Reward"><i class="fas fa-pen"></i></a>
-                                                    <a class="btn btn-danger" asp-controller="Main" asp-action="Eliminar_recompensa" asp-route-id="@item.ID_Reward" onclick="return confirm('¿Estás seguro de que quieres eliminar este elemento?');"><i class="fas fa-trash"></i></a>
+                                                    <a class="btn btn-danger" asp-controller="Main" asp-action="Eliminar_recompensa" asp-route-id="@item.ID_Reward" onclick="return confirm('Are you sure you want to delete this reward?');"><i class="fas fa-trash"></i></a>
                                                 </td>
                                             </tr>
                                             contador++;

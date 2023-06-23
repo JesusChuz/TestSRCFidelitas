@@ -1294,7 +1294,7 @@ namespace sistema_reconocimiento.Controllers
                             {
                                 status.StatusCode = 1;
                                 status.Message = "Your purchase has been successful";
-                                TempData["msg"] = status.Message;
+                                TempData["msgPurchaseSucceeded"] = status.Message;
                                 return RedirectToAction("Index", "Main");
                             }
                             else

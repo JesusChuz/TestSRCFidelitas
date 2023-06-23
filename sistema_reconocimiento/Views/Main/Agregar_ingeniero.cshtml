@@ -30,9 +30,8 @@
                                     <i class="bx bx-user"></i>
                                 </span>
                                 @Html.TextBoxFor(m => m.Name_Engineer, new { @class = "form-control", placeholder = "Nombre", id="basic-icon-default-name"/*,required = "required", maxlength = "30",minlength = "3"*/})
-
                             </div>
-                            @Html.ValidationMessageFor(m => m.Name_Engineer,"", new { @class = "text-danger" })
+                            
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="basic-icon-default-lastname">Apellido</label>
@@ -41,7 +40,6 @@
                                     <i class="bx bx-user"></i>
                                 </span>
                                 @Html.TextBoxFor(m => m.LastName_Engineer, new { @class = "form-control", placeholder = "Apellido", id="basic-icon-default-name"})
-                                @Html.ValidationMessageFor(m => m.LastName_Engineer, "", new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="mb-3">
@@ -81,8 +79,8 @@
                                 </label>
                                 <select class="form-select" id="inputGroupSelect01" name="UserRole">
                                     <option selected>Seleccionar...</option>
-                                    <option value="comun">Común</option>
-                                    <option value="admin">Administrador</option>
+                                    <option value="comun">Common</option>
+                                    <option value="admin">Administrator</option>
                                 </select>
                                 @Html.ValidationMessage("UserRole", "", new { @class = "text-danger" })
                             </div>

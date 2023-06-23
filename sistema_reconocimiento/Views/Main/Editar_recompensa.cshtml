@@ -8,19 +8,19 @@
 }
 <div class="app-content content">
     <div class="content-wrapper">
-        <h4 class="fw-bold py-3"><span class="text-muted fw-light">Recompensas/</span>Actualizar información</h4>
+        <h4 class="fw-bold py-3"><span class="text-muted fw-light">Rewards/</span>Edit</h4>
         <div class="row">
             <div class="col-xxl">
                 <div class="card mb-4">
                     <div class="card-body">
                         <div class="mb-3">
                             <div class="card mb-2">
-                                <h5 class="mb-0">Complete las información de la recompensa</h5>
+                                <h5 class="mb-0">Complete the information</h5>
                                 <div class="card-body">
                                     <form asp-action="Editar_recompensa" enctype="multipart/form-data">
                                         <input type="hidden" asp-for="ID_Reward" />
                                         <div class="mb-3">
-                                            <label class="form-label" for="basic-icon-default-name">Título</label>
+                                            <label class="form-label" for="basic-icon-default-name">Title</label>
                                             <div class="input-group input-group-merge">
                                                 <span id="basic-icon-default-name" class="input-group-text">
                                                     <i class="fas fa-pen"></i>
@@ -33,7 +33,7 @@
                                             <span asp-validation-for="Reward_Name" class="text-danger"></span>
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label" for="basic-icon-default-lastname">Descripción</label>
+                                            <label class="form-label" for="basic-icon-default-lastname">Description</label>
                                             <div class="input-group input-group-merge">
                                                 <span id="basic-icon-default-lastname" class="input-group-text">
                                                     <i class="fas fa-book"></i>
@@ -46,7 +46,7 @@
                                             <span asp-validation-for="Reward_Description" class="text-danger"></span>
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label" for="basic-icon-default-email">Precio</label>
+                                            <label class="form-label" for="basic-icon-default-email">Price</label>
                                             <div class="input-group input-group-merge">
                                                 <span class="input-group-text"><i class="fas fa-money"></i></span>
                                                 <input asp-for="Price"
@@ -58,16 +58,16 @@
                                             <span asp-validation-for="Price" class="text-danger"></span>
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label" for="basic-icon-default-email">Imágen</label>
+                                            <label class="form-label" for="basic-icon-default-email">Select the Image</label>
                                             <div class="input-group input-group-merge">
                                                 <span class="input-group-text"><i class="fas fa-photo"></i></span>
-                                                <input type="file" class="account-file-input" accept="image/png, image/jpeg" name="picture" />
+                                                <input type="file" class="account-file-input" accept="image/png, image/jpeg" name="picture" required/>
                                             </div>
                                             @Html.ValidationMessageFor(model => model.PictureFile, "", new { @class = "text-danger" })
                                         </div>
                                         </br>
-                                        <a class="btn btn-danger" asp-controller="Main" asp-action="Recompensas">Regresar</a>
-                                        <button type="submit" class="btn btn-primary">Actualizar</button>
+                                        <a class="btn btn-danger" asp-controller="Main" asp-action="Recompensas">Return</a>
+                                        <button type="submit" class="btn btn-primary">Update</button>
                                     </form>
                                 </div>
                             </div>
@@ -78,12 +78,12 @@
             <div class="col-xxl">
                 <div class="card mb-4">
                     <div class="card-header d-flex align-items-center justify-content-between">
-                        <h5 class="mb-0">Información Actual</h5>
+                        <h5 class="mb-0">Current information</h5>
                     </div>
                     <div class="card-body">
                         <form>
                             <div class="mb-3">
-                                <label class="form-label" for="basic-icon-default-name">Título</label>
+                                <label class="form-label" for="basic-icon-default-name">Title</label>
                                 <div class="input-group input-group-merge">
                                     <span id="basic-icon-default-name" class="input-group-text">
                                         <i class="fas fa-pen"></i>
@@ -96,7 +96,7 @@
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label" for="basic-icon-default-lastname">Descripción</label>
+                                <label class="form-label" for="basic-icon-default-lastname">Description</label>
                                 <div class="input-group input-group-merge">
                                     <span id="basic-icon-default-lastname" class="input-group-text">
                                         <i class="fas fa-book"></i>
@@ -109,7 +109,7 @@
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label" for="basic-icon-default-email">Precio</label>
+                                <label class="form-label" for="basic-icon-default-email">Price</label>
                                 <div class="input-group input-group-merge">
                                     <span class="input-group-text"><i class="fas fa-money"></i></span>
                                     <input asp-for="Price"
@@ -120,7 +120,7 @@
                                 </div>
                                 <br />
                                 <div class="mb-3">
-                                    <label class="form-label" for="basic-icon-default-email">Imágen actual</label>
+                                    <label class="form-label" for="basic-icon-default-email">Current Image</label>
                                     <br />
                                     @if (!string.IsNullOrEmpty(Model.Base64Image))
                                     {
@@ -128,7 +128,7 @@
                                     }
                                     else
                                     {
-                                        <span>No se encontró ninguna imagen.</span>
+                                        <span>Couldn't found any image.</span>
                                     }
                                 </div>
                             </div>

@@ -17,7 +17,7 @@
         <div class="row match-height">
             <div class="col-12">
                 <div class="navbar-nav align-items-center">
-                    <h3 class="content-header-right">@TempData["p"]"Ninguno de nosotros es tan bueno como todos nosotros juntos." -Ray Kroc.</h3>
+                    <h3 class="content-header-right">@TempData["p"]"None of us is as good as all together" -Ray Kroc.</h3>
                     </br>
                 </div>
                 </br>
@@ -35,7 +35,7 @@
     <div class="col-xl-4 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">Top 5 ingenieros con mas reconocimientos</h4>
+                <h4 class="card-title">Top 5 engineers with most recognitions</h4>
                 <a class="heading-elements-toggle">
                     <i class="fa fa-ellipsis-v font-medium-3"></i>
                 </a>
@@ -137,8 +137,14 @@
     <!-- Images -->
     <div class="card-header">
         <div class="navbar-nav align-items-center">
-            <h3 class="content-header-right">Recompensas</h3>
+            <h3 class="content-header-right">Rewards</h3>
             </br>
+                @if (TempData["msgPurchaseSucceeded"] != null)
+                {
+                    <div class="msg">
+                        <span class="text-danger">@TempData["msgPurchaseSucceeded"]</span>
+                    </div>
+                }
         </div>
         <div class="row mb-5">
              @foreach (var item in Model.Rewards)
@@ -154,7 +160,7 @@
                       @Html.DisplayFor(modelItem => item.Reward_Description)
                     </p>
                     <label>
-                        Precio:
+                        Price:
                     </label>
                     <br />
                     <div class="navbar-nav align-items-center">
