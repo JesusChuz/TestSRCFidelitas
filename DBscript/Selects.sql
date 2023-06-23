@@ -29,4 +29,5 @@ SELECT * FROM Rol;
 DELETE FROM Recognitions
 DELETE FROM Positions
 DELETE FROM Engineers
-DELETE FROM AspNetUsers
+
+DELETE FROM AspNetUsers where Email = 'john@gmail.com';

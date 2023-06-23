@@ -45,9 +45,9 @@
                                                 <p class="mb-1">
                                                     "@Html.DisplayFor(modelItem => item.Comment)"
                                                 </p>
-                                                <small>Enviado a: @ViewData[$"RecognizedEngineerName_{item.ID_Recognition}"]</small>
-                                                <small>Fecha: @item.Recognition_Date.ToString("dd/MMM/yyyy")</small>
-                                                <small>@Html.DisplayFor(modelItem => item.Recognition_State)</small>
+                                                <small>Sent by: @ViewData[$"RecognizedEngineerName_{item.ID_Recognition}"]</small>
+                                                <small>Date: @item.Recognition_Date.ToString("dd/MMM/yyyy")</small>
+                                                <small>State: @Html.DisplayFor(modelItem => item.Recognition_State)</small>
                                             </div>
                                         </a>
                                     }
@@ -71,9 +71,9 @@
                                                 <p class="mb-1">
                                                     "@Html.DisplayFor(modelItem => item.Comment)"
                                                 </p>
-                                                <small>Enviado por: @ViewData[$"PetitionerEngineerName_{item.ID_Recognition}"]</small>
-                                                <small>Fecha: @item.Recognition_Date.ToString("dd/MMM/yyyy")</small>
-                                                <small>@Html.DisplayFor(modelItem => item.Recognition_State)</small>
+                                                <small>Sent by: @ViewData[$"PetitionerEngineerName_{item.ID_Recognition}"]</small>
+                                                <small>Date: @item.Recognition_Date.ToString("dd/MMM/yyyy")</small>
+                                                <small>State: @Html.DisplayFor(modelItem => item.Recognition_State)</small>
                                             </div>
                                         </a>
                                     }

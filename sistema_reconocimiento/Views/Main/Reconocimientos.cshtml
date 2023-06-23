@@ -80,46 +80,43 @@
                                     <tbody>
                                         @foreach (var item in Model.RecognitionsP)
                                         {
-                                            if (item.Recognition_State?.Equals("Pending", StringComparison.OrdinalIgnoreCase) ?? false)
-                                            {
-                                                <tr>
-                                                    <td>@Html.DisplayFor(modelItem => item.ID_Recognition)</td>
-                                                    <td>@Html.DisplayFor(modelItem => item.Case_Number)</td>
-                                                    <td>@Html.DisplayFor(modelItem => item.PetitionerEngineer.Name_Engineer)  @Html.DisplayFor(modelItem => item.PetitionerEngineer.LastName_Engineer)</td>
-                                                    <td>@Html.DisplayFor(modelItem => item.RecognizedEngineer.Name_Engineer)  @Html.DisplayFor(modelItem => item.RecognizedEngineer.LastName_Engineer)</td>
-                                                    <td>@Html.DisplayFor(modelItem => item.Recognition_State)</td>
-                                                    <td>"@Html.DisplayFor(modelItem => item.Comment)"</td>
-                                                    <td>
-                                                        @using (Html.BeginForm("Aprobar_Reconocimiento", "Main", FormMethod.Post, new { @class = "submit-approval", role = "form" }))
-                                                        {
-                                                            @Html.AntiForgeryToken()
-                                                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                                                            <input asp-for="RecognitionsPOST.ID_Recognition" class="form-control hidden disabled" value="@item.ID_Recognition" />
-                                                            <input asp-for="RecognitionsPOST.Petitioner_Eng" class="form-control hidden disabled" value="@item.Petitioner_Eng" />
-                                                            <input asp-for="RecognitionsPOST.Recognized_Eng" class="form-control hidden disabled" value="@item.Recognized_Eng" />
-                                                            <input asp-for="RecognitionsPOST.ID_EngineerRec" class="form-control hidden disabled" value="@item.Recognized_Eng" />
-                                                            <input asp-for="RecognitionsPOST.Points_EngineerRec" class="form-control hidden disabled" value="@pointsR" />
-                                                            <div class="navbar-nav align-items-center">
-                                                                <button type="submit" class="btn btn-danger"><i class="fas fa-check"></i></button>
-                                                            </div>
-                                                        }
-                                                        @using (Html.BeginForm("Rechazar_Reconocimiento", "Main", FormMethod.Post, new { @class = "submit-rejection", role = "form" }))
-                                                        {
-                                                            @Html.AntiForgeryToken()
-                                                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                                                            <input asp-for="RecognitionsPOST.ID_Recognition" class="form-control hidden disabled" value="@item.ID_Recognition" />
-                                                            <input asp-for="RecognitionsPOST.Petitioner_Eng" class="form-control hidden disabled" value="@item.Petitioner_Eng" />
-                                                            <input asp-for="RecognitionsPOST.Recognized_Eng" class="form-control hidden disabled" value="@item.Recognized_Eng" />
-                                                            <div class="navbar-nav align-items-center">
-                                                                <button type="submit" class="btn btn-danger"><i class="fas fa-cancel"></i></button>
-                                                            </div>
-                                                        }
-                                                        @*                                                    <a class="btn btn-danger" href=""><i class="fas fa-check"></i></a>
+                                            <tr>
+                                                <td>@Html.DisplayFor(modelItem => item.ID_Recognition)</td>
+                                                <td>@Html.DisplayFor(modelItem => item.Case_Number)</td>
+                                                <td>@Html.DisplayFor(modelItem => item.PetitionerEngineer.Name_Engineer)  @Html.DisplayFor(modelItem => item.PetitionerEngineer.LastName_Engineer)</td>
+                                                <td>@Html.DisplayFor(modelItem => item.RecognizedEngineer.Name_Engineer)  @Html.DisplayFor(modelItem => item.RecognizedEngineer.LastName_Engineer)</td>
+                                                <td>@Html.DisplayFor(modelItem => item.Recognition_State)</td>
+                                                <td>@Html.DisplayFor(modelItem => item.Comment)</td>
+                                                <td>
+                                                    @using (Html.BeginForm("Aprobar_Reconocimiento", "Main", FormMethod.Post, new { @class = "submit-approval", role = "form" }))
+                                                    {
+                                                        @Html.AntiForgeryToken()
+                                                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                                        <input asp-for="RecognitionsPOST.ID_Recognition" class="form-control hidden disabled" value="@item.ID_Recognition" />
+                                                        <input asp-for="RecognitionsPOST.Petitioner_Eng" class="form-control hidden disabled" value="@item.Petitioner_Eng" />
+                                                        <input asp-for="RecognitionsPOST.Recognized_Eng" class="form-control hidden disabled" value="@item.Recognized_Eng" />
+                                                        <input asp-for="RecognitionsPOST.ID_EngineerRec" class="form-control hidden disabled" value="@item.Recognized_Eng" />
+                                                        <input asp-for="RecognitionsPOST.Points_EngineerRec" class="form-control hidden disabled" value="@pointsR" />
+                                                        <div class="navbar-nav align-items-center">
+                                                            <button type="submit" class="btn btn-danger"><i class="fas fa-check"></i></button>
+                                                        </div>
+                                                    }
+                                                    @using (Html.BeginForm("Rechazar_Reconocimiento", "Main", FormMethod.Post, new { @class = "submit-rejection", role = "form" }))
+                                                    {
+                                                        @Html.AntiForgeryToken()
+                                                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                                        <input asp-for="RecognitionsPOST.ID_Recognition" class="form-control hidden disabled" value="@item.ID_Recognition" />
+                                                        <input asp-for="RecognitionsPOST.Petitioner_Eng" class="form-control hidden disabled" value="@item.Petitioner_Eng" />
+                                                        <input asp-for="RecognitionsPOST.Recognized_Eng" class="form-control hidden disabled" value="@item.Recognized_Eng" />
+                                                        <div class="navbar-nav align-items-center">
+                                                            <button type="submit" class="btn btn-danger"><i class="fas fa-cancel"></i></button>
+                                                        </div>
+                                                    }
+@*                                                    <a class="btn btn-danger" href=""><i class="fas fa-check"></i></a>
                                                     <a class="btn btn-danger" href=""><i class="fas fa-cancel"></i></a>
                                                     <a class="btn btn-danger" href=""><i class="fas fa-trash"></i></a>*@
-                                                    </td>
-                                                </tr>
-                                            }
+                                                </td>
+                                            </tr>
                                         }
                                 </table>
                         </div>
@@ -192,16 +189,13 @@
                                     <tbody>
                                         @foreach (var item in Model.RecognitionsAR)
                                         {
-                                            if ((item.Recognition_State?.Equals("Approved", StringComparison.OrdinalIgnoreCase) ?? false) ||
-                                            (item.Recognition_State?.Equals("Rejected", StringComparison.OrdinalIgnoreCase) ?? false))
-                                            {
                                             <tr>
                                                 <td>@Html.DisplayFor(modelItem => item.ID_Recognition)</td>
                                                 <td>@Html.DisplayFor(modelItem => item.Case_Number)</td>
                                                 <td>@Html.DisplayFor(modelItem => item.PetitionerEngineer.Name_Engineer)  @Html.DisplayFor(modelItem => item.PetitionerEngineer.LastName_Engineer)</td>
                                                 <td>@Html.DisplayFor(modelItem => item.RecognizedEngineer.Name_Engineer)  @Html.DisplayFor(modelItem => item.RecognizedEngineer.LastName_Engineer)</td>
                                                 <td>@Html.DisplayFor(modelItem => item.Recognition_State)</td>
-                                                <td>"@Html.DisplayFor(modelItem => item.Comment)"</td>
+                                                <td>@Html.DisplayFor(modelItem => item.Comment)</td>
                                                 <td>
                                                     @using (Html.BeginForm("Eliminar_Reconocimiento", "Main", FormMethod.Post, new { @class = "submit-delete", role = "form" }))
                                                     {
@@ -214,7 +208,6 @@
                                                     }
                                                 </td>
                                             </tr>
-                                            }
                                         }
                                 </table>
                             </div>
