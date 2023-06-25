@@ -3,25 +3,22 @@
 @{
     ViewData["Title"] = "Recompensas";
     Layout = "~/Views/Shared/_Layout.cshtml";
-<<<<<<< HEAD
     int points = ViewBag.GetPoints;
     int ID_Engineer = ViewBag.GetIdEngineer;
-=======
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
 }
 <div class="app-content content">
     <div class="content-wrapper">
         <div class="content-wrapper-before"></div>
         <div class="content-header row">
             <div class="content-header-left col-md-4 col-12 mb-2">
-                <h3 class="content-header-title">Recompensas</h3>
+                <h3 class="content-header-title">Rewards</h3>
             </div>
             <div class="content-header-right col-md-8 col-12">
                 <div class="breadcrumbs-top float-md-right">
                     <div class="breadcrumb-wrapper mr-1">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item">
-                                <a asp-controller="Main" asp-action="Index"> Main</a>
+                                <a asp-controller="Main" asp-action="Index"> Principal</a>
                             </li>
                             <li class="breadcrumb-item active">
                                 Rewards
@@ -51,7 +48,8 @@
                                                 <input type="text"
                                                        class="form-control border-0 shadow-none"
                                                        placeholder="Search"
-                                                       aria-label="Search" />
+                                                       aria-label="Search"
+                                                       id="searchInput" />
                                             </div>
                                         </div>
                                         <!-- /Search -->
@@ -66,7 +64,7 @@
                             <div class="card-body">
                             </div>
                             <div class="table-responsive">
-                                <table class="table">
+                                <table class="table" id="myTableAR">
                                     <thead class="thead-default">
                                         <tr>
                                             <th scope="col">Reward number</th>
@@ -95,15 +93,39 @@
                                                     </svg>
                                                 </td>
                                                 <td>
-                                                    <a class="btn btn-danger" asp-controller="Main" asp-action="Editar_recompensa" asp-route-id="@item.ID_Reward"><i class="fas fa-pen"></i></a>
-                                                    <a class="btn btn-danger" asp-controller="Main" asp-action="Eliminar_recompensa" asp-route-id="@item.ID_Reward" onclick="return confirm('Are you sure you want to delete this reward?');"><i class="fas fa-trash"></i></a>
-                                                </td>
+                                                    <div style="display: flex;">
+                                                        <div data-toggle="tooltip"
+                                                             data-placement="top"
+                                                             title="Edit reward">
+                                                            <a class="btn btn-danger enter-edit" asp-controller="Main" asp-action="Editar_recompensa" asp-route-id="@item.ID_Reward"><i class="fas fa-pen"></i></a>
+                                                        </div>
+                                                        <div data-toggle="tooltip"
+                                                             data-placement="top"
+                                                             title="Delete reward">
+                                                            <a class="btn btn-danger submit-delete" asp-controller="Main" asp-action="Eliminar_recompensa" asp-route-id="@item.ID_Reward"><i class="fas fa-trash"></i></a>
+                                                        </div>
+                                                    </div>
+                                                 </td>
                                             </tr>
                                             contador++;
                                         }
                                     </tbody>
                                 </table>
                             </div>
+                        </div>
+                        <div id="paginationAR" class="pagination-container navbar-nav align-items-center">
+                            <ul class="pagination">
+                                <li class="page-item prev-page"><a class="btn btn-danger" href="#">Previous</a></li>
+                                <li class="page-item">
+                                    @*<span class="page-link">*@
+                                    <svg width="40" height="40">
+                                        <circle cx="20" cy="20" r="15" fill="#79d4f7" />
+                                        <text class="current-page" x="50%" y="55%" text-anchor="middle" fill="white" font-size="12px">1</text>
+                                    </svg>
+                                    @*</span>*@
+                                </li>
+                                <li class="page-item next-page"><a class="btn btn-danger" href="#">Next</a></li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -113,6 +135,7 @@
 </div>
 
 @section scripts {
+    <script src="~/theme-assets/vendors/libs/jquery/jquery.js"></script>
     <script>
         var RenCreado = '@TempData["RenCreado"]';
         if (RenCreado === "True") {
@@ -134,7 +157,7 @@
                 "showMethod": "fadeIn",
                 "hideMethod": "fadeOut"
             };
-            toastr["success"]("Recompensa creada", "Recompensa");
+            toastr["success"]("Reward Created");
         }
         var RenEliminada = '@TempData["RenEliminada"]';
         if (RenEliminada === "True") {
@@ -156,7 +179,7 @@
                 "showMethod": "fadeIn",
                 "hideMethod": "fadeOut"
             };
-            toastr["error"]("Recompensa eliminada", "Recompensa");
+            toastr["error"]("Reward deleted");
         }
         var RenM = '@TempData["RenM"]';
         if (RenM === "True") {
@@ -178,7 +201,128 @@
                 "showMethod": "fadeIn",
                 "hideMethod": "fadeOut"
             }
-            toastr["info"]("Recompensa Modificada", "Recompensa");
+            toastr["info"]("Reward modified");
         }
+    </script>
+    <script>
+        // Función para filtrar las tablas por la búsqueda
+        function filterTable(tableId, searchInputId) {
+            let input, filter, table, tr, td, i, j, txtValue;
+            input = document.getElementById(searchInputId);
+            filter = input.value.toUpperCase();
+            table = document.getElementById(tableId);
+            tr = table.getElementsByTagName("tr");
+
+            // Iterar sobre las filas de la tabla y mostrar/ocultar según el filtro de búsqueda
+            for (i = 0; i < tr.length; i++) {
+                if (i === 0) {
+                    // Saltar la primera fila (títulos de las columnas)
+                    continue;
+                }
+                let found = false;
+                td = tr[i].getElementsByTagName("td");
+
+                for (j = 0; j < td.length; j++) {
+                    txtValue = td[j].textContent || td[j].innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (found) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+
+        // Evento para ejecutar la búsqueda al escribir en la barra de búsqueda
+        document.getElementById("searchInput").addEventListener("keyup", function () {
+            filterTable("myTableAR", "searchInput"); // Modificar los valores según el ID de tus tablas y la barra de búsqueda
+        });
+    </script>
+    <script>
+        // Función para mostrar los elementos correspondientes a la página actual
+        function showPage(page, tableId, paginationContainerId) {
+            var rowsPerPage = 3; // Número de filas por página
+            var startIndex = (page - 1) * rowsPerPage;
+            var endIndex = startIndex + rowsPerPage;
+
+            // Ocultar todas las filas de la tabla
+            $('#' + tableId + ' tbody tr').hide();
+
+            // Mostrar las filas de la página actual
+            $('#' + tableId + ' tbody tr').slice(startIndex, endIndex).show();
+
+            // Actualizar el número de página actual en el elemento correspondiente
+            $('#' + paginationContainerId + ' .current-page').text(page);
+        }
+
+        $(document).ready(function () {
+            var currentPageP = 1; // Página actual inicial para la tabla reconocimientos pendings
+            var currentPageAR = 1; // Página actual inicial para la tabla Historial de reconocimientos
+
+            // Mostrar la página actual al cargar la página
+            showPage(currentPageAR, 'myTableAR', 'paginationAR');
+
+            // Evento de clic para el botón "Anterior" de la tabla Historial de reconocimientos
+            $('#paginationAR .prev-page').click(function () {
+                if (currentPageAR > 1) {
+                    currentPageAR--;
+                    showPage(currentPageAR, 'myTableAR', 'paginationAR');
+                }
+            });
+
+            // Evento de clic para el botón "Siguiente" de la tabla Historial de reconocimientos
+            $('#paginationAR .next-page').click(function () {
+                var totalPagesAR = Math.ceil($('#myTableAR tbody tr').length / 3); // Calcular el número total de páginas
+                if (currentPageAR < totalPagesAR) {
+                    currentPageAR++;
+                    showPage(currentPageAR, 'myTableAR', 'paginationAR');
+                }
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('a.submit-delete').click(function (e) {
+                e.preventDefault(); // Evita que el enlace se siga al hacer clic
+
+                Swal.fire({
+                    title: 'Are you sure that you want to delete this reward?',
+                    text: 'This action cannot be reverted',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#79d4f7',
+                    cancelButtonColor: 'red',
+                    confirmButtonText: 'Yes, delete it',
+                    cancelButtonText: 'No, cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = $(this).attr('href');
+                    }
+                });
+            });
+
+            $('a.enter-edit').click(function (e) {
+                e.preventDefault(); // Evita que el enlace se siga al hacer clic
+
+                Swal.fire({
+                    title: 'Are you sure that you want to edit this reward?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#79d4f7',
+                    cancelButtonColor: 'red',
+                    confirmButtonText: 'Yes, I am gonna edit it',
+                    cancelButtonText: 'No, cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = $(this).attr('href');
+                    }
+                });
+            });
+        });
     </script>
 }

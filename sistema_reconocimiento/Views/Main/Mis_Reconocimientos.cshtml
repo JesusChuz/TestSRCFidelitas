@@ -3,12 +3,19 @@
 @{
     ViewData["Title"] = "Mis Reconocimientos";
     Layout = "~/Views/Shared/_Layout.cshtml";
-<<<<<<< HEAD
     int points = ViewBag.GetPoints;
     int ID_Engineer = ViewBag.GetIdEngineer;
-=======
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
 }
+<style>
+    .break-word {
+        word-wrap: break-word;
+    }
+
+    .list-group-item {
+        max-height: 200px; /* Ajusta la altura máxima según tus necesidades */
+        overflow-y: auto;
+    }
+</style>
 <div class="app-content content">
     <div class="content-wrapper">
         <div class="content-wrapper-before"></div>
@@ -45,12 +52,15 @@
                                     {
                                         <a href="" class="list-group-item list-group-item-action flex-column align-items-start">
                                             <div class="d-flex justify-content-between w-100">
-                                                <p class="mb-1">
-                                                    "@Html.DisplayFor(modelItem => item.Comment)"
-                                                </p>
                                                 <small>Sent by: @ViewData[$"RecognizedEngineerName_{item.ID_Recognition}"]</small>
                                                 <small>Date: @item.Recognition_Date.ToString("dd/MMM/yyyy")</small>
                                                 <small>State: @Html.DisplayFor(modelItem => item.Recognition_State)</small>
+                                                <p class="mb-1 break-word">
+                                                    <small>
+                                                        Comments:
+                                                        "@Html.DisplayFor(modelItem => item.Comment)"
+                                                    </small>
+                                                </p>
                                             </div>
                                         </a>
                                     }
@@ -63,7 +73,7 @@
                         <div class="demo-inline-spacing mt-2">
                             <div class="list-group">
                                 <a href="" class="list-group-item list-group-item-action flex-column align-items-start active">
-                                    <h3 class="content-header-right">When I was recognized by someone</h3>
+                                    <h3 class="content-header-right">When I recognized someone</h3>
                                 </a>
                                 @foreach (var item in Model)
                                 {
@@ -71,12 +81,15 @@
                                     {
                                         <a href="" class="list-group-item list-group-item-action flex-column align-items-start">
                                             <div class="d-flex justify-content-between w-100">
-                                                <p class="mb-1">
-                                                    "@Html.DisplayFor(modelItem => item.Comment)"
-                                                </p>
                                                 <small>Sent by: @ViewData[$"PetitionerEngineerName_{item.ID_Recognition}"]</small>
                                                 <small>Date: @item.Recognition_Date.ToString("dd/MMM/yyyy")</small>
                                                 <small>State: @Html.DisplayFor(modelItem => item.Recognition_State)</small>
+                                                <p class="mb-1 break-word">
+                                                    <small>
+                                                        Comments:
+                                                        "@Html.DisplayFor(modelItem => item.Comment)"
+                                                    </small>
+                                                </p>
                                             </div>
                                         </a>
                                     }

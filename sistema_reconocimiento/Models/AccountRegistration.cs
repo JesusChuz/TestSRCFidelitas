@@ -25,10 +25,7 @@ namespace sistema_reconocimiento.Models
         public string PasswordConfirm { get; set; }
         [Required] 
         public string? Role { get; set; }
-<<<<<<< HEAD
         public bool IsNew { get; set; }
-=======
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
 
         //public virtual ICollection<Engineers> Engineers { get; set; }
 

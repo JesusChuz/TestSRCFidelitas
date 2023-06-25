@@ -1,7 +1,6 @@
 {
   "format": 1,
   "restore": {
-<<<<<<< HEAD
     "E:\\Users\\XPC\\Documents\\Fidelitas\\Cuatrimestre VIII\\DiseñoyDesarrolloSistemas\\Workspace\\sistema_reconocimiento\\sistema_reconocimiento.csproj": {}
   },
   "projects": {
@@ -13,19 +12,6 @@
         "projectPath": "E:\\Users\\XPC\\Documents\\Fidelitas\\Cuatrimestre VIII\\DiseñoyDesarrolloSistemas\\Workspace\\sistema_reconocimiento\\sistema_reconocimiento.csproj",
         "packagesPath": "C:\\Users\\XPC\\.nuget\\packages\\",
         "outputPath": "E:\\Users\\XPC\\Documents\\Fidelitas\\Cuatrimestre VIII\\DiseñoyDesarrolloSistemas\\Workspace\\sistema_reconocimiento\\obj\\",
-=======
-    "C:\\Users\\Andiel\\Documents\\Trabajos_de_la_U\\cuatrimestre#7\\Dise-desarrollo\\Jorge-Rama\\sistema_reconocimiento\\sistema_reconocimiento.csproj": {}
-  },
-  "projects": {
-    "C:\\Users\\Andiel\\Documents\\Trabajos_de_la_U\\cuatrimestre#7\\Dise-desarrollo\\Jorge-Rama\\sistema_reconocimiento\\sistema_reconocimiento.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "C:\\Users\\Andiel\\Documents\\Trabajos_de_la_U\\cuatrimestre#7\\Dise-desarrollo\\Jorge-Rama\\sistema_reconocimiento\\sistema_reconocimiento.csproj",
-        "projectName": "sistema_reconocimiento",
-        "projectPath": "C:\\Users\\Andiel\\Documents\\Trabajos_de_la_U\\cuatrimestre#7\\Dise-desarrollo\\Jorge-Rama\\sistema_reconocimiento\\sistema_reconocimiento.csproj",
-        "packagesPath": "C:\\Users\\Andiel\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Andiel\\Documents\\Trabajos_de_la_U\\cuatrimestre#7\\Dise-desarrollo\\Jorge-Rama\\sistema_reconocimiento\\obj\\",
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -58,13 +44,10 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
-<<<<<<< HEAD
             "MailKit": {
               "target": "Package",
               "version": "[4.0.0, )"
             },
-=======
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
               "target": "Package",
               "version": "[6.0.16, )"
@@ -73,13 +56,10 @@
               "target": "Package",
               "version": "[6.0.16, )"
             },
-<<<<<<< HEAD
             "Microsoft.AspNetCore.Mvc.TagHelpers": {
               "target": "Package",
               "version": "[2.2.0, )"
             },
-=======
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[6.0.16, )"

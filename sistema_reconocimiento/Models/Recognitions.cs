@@ -1,9 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-<<<<<<< HEAD
 using System.ComponentModel.DataAnnotations.Schema;
 
-=======
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
 namespace sistema_reconocimiento.Models
 {
     public class Recognitions
@@ -12,7 +9,6 @@ namespace sistema_reconocimiento.Models
         [Required]
         public int ID_Recognition { get; set; }
 
-<<<<<<< HEAD
          public int Petitioner_Eng { get; set; }
          [ForeignKey("Petitioner_Eng")]
          public virtual Engineers PetitionerEngineer { get; set; }
@@ -24,7 +20,8 @@ namespace sistema_reconocimiento.Models
         public string Recognition_State { get; set; }
         [Required(ErrorMessage = "Case number required")]
         public string Case_Number { get; set; }
-        [Required(ErrorMessage = "Comments are requred")]
+        [Required(ErrorMessage = "Comments are required")]
+        [StringLength(500, ErrorMessage = "The comment should not be longer than 500 characters")]
         public string Comment { get; set; }
 
         public int Evaluator_Admin { get; set; }
@@ -43,19 +40,5 @@ namespace sistema_reconocimiento.Models
 
         public DateTime Recognition_Date { get; set; }
 
-=======
-        [Required]
-        public int Petitioner_Eng { get; set; }
-        [Required]
-        public int Recognized_Eng { get; set; }
-        [Required]
-        public string Recognition_State { get; set; }
-        [Required]
-        public string Case_Number { get; set; }
-        [Required]
-        public string Comment { get; set; }
-        [Required]
-        public int Evaluator_Admin { get; set; }
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
     }
 }

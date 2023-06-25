@@ -3,10 +3,7 @@
 @{
     ViewData["Title"] = "Reconocer";
     Layout = "~/Views/Shared/_Layout.cshtml";
-<<<<<<< HEAD
     int ID_Engineer = ViewBag.GetIdEngineer;
-=======
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
 }
 <div class="app-content content">
     <div class="card-body">
@@ -16,19 +13,25 @@
                     <h5>Complete the following information</h5>
                 </div>
                 <div class="card-body">
-                    @using (Html.BeginForm("Agregar_Reconocimiento", "Main", FormMethod.Post, new { @class = "submit-recognition", role = "form" }))
+                    @using (Html.BeginForm("Reconocer", "Main", FormMethod.Post, new { @class = "submit-recognition", role = "form" }))
                     {
                         @Html.AntiForgeryToken()
                         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                         <div class="mb-3">
-                            <label class="form-label" for="basic-icon-default-name">Case number</label>
-                            <div class="input-group input-group-merge">
-                                <span id="basic-icon-default-name" class="input-group-text">
-                                    <i class="fas fa-ticket"></i>
-                                </span>
-                                <input asp-for="Recognitions.Case_Number" type="text" class="form-control" placeholder="20023412220044" />
-                                @Html.ValidationMessageFor(m => m.Recognitions.Case_Number, "", new { @class = "text-danger" })
-                            </div>
+                            <div class="input-group"
+                                data-toggle="tooltip"
+                                data-placement="top"
+                                title="Support Request number">
+                                    <span id="basic-icon-default-name" class="input-group-text">
+                                        <label class="form-label" for="basic-icon-default-name">
+                                            Case number
+                                            <i class="fas fa-ticket"></i>
+                                        </label>
+                                    </span>
+                                <input asp-for="Recognitions.Case_Number" type="text" class="form-control" placeholder="20023412220044" asp-items="ViewBag.GetCaseNumber" />
+                               @* @Html.TextBoxFor(m => m.Recognitions.Case_Number, new { @class = "form-control", type="text", placeholder="20023412220044", value="ViewBag"})
+*@                             </div>
+                            <span class="text-danger">@TempData["msgCaseNumber"]</span>
                         </div>
                         <div class="mb-3">
                             <div class="input-group">
@@ -41,14 +44,23 @@
                                 <input asp-for="Recognitions.Recognition_State" class="form-control txtPoints hidden disabled" value="Pending" />
                                 <input asp-for="Recognitions.Evaluator_Admin" class="form-control txtPoints hidden disabled" value="10" />
                             </div>
+                            <span class="text-danger">@TempData["msgRecognized"]</span>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" for="basic-icon-default-email">Comments</label>
-                            <div class="input-group input-group-merge">
-                                <span class="input-group-text"><i class="fas fa-heart"></i></span>
-                                <input asp-for="Recognitions.Comment" class="form-control" rows="3" />
-                                @Html.ValidationMessageFor(m => m.Recognitions.Comment, "", new { @class = "text-danger" })
-                            </div>
+                            <div class="input-group"
+                                 data-toggle="tooltip"
+                                 data-placement="top"
+                                 title="The comment should not be longer than 500 characters">
+                                <span class="input-group-text">
+                                    <label class="form-label" for="basic-icon-default-email">
+                                        Comments
+                                        <i class="fas fa-heart"></i>
+                                    </label>
+                                </span>
+                                @*<input asp-for="Recognitions.Comment" class="form-control" rows="6" />*@
+                                @Html.TextAreaFor(m => m.Recognitions.Comment, new { @class = "form-control", rows="9"  })
+                                @*@Html.TextBoxFor(m => m.Recognitions.Comment, new { @class = "form-control", rows="3", type="text", value="@Model.SubmitRecognitionViewModel.Recognitions.Comment"})*@                            </div>
+                            <span class="text-danger">@TempData["msgComment"]</span>
                         </div>
                         <br/>
                         <div class="navbar-nav align-items-center">
@@ -60,3 +72,4 @@
         </div>
     </div>
 </div>
+

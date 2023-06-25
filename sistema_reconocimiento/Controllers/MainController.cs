@@ -22,38 +22,28 @@ using Microsoft.AspNetCore.Http;
 using sistema_reconocimiento.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
-<<<<<<< HEAD
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Globalization;
 using Newtonsoft.Json;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using System.Text.RegularExpressions;
-=======
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
+using MessagePack;
 
 namespace sistema_reconocimiento.Controllers
 {
     public class MainController : Controller
     {
-<<<<<<< HEAD
         private readonly INotificationEmailService _service;
         private readonly IAuthService _serviceAuth;
-=======
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext _context;
         private readonly ILogger<MainController> _logger;
         private readonly IConfiguration _configuration;
         private readonly string _varConnStr;
-<<<<<<< HEAD
         public MainController(INotificationEmailService service, IAuthService serviceAuth, ILogger<MainController> logger, IConfiguration configuration, ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             this._service = service;
             _serviceAuth = serviceAuth;
-=======
-        public MainController(ILogger<MainController> logger, IConfiguration configuration, ApplicationDbContext context, UserManager<ApplicationUser> userManager)
-        {
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
             _context = context;
             _logger = logger;
             _userManager = userManager;
@@ -63,13 +53,6 @@ namespace sistema_reconocimiento.Controllers
         }
         public bool validateAccountEnabled(bool result)
         {
-            // Crear la conexión a la base de datos
-            /*if(model.Email == null)
-            {
-                return RedirectToAction("Login", "Auth");
-            }
-            else
-            {*/
                 // Obtener el objeto de sesión
                 ISession session = HttpContext.Session;
                 // Obtener el valor almacenado en la sesión
@@ -123,11 +106,10 @@ namespace sistema_reconocimiento.Controllers
                         return result;
                         //return RedirectToAction("Login", "Auth");
                     }
-                return result;
+                    return result;
                 //}
             }
         }
-<<<<<<< HEAD
         public void LoadPoints(Engineers model)
         {
             using (SqlConnection connection = new SqlConnection(_varConnStr))
@@ -242,16 +224,11 @@ namespace sistema_reconocimiento.Controllers
         }
         [Authorize]
         public async Task<IActionResult> Index(bool result, Engineers model)
-=======
-        [Authorize]
-        public IActionResult Index(bool result)
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
         {
             if (result == false) {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
-<<<<<<< HEAD
                     LoadPoints(model);
                     LoadIdEngineer(model);
                     var applicationDbContext = _context.Rewards;
@@ -266,9 +243,6 @@ namespace sistema_reconocimiento.Controllers
                     //return View(await applicationDbContext.ToListAsync());
                     return View(viewModel);
 
-=======
-                    return View();
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
                 }
                 else
                 {
@@ -278,23 +252,15 @@ namespace sistema_reconocimiento.Controllers
             return RedirectToAction("Login", "Auth");
         }
         [Authorize(Roles = "admin")]
-<<<<<<< HEAD
         public async Task<IActionResult> IngenierosAsync(bool result, Engineers model)
-=======
-        public async Task<IActionResult> IngenierosAsync(bool result)
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
         {
             if (result == false)
             {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
-<<<<<<< HEAD
                     LoadPoints(model);
                     LoadIdEngineer(model);
-=======
-
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
                     var applicationDbContext = _context.Engineers.Include(e => e.ApplicationUser).Include(e => e.Manager).Include(e => e.Positions);
                     foreach (var engineer in applicationDbContext)
                     {
@@ -313,25 +279,27 @@ namespace sistema_reconocimiento.Controllers
             return RedirectToAction("Login", "Auth");
         }
         [Authorize(Roles = "admin")]
-<<<<<<< HEAD
         public IActionResult Agregar_ingeniero(bool result, Engineers model)
-=======
-        public IActionResult Agregar_ingeniero(bool result)
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
         {
             if (result == false)
             {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
-<<<<<<< HEAD
                     LoadPoints(model);
                     LoadIdEngineer(model);
-=======
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
+                    var loadmanager = _context.Set<Manager>()
+                    .Select(m => new
+                    {
+                        ID_Manager = m.ID_Manager,
+                        FullName = m.Name_Manager + " " + m.LastName_Manager + " (" + m.Email + ")"
+                    })
+                    .ToList();
+
                     ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id");
-                    ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager");
+                    ViewData["ID_Manager"] = new SelectList(loadmanager, "ID_Manager", "FullName");
                     ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name");
+
                     return View();
                 }
                 else
@@ -341,88 +309,128 @@ namespace sistema_reconocimiento.Controllers
             }
             return RedirectToAction("Login", "Auth");
         }
+
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-<<<<<<< HEAD
-        public async Task<IActionResult> Agregar_ingeniero([Bind("ID_Engineer,Name_Engineer,LastName_Engineer,Position,Points,ID_Account,ID_Manager")] Engineers engineers, string UserRole, string EmailA, string PasswordA)
+        public async Task<IActionResult> Agregar_ingeniero([Bind("ID_Engineer,Name_Engineer,LastName_Engineer,Position,Points,ID_Account,ID_Manager")] Engineers engineers, string UserRole, string Email, string Password, string ConfirmPassword)
         {
+            LoadPoints(engineers);
+            var loadmanager = _context.Set<Manager>()
+            .Select(m => new
+            {
+                ID_Manager = m.ID_Manager,
+                FullName = m.Name_Manager + " " + m.LastName_Manager + " (" + m.Email + ")"
+            })
+            .ToList();
+            var status = new Status();
             try
             {
-                LoadPoints(engineers);
-                if (string.IsNullOrWhiteSpace(engineers.Name_Engineer) || engineers.Name_Engineer.Length < 3 || engineers.Name_Engineer.Length > 30)
+                if (string.IsNullOrWhiteSpace(engineers.Name_Engineer) || engineers.Name_Engineer.Length < 2 || engineers.Name_Engineer.Length > 30)
                 {
-                    ModelState.AddModelError("Name_Engineer", "El nombre del ingeniero es requerido y debe tener entre 3 y 30 caracteres.");
+                    status.Message = "The name of the engineer is required and should be between 2 and 30 characters long";
+                    TempData["msgName_Engineer"] = status.Message;
+
                     ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
-                    ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
+                    ViewData["ID_Manager"] = new SelectList(loadmanager, "ID_Manager", "FullName", engineers.ID_Manager);
                     ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
                     return View(engineers);
                 }
-                if (_context.ApplicationUser.Any(u => u.Email == EmailA))
+                if (_context.ApplicationUser.Any(u => u.Email == Email))
                 {
-                    ModelState.AddModelError(string.Empty, "Ya existe un ingeniero con el correo electrónico proporcionado.");
+
+                    status.Message = "The email has been registered already";
+                    TempData["msgEmail"] = status.Message;
+
                     ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
-                    ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
+                    ViewData["ID_Manager"] = new SelectList(loadmanager, "ID_Manager", "FullName", engineers.ID_Manager);
                     ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
                     return View(engineers);
                 }
-                if (string.IsNullOrWhiteSpace(engineers.LastName_Engineer) || engineers.LastName_Engineer.Length < 3 || engineers.LastName_Engineer.Length > 30)
+                if (string.IsNullOrWhiteSpace(engineers.LastName_Engineer) || engineers.LastName_Engineer.Length < 2 || engineers.LastName_Engineer.Length > 30)
                 {
-                    ModelState.AddModelError("LastName_Engineer", "El apellido del ingeniero es requerido y debe tener entre 3 y 30 caracteres.");
+
+                    status.Message = "The last name of the engineer is required and should be between 2 and 30 characters long";
+                    TempData["msgLastName_Engineer"] = status.Message;
+
                     ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
-                    ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
+                    ViewData["ID_Manager"] = new SelectList(loadmanager, "ID_Manager", "FullName", engineers.ID_Manager);
                     ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
                     return View(engineers);
                 }
-                if (string.IsNullOrWhiteSpace(EmailA))
+                if (string.IsNullOrWhiteSpace(Email))
                 {
-                    ModelState.AddModelError("EmailA", "El email es requerido.");
+                    status.Message = "Email is required";
+                    TempData["msgEmail"] = status.Message;
+
                     ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
-                    ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
+                    ViewData["ID_Manager"] = new SelectList(loadmanager, "ID_Manager", "FullName", engineers.ID_Manager);
                     ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
                     return View(engineers);
                 }
-                if (string.IsNullOrWhiteSpace(PasswordA) || PasswordA.Length < 6 || !Regex.IsMatch(PasswordA, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).{6,}$"))
+                if (string.IsNullOrWhiteSpace(Password) || Password.Length < 6 || !Regex.IsMatch(Password, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).{6,}$"))
                 {
-                    ModelState.AddModelError("PasswordA", "La contraseña es requerida y debe tener al menos 6 caracteres, una minúscula, una mayúscula, un símbolo especial y almenos un número.");
+                   
+                    status.Message = "Password is required, needs to be at least 6 characters and you need to use a Capital letter, a lowercase, a symbol and a number";
+                    TempData["msgPassword"] = status.Message;
+                    
                     ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
-                    ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
+                    ViewData["ID_Manager"] = new SelectList(loadmanager, "ID_Manager", "FullName", engineers.ID_Manager);
                     ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
                     return View(engineers);
                 }
-                else
+                if (Password != ConfirmPassword)
                 {
-                    var emailAttribute = new EmailAddressAttribute();
-                    if (!emailAttribute.IsValid(EmailA))
-                    {
-                        ModelState.AddModelError("EmailA", "El formato del email no es válido.");
-                        ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
-                        ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
-                        ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
-                        return View(engineers);
-                    }
+                    status.Message = "Verify that you confirmed the password";
+                    TempData["msgPasswordC"] = status.Message;
+
+                    ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
+                    ViewData["ID_Manager"] = new SelectList(loadmanager, "ID_Manager", "FullName", engineers.ID_Manager);
+                    ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
+                    return View(engineers);
+                }
+                var emailAttribute = new EmailAddressAttribute();
+                if (!emailAttribute.IsValid(Email))
+                {
+                   
+                    status.Message = "The email format is invalid";
+                    TempData["msgEmail"] = status.Message;
+
+                    ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
+                    ViewData["ID_Manager"] = new SelectList(loadmanager, "ID_Manager", "FullName", engineers.ID_Manager);
+                    ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
+                    return View(engineers);
                 }
                 if (engineers.Position <= 0)
                 {
-                    ModelState.AddModelError("Position", "La posición es requerida.");
+                  
+                    status.Message = "Select a position";
+                    TempData["msgPosition"] = status.Message;
+
                     ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
-                    ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
+                    ViewData["ID_Manager"] = new SelectList(loadmanager, "ID_Manager", "FullName", engineers.ID_Manager);
                     ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
                     return View(engineers);
                 }
 
                 if (engineers.ID_Manager <= 0)
                 {
-                    ModelState.AddModelError("ID_Manager", "El manager es requerido.");
+                   
+                    status.Message = "Select a manager";
+                    TempData["msgManager"] = status.Message;
+
                     ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
-                    ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
+                    ViewData["ID_Manager"] = new SelectList(loadmanager, "ID_Manager", "FullName", engineers.ID_Manager);
                     ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
                     return View(engineers);
                 }
                 if (string.IsNullOrWhiteSpace(UserRole) || (UserRole != "comun" && UserRole != "admin"))
                 {
-                    ModelState.AddModelError("UserRole", "El rol del usuario es requerido'.");
+                    status.Message = "Select a role for the user";
+                    TempData["msgRole"] = status.Message;
+
                     ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
-                    ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
+                    ViewData["ID_Manager"] = new SelectList(loadmanager, "ID_Manager", "FullName", engineers.ID_Manager);
                     ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
                     return View(engineers);
                 }
@@ -430,8 +438,8 @@ namespace sistema_reconocimiento.Controllers
                 {
                     Username = engineers.Name_Engineer,
                     Name = engineers.Name_Engineer + "  " + engineers.LastName_Engineer,
-                    Email = EmailA,
-                    Password = (string)(TempData["PasswordA"] = PasswordA),
+                    Email = Email,
+                    Password = (string)(TempData["Password"] = Password),
                     Role = UserRole
                 };
 
@@ -441,25 +449,22 @@ namespace sistema_reconocimiento.Controllers
 
                 _context.Add(engineers);
                 await _context.SaveChangesAsync();
-                TempData["IngenieroCreado"] = true;
+                TempData["IngCreado"] = true;
                 return RedirectToAction("Ingenieros", "Main");
             }
             catch
             {
                 ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
-                ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
+                ViewData["ID_Manager"] = new SelectList(loadmanager, "ID_Manager", "FullName", engineers.ID_Manager);
                 ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
                 return RedirectToAction("Index", "Main");
             }
-
-
         }
 
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> Editar_ingeniero(int? id, Engineers model)
         {
             LoadPoints(model);
-            LoadIdEngineer(model);
             if (id == null || _context.Engineers == null)
             {
                 return NotFound();
@@ -470,7 +475,6 @@ namespace sistema_reconocimiento.Controllers
             {
                 return NotFound();
             }
-
 
             var applicationUser = await _userManager.FindByIdAsync(engineers.ID_Account);
 
@@ -494,98 +498,131 @@ namespace sistema_reconocimiento.Controllers
             }
             else
             {
-                ViewData["Rol"] = "No asignado";
+                ViewData["Rol"] = "Not assigned";
             }
 
+            var loadmanager = _context.Set<Manager>()
+            .Select(m => new
+            {
+                ID_Manager = m.ID_Manager,
+                FullName = m.Name_Manager + " " + m.LastName_Manager + " (" + m.Email + ")"
+            })
+            .ToList();
 
-            ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
-            ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
-            ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
+            ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id");
+            ViewData["ID_Manager"] = new SelectList(loadmanager, "ID_Manager", "FullName");
+            ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name");
             return View(engineers);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Editar_ingeniero(int id, [Bind("ID_Engineer,Name_Engineer,LastName_Engineer,Position,ID_Account,ID_Manager")] Engineers engineers, string EmailM, string PassM, string UserRoleM)
+        public async Task<IActionResult> Editar_ingeniero(int id, [Bind("ID_Engineer,Name_Engineer,LastName_Engineer,Position,ID_Account,ID_Manager")] Engineers engineers, string Email, string Password, string ConfirmPassword, string UserRole)
         {
             LoadPoints(engineers);
-
+            var loadmanager = _context.Set<Manager>()
+            .Select(m => new
+            {
+                ID_Manager = m.ID_Manager,
+                FullName = m.Name_Manager + " " + m.LastName_Manager + " (" + m.Email + ")"
+            })
+            .ToList();
+            var status = new Status();
             try
             {
-                if (string.IsNullOrWhiteSpace(engineers.Name_Engineer) || engineers.Name_Engineer.Length < 3 || engineers.Name_Engineer.Length > 30)
+                if (string.IsNullOrWhiteSpace(engineers.Name_Engineer) || engineers.Name_Engineer.Length < 2 || engineers.Name_Engineer.Length > 30)
                 {
-                    ModelState.AddModelError("Name_Engineer", "El nombre del ingeniero es requerido y debe tener entre 3 y 30 caracteres.");
-                    ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
-                    ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
-                    ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
+                    status.Message = "The name of the engineer is required and should be between 2 and 30 characters long";
+                    TempData["msgName_Engineer"] = status.Message;
 
-                    return View(engineers);
-                }
-                //if (_context.ApplicationUser.Any(u => u.Email == EmailM))
-                //{
-                //    ModelState.AddModelError(string.Empty, "Ya existe un ingeniero con el correo electrónico proporcionado.");
-                //    ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
-                //    ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
-                //    ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
-                //    return View(engineers);
-                //}
-                if (string.IsNullOrWhiteSpace(engineers.LastName_Engineer) || engineers.LastName_Engineer.Length < 3 || engineers.LastName_Engineer.Length > 30)
-                {
-                    ModelState.AddModelError("LastName_Engineer", "El apellido del ingeniero es requerido y debe tener entre 3 y 30 caracteres.");
                     ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
-                    ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
+                    ViewData["ID_Manager"] = new SelectList(loadmanager, "ID_Manager", "FullName", engineers.ID_Manager);
                     ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
                     return View(engineers);
                 }
-                if (string.IsNullOrWhiteSpace(EmailM))
+                if (string.IsNullOrWhiteSpace(engineers.LastName_Engineer) || engineers.LastName_Engineer.Length < 2 || engineers.LastName_Engineer.Length > 30)
                 {
-                    ModelState.AddModelError("EmailM", "El Email es requerido.");
+
+                    status.Message = "The last name of the engineer is required and should be between 2 and 30 characters long";
+                    TempData["msgLastName_Engineer"] = status.Message;
+
                     ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
-                    ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
+                    ViewData["ID_Manager"] = new SelectList(loadmanager, "ID_Manager", "FullName", engineers.ID_Manager);
                     ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
                     return View(engineers);
                 }
-                if (string.IsNullOrWhiteSpace(PassM) || PassM.Length < 6 || !Regex.IsMatch(PassM, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).{6,}$"))
+                if (string.IsNullOrWhiteSpace(Email))
                 {
-                    ModelState.AddModelError("PassM", "La contraseña es requerida y debe tener al menos 6 caracteres, una minúscula, una mayúscula, un símbolo especial y almenos un número.");
+                    status.Message = "Email is required";
+                    TempData["msgEmail"] = status.Message;
+
                     ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
-                    ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
+                    ViewData["ID_Manager"] = new SelectList(loadmanager, "ID_Manager", "FullName", engineers.ID_Manager);
                     ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
                     return View(engineers);
                 }
-                else
+                if (string.IsNullOrWhiteSpace(Password) || Password.Length < 6 || !Regex.IsMatch(Password, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).{6,}$"))
                 {
-                    var emailAttribute = new EmailAddressAttribute();
-                    if (!emailAttribute.IsValid(EmailM))
-                    {
-                        ModelState.AddModelError("EmailM", "El formato del email no es válido.");
-                        ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
-                        ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
-                        ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
-                        return View(engineers);
-                    }
+
+                    status.Message = "Password is required, needs to be at least 6 characters and you need to use a Capital letter, a lowercase, a symbol and a number";
+                    TempData["msgPassword"] = status.Message;
+
+                    ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
+                    ViewData["ID_Manager"] = new SelectList(loadmanager, "ID_Manager", "FullName", engineers.ID_Manager);
+                    ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
+                    return View(engineers);
+                }
+                if (Password != ConfirmPassword)
+                {
+                    status.Message = "Verify that is the same password";
+                    TempData["msgPasswordC"] = status.Message;
+
+                    ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
+                    ViewData["ID_Manager"] = new SelectList(loadmanager, "ID_Manager", "FullName", engineers.ID_Manager);
+                    ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
+                    return View(engineers);
+                }
+                var emailAttribute = new EmailAddressAttribute();
+                if (!emailAttribute.IsValid(Email))
+                {
+
+                    status.Message = "The email format is invalid";
+                    TempData["msgEmail"] = status.Message;
+
+                    ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
+                    ViewData["ID_Manager"] = new SelectList(loadmanager, "ID_Manager", "FullName", engineers.ID_Manager);
+                    ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
+                    return View(engineers);
                 }
                 if (engineers.Position <= 0)
                 {
-                    ModelState.AddModelError("Position", "La posición es requerida.");
+
+                    status.Message = "Select a position";
+                    TempData["msgPosition"] = status.Message;
+
                     ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
-                    ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
+                    ViewData["ID_Manager"] = new SelectList(loadmanager, "ID_Manager", "FullName", engineers.ID_Manager);
                     ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
                     return View(engineers);
                 }
 
                 if (engineers.ID_Manager <= 0)
                 {
-                    ModelState.AddModelError("ID_Manager", "El manager es requerido.");
+
+                    status.Message = "Select a manager";
+                    TempData["msgManager"] = status.Message;
+
                     ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
-                    ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
+                    ViewData["ID_Manager"] = new SelectList(loadmanager, "ID_Manager", "FullName", engineers.ID_Manager);
                     ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
                     return View(engineers);
                 }
-                if (string.IsNullOrWhiteSpace(UserRoleM) || (UserRoleM != "comun" && UserRoleM != "admin"))
+                if (string.IsNullOrWhiteSpace(UserRole) || (UserRole != "comun" && UserRole != "admin"))
                 {
-                    ModelState.AddModelError("UserRole", "El rol del usuario es requerido");
+                    status.Message = "Select a role for the user";
+                    TempData["msgRole"] = status.Message;
+
                     ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
-                    ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
+                    ViewData["ID_Manager"] = new SelectList(loadmanager, "ID_Manager", "FullName", engineers.ID_Manager);
                     ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
                     return View(engineers);
                 }
@@ -596,8 +633,8 @@ namespace sistema_reconocimiento.Controllers
                 // Modificar las propiedades.
                 applicationUser.Name = engineers.Name_Engineer + "  " + engineers.LastName_Engineer;
                 applicationUser.UserName = engineers.Name_Engineer;
-                applicationUser.Email = EmailM;
-                applicationUser.PasswordHash = _userManager.PasswordHasher.HashPassword(applicationUser, PassM);
+                applicationUser.Email = Email;
+                applicationUser.PasswordHash = _userManager.PasswordHasher.HashPassword(applicationUser, Password);
 
                 // Actualizar el ApplicationUser en la base de datos.
                 var updateResult = await _userManager.UpdateAsync(applicationUser);
@@ -626,10 +663,12 @@ namespace sistema_reconocimiento.Controllers
                     }
                 }
                 // Añadir el nuevo rol.
-                var addResult = await _userManager.AddToRoleAsync(user, UserRoleM);
+                var addResult = await _userManager.AddToRoleAsync(user, UserRole);
 
                 _context.Update(engineers);
                 await _context.SaveChangesAsync();
+                TempData["IngModif"] = true;
+                return RedirectToAction("Ingenieros", "Main");
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -642,8 +681,6 @@ namespace sistema_reconocimiento.Controllers
                     throw;
                 }
             }
-            TempData["IngenieroModificado"] = true;
-            return RedirectToAction(nameof(Index));
         }
 
         private bool EngineersExists(int iD_Engineer)
@@ -687,11 +724,11 @@ namespace sistema_reconocimiento.Controllers
             if (!result.Succeeded)
             {
                 // Ocurrió un error al eliminar el usuario, manejarlo según sea necesario
-                return Problem("Error al eliminar el usuario");
+                return Problem("Error trying to delete the user");
             }
             await _context.SaveChangesAsync();
-            TempData["IngenieroEliminado"] = true;
-            return RedirectToAction(nameof(Index));
+            TempData["IngEliminado"] = true;
+            return RedirectToAction("Ingenieros", "Main");
 
         }
         public async Task<List<Recognitions>> LoadRecognitionsPending(String recognitionState)
@@ -717,30 +754,11 @@ namespace sistema_reconocimiento.Controllers
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> Reconocimientos(bool result, Engineers modelE, SubmitStateRecognition model, int? page)
         {
-=======
-        public async Task<IActionResult> Agregar_ingeniero([Bind("ID_Engineer,Name_Engineer,LastName_Engineer,Position,Points,ID_Account,ID_Manager")] Engineers engineers)
-        {
-            
-                _context.Add(engineers);
-                await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-
-            ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
-            ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
-            ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
-            return View(engineers);
-        }
-
-        [Authorize(Roles = "admin")]
-        public IActionResult Editar_ingeniero(bool result)
-        {
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
             if (result == false)
             {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
-<<<<<<< HEAD
                     LoadPoints(modelE);
                     LoadIdEngineer(modelE);
                     // LoadRecognizedPoints(modelE, model);
@@ -795,7 +813,7 @@ namespace sistema_reconocimiento.Controllers
                                     connection.Close();
                                 }
                                 status.Message = "The recognition has been approved";
-                                
+                                TempData["RecogApproved"] = true;
                                 return RedirectToAction("Reconocimientos", "Main");
                             }
                             else
@@ -850,6 +868,7 @@ namespace sistema_reconocimiento.Controllers
                             {
                                 status.StatusCode = 1;
                                 status.Message = "The recognition has been rejected";
+                                TempData["RecogRejected"] = true;
                                 return RedirectToAction("Reconocimientos", "Main");
                             }
                             else
@@ -893,6 +912,7 @@ namespace sistema_reconocimiento.Controllers
             }
 
             await _context.SaveChangesAsync();
+            TempData["RecogDeleted"] = true;
             return RedirectToAction(nameof(Reconocimientos));
         }
         [Authorize(Roles = "admin")]
@@ -925,8 +945,6 @@ namespace sistema_reconocimiento.Controllers
                 if (result == true)
                 {
                     LoadPoints(model);
-=======
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
                     return View();
                 }
                 else
@@ -935,7 +953,6 @@ namespace sistema_reconocimiento.Controllers
                 }
             }
             return RedirectToAction("Login", "Auth");
-<<<<<<< HEAD
         }
         [HttpPost]
         [Authorize(Roles = "admin")]
@@ -943,8 +960,9 @@ namespace sistema_reconocimiento.Controllers
         {
             var status = new Status();
             LoadPoints(model);
-            if (rewards.Reward_Name != null && rewards.Reward_Description != null && rewards.Price != null && rewards.PictureFile != null)
+            if (rewards.Reward_Name != null && rewards.Reward_Description != null && rewards.Price != 0 && rewards.PictureFile != null)
             {
+
                 if (rewards.PictureFile != null && rewards.PictureFile.Length > 0)
                 {
                     using (var memoryStream = new MemoryStream())
@@ -954,26 +972,46 @@ namespace sistema_reconocimiento.Controllers
                     }
                     _context.Add(rewards);
                     await _context.SaveChangesAsync();
+                    TempData["RenCreado"] = true;
                     return RedirectToAction("Recompensas");
                 }
                 else
                 {
                     status.Message = "You need to upload an image";
-                    TempData["msg"] = status.Message;
+                    TempData["msgPictureFile"] = status.Message;
                     ModelState.SetModelValue("Reward_Name", new ValueProviderResult(rewards.Reward_Name, CultureInfo.InvariantCulture));
                     ModelState.SetModelValue("Reward_Description", new ValueProviderResult(rewards.Reward_Description, CultureInfo.InvariantCulture));
                     return View();
                 }
             }
-            else
+            if (rewards.Reward_Name == null)
             {
-                status.Message = "Please fill all the necessary information";
-                TempData["msg"] = status.Message;
+                status.Message = "Reward's name is required";
+                TempData["msgReward_Name"] = status.Message;
                 ModelState.SetModelValue("Reward_Name", new ValueProviderResult(rewards.Reward_Name, CultureInfo.InvariantCulture));
                 ModelState.SetModelValue("Reward_Description", new ValueProviderResult(rewards.Reward_Description, CultureInfo.InvariantCulture));
                 //ModelState.SetModelValue("Price", new ValueProviderResult(rewards.Price, CultureInfo.InvariantCulture)); -- tira error porque el tipo de dato es int, si se pasa a string deja de dar error
                 return View();
             }
+            if (rewards.Reward_Description == null)
+            {
+                status.Message = "Reward's description is required";
+                TempData["msgReward_Description"] = status.Message;
+                ModelState.SetModelValue("Reward_Name", new ValueProviderResult(rewards.Reward_Name, CultureInfo.InvariantCulture));
+                ModelState.SetModelValue("Reward_Description", new ValueProviderResult(rewards.Reward_Description, CultureInfo.InvariantCulture));
+                //ModelState.SetModelValue("Price", new ValueProviderResult(rewards.Price, CultureInfo.InvariantCulture)); -- tira error porque el tipo de dato es int, si se pasa a string deja de dar error
+                return View();
+            } 
+            if (rewards.Price == 0)
+            {
+                status.Message = "Reward's price is required";
+                TempData["msgPrice"] = status.Message;
+                ModelState.SetModelValue("Reward_Name", new ValueProviderResult(rewards.Reward_Name, CultureInfo.InvariantCulture));
+                ModelState.SetModelValue("Reward_Description", new ValueProviderResult(rewards.Reward_Description, CultureInfo.InvariantCulture));
+                //ModelState.SetModelValue("Price", new ValueProviderResult(rewards.Price, CultureInfo.InvariantCulture)); -- tira error porque el tipo de dato es int, si se pasa a string deja de dar error
+                return View();
+            }
+            return View();
         }
         public ActionResult ShowPicture(int id)
         {
@@ -987,18 +1025,12 @@ namespace sistema_reconocimiento.Controllers
 
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> Editar_recompensa(bool result, Engineers model, int? id)
-=======
-        }
-        [Authorize(Roles = "admin")]
-        public IActionResult Reconocimientos(bool result)
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
         {
             if (result == false)
             {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
-<<<<<<< HEAD
                     LoadPoints(model);
                     if (id == null || _context.Rewards == null)
                     {
@@ -1021,9 +1053,6 @@ namespace sistema_reconocimiento.Controllers
                     rewards.Base64Image = base64Image;
 
                     return View(rewards);
-=======
-                    return View();
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
                 }
                 else
                 {
@@ -1032,7 +1061,6 @@ namespace sistema_reconocimiento.Controllers
             }
             return RedirectToAction("Login", "Auth");
         }
-<<<<<<< HEAD
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -1049,12 +1077,12 @@ namespace sistema_reconocimiento.Controllers
             {
                 if (picture == null || picture.Length == 0)
                 {
-                    ModelState.AddModelError("PictureFile", "Se debe seleccionar una imagen.");
+                    ModelState.AddModelError("PictureFile", "You need to reupload the image.");
                     return View(rewards);
                 }
                 if (rewards.Price < 1 || rewards.Price > 75000)
                 {
-                    ViewData["PriceE"] = "El precio debe estar entre 1 y 75000.";
+                    ViewData["PriceE"] = "The price should be between 1 and 75000";
                     return View(rewards);
                 }
                 if (picture != null && picture.Length > 0)
@@ -1104,54 +1132,13 @@ namespace sistema_reconocimiento.Controllers
         }
         [Authorize(Roles = "admin")]
         public IActionResult Frases(bool result, Engineers model)
-=======
-        [Authorize(Roles = "admin")]
-        public IActionResult Recompensas(bool result)
         {
             if (result == false)
             {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
-                    return View();
-                }
-                else
-                {
-                    return RedirectToAction("Login", "Auth");
-                }
-            }
-            return RedirectToAction("Login", "Auth");
-        }
-        [Authorize(Roles = "admin")]
-        public IActionResult Agregar_recompensa(bool result)
-        {
-            if (result == false)
-            {
-                result = validateAccountEnabled(result);
-                if (result == true)
-                {
-                    return View();
-                }
-                else
-                {
-                    return RedirectToAction("Login", "Auth");
-                }
-            }
-            return RedirectToAction("Login", "Auth");
-        }
-        [Authorize(Roles = "admin")]
-        public IActionResult Editar_recompensa(bool result)
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
-        {
-            if (result == false)
-            {
-                result = validateAccountEnabled(result);
-                if (result == true)
-                {
-<<<<<<< HEAD
                     LoadPoints(model);
-=======
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
                     return View();
                 }
                 else
@@ -1162,21 +1149,14 @@ namespace sistema_reconocimiento.Controllers
             return RedirectToAction("Login", "Auth");
         }
         [Authorize(Roles = "admin")]
-<<<<<<< HEAD
         public IActionResult Agregar_frase(bool result, Engineers model)
-=======
-        public IActionResult Frases(bool result)
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
         {
             if (result == false)
             {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
-<<<<<<< HEAD
                     LoadPoints(model);
-=======
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
                     return View();
                 }
                 else
@@ -1187,21 +1167,14 @@ namespace sistema_reconocimiento.Controllers
             return RedirectToAction("Login", "Auth");
         }
         [Authorize(Roles = "admin")]
-<<<<<<< HEAD
         public IActionResult Editar_frase(bool result, Engineers model)
-=======
-        public IActionResult Agregar_frase(bool result)
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
         {
             if (result == false)
             {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
-<<<<<<< HEAD
                     LoadPoints(model);
-=======
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
                     return View();
                 }
                 else
@@ -1211,7 +1184,6 @@ namespace sistema_reconocimiento.Controllers
             }
             return RedirectToAction("Login", "Auth");
         }
-<<<<<<< HEAD
         public async Task<IActionResult> Mis_ReconocimientosAsync(bool result, Engineers model)
         {
             if (result == false)
@@ -1256,42 +1228,17 @@ namespace sistema_reconocimiento.Controllers
                     return RedirectToAction("Index");
                 }
             }
-
             return RedirectToAction("Index");
         }
         [Authorize]
         public IActionResult Perfil(bool result, Engineers model)
-=======
-        [Authorize(Roles = "admin")]
-        public IActionResult Editar_frase(bool result)
         {
             if (result == false)
             {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
-                    return View();
-                }
-                else
-                {
-                    return RedirectToAction("Login", "Auth");
-                }
-            }
-            return RedirectToAction("Login", "Auth");
-        }
-        [Authorize]
-        public IActionResult Mis_Reconocimientos(bool result)
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
-        {
-            if (result == false)
-            {
-                result = validateAccountEnabled(result);
-                if (result == true)
-                {
-<<<<<<< HEAD
                     LoadPoints(model);
-=======
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
                     return View();
                 }
                 else
@@ -1302,33 +1249,25 @@ namespace sistema_reconocimiento.Controllers
             return RedirectToAction("Login", "Auth");
         }
         [Authorize]
-<<<<<<< HEAD
         public IActionResult Reconocer(bool result, Engineers model)
-=======
-        public IActionResult Perfil(bool result)
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
         {
             if (result == false)
             {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
-<<<<<<< HEAD
                     LoadPoints(model);
                     LoadIdEngineer(model);
                     var engineers = _context.Engineers
                     .Select(e => new
                     {
                         ID_Engineer = e.ID_Engineer,
-                        FullName = e.Name_Engineer + " " + e.LastName_Engineer
+                        FullName = e.Name_Engineer + " " + e.LastName_Engineer + " (" + e.ApplicationUser.Email + ")"
                     })
                     .ToList();
 
                     ViewData["ID_EngineerToRecognize"] = new SelectList(engineers, "ID_Engineer", "FullName");
 
-                   // ViewData["ID_EngineerToRecognize"] = new SelectList(_context.Engineers, "ID_Engineer", "Name_Engineer");
-=======
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
                     return View();
                 }
                 else
@@ -1338,10 +1277,9 @@ namespace sistema_reconocimiento.Controllers
             }
             return RedirectToAction("Login", "Auth");
         }
-<<<<<<< HEAD
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Agregar_Reconocimiento(bool result, Engineers engineers, Recognitions recognitions)
+        public async Task<IActionResult> Reconocer(bool result, Engineers engineers, Recognitions recognitions, SubmitRecognitionViewModel srvw)
         {
             var status = new Status();
             var login = new LoginModel();
@@ -1349,67 +1287,63 @@ namespace sistema_reconocimiento.Controllers
             DateTime fechaActual = DateTime.Now;
             if (string.IsNullOrWhiteSpace(recognitions.Case_Number))
             {
-                ModelState.AddModelError("Case_Number", "Case number ios required");
+                status.Message = "Case number is required";
+                TempData["msgCaseNumber"] = status.Message;
+                ViewBag.GetCaseNumber = recognitions.Case_Number;
+                ViewBag.GetComment = recognitions.Comment;
+                //ModelState.SetModelValue("Case_Number", new ValueProviderResult(srvw.Recognitions.Case_Number, CultureInfo.InvariantCulture));
+                //ModelState.SetModelValue("Comment", new ValueProviderResult(srvw.Recognitions.Comment, CultureInfo.InvariantCulture));
                 return RedirectToAction("Reconocer", "Main");
             }
             if (string.IsNullOrWhiteSpace(recognitions.Comment))
             {
-                ModelState.AddModelError("Comment", "Comments are required");
+                status.Message = "Comments are required";
+                TempData["msgComment"] = status.Message;
+                ViewBag.GetCaseNumber = recognitions.Case_Number;
+                ViewBag.GetComment = recognitions.Comment;
+                //ModelState.SetModelValue("Case_Number", new ValueProviderResult(srvw.Recognitions.Case_Number, CultureInfo.InvariantCulture));
+                //ModelState.SetModelValue("Comment", new ValueProviderResult(srvw.Recognitions.Comment, CultureInfo.InvariantCulture));
                 return RedirectToAction("Reconocer", "Main");
+            }
+            if (recognitions.Comment.Length > 500)
+            {
+                status.Message = "The comment should not be longer than 500 characters";
+                TempData["msgRecognized"] = status.Message;
+                ViewBag.GetCaseNumber = recognitions.Case_Number;
+                ViewBag.GetComment = recognitions.Comment;
+                //ModelState.SetModelValue("Case_Number", new ValueProviderResult(srvw.Recognitions.Case_Number, CultureInfo.InvariantCulture));
+                //ModelState.SetModelValue("Comment", new ValueProviderResult(srvw.Recognitions.Comment, CultureInfo.InvariantCulture));
+                return RedirectToAction("Reconocer", "Main"); 
             }
             else
             {
                 recognitions.Recognition_Date = fechaActual;
                 _context.Add(recognitions);
                 await _context.SaveChangesAsync();
+                TempData["ReconoSuccess"] = true;
                 var resultNotification = await _service.SendNewRecognition(login, engineers, recognitions, manager);
                 if (resultNotification.StatusCode == 1)
                 {
-                    status.StatusCode = 1;
-                    return RedirectToAction("Mis_Reconocimientos", "Main");
+                    status.StatusCode = 1; 
+                    return RedirectToAction("Reconocimientos", "Main");
                 }
                 else
                 {
                     status.Message = "We were unable to send the recognition";
                     TempData["msg"] = resultNotification.Message;
-                    return RedirectToAction("Index", "Main");
                 }
             }
-
+            return RedirectToAction("Index", "Main");
         }
         [Authorize]
         public IActionResult Privacy(bool result, Engineers model)
-=======
-        [Authorize]
-        public IActionResult Reconocer(bool result)
         {
             if (result == false)
             {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
-                    return View();
-                }
-                else
-                {
-                    return RedirectToAction("Login", "Auth");
-                }
-            }
-            return RedirectToAction("Login", "Auth");
-        }
-        [Authorize]
-        public IActionResult Privacy(bool result)
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
-        {
-            if (result == false)
-            {
-                result = validateAccountEnabled(result);
-                if (result == true)
-                {
-<<<<<<< HEAD
                     LoadPoints(model);
-=======
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
                     return View();
                 }
                 else
@@ -1426,21 +1360,14 @@ namespace sistema_reconocimiento.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
         [Authorize]
-<<<<<<< HEAD
         public IActionResult Metricas(bool result, Engineers model)
-=======
-        public IActionResult Metricas(bool result)
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
         {
             if (result == false)
             {
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
-<<<<<<< HEAD
                     LoadPoints(model);
-=======
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
                     return View();
                 }
                 else
@@ -1450,7 +1377,6 @@ namespace sistema_reconocimiento.Controllers
             }
             return RedirectToAction("Login", "Auth");
         }
-<<<<<<< HEAD
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Canjear_Recompensa(Purchases purchases, Engineers engineers)
@@ -1482,7 +1408,7 @@ namespace sistema_reconocimiento.Controllers
                             {
                                 status.StatusCode = 1;
                                 status.Message = "Your purchase has been successful";
-                                TempData["msgPurchaseSucceeded"] = status.Message;
+                                TempData["RewardBuy"] = true;
                                 return RedirectToAction("Index", "Main");
                             }
                             else
@@ -1513,7 +1439,5 @@ namespace sistema_reconocimiento.Controllers
         {
             return (_context.Rewards?.Any(e => e.ID_Reward == id)).GetValueOrDefault();
         }
-=======
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
     }
 }

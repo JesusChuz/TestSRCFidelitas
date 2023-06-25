@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "kBtnEvB0KZ0vvfsmxVSctnLNIYNYJDWg47gOfzlFQ5U=",
+  "Hash": "hobJ88xTrRU1Xr6BuH5wWWbT7hASKuE/GRXCy4bgBjM=",
   "Source": "sistema_reconocimiento",
   "BasePath": "_content/sistema_reconocimiento",
   "Mode": "Default",
@@ -8005,6 +8005,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\theme-assets\\css\\plugins\\forms\\switch.min.css"
+    },
+    {
+      "Identity": "E:\\Users\\XPC\\Documents\\Fidelitas\\Cuatrimestre VIII\\DiseñoyDesarrolloSistemas\\Workspace\\sistema_reconocimiento\\wwwroot\\theme-assets\\css\\tooltips.css",
+      "SourceId": "sistema_reconocimiento",
+      "SourceType": "Discovered",
+      "ContentRoot": "E:\\Users\\XPC\\Documents\\Fidelitas\\Cuatrimestre VIII\\DiseñoyDesarrolloSistemas\\Workspace\\sistema_reconocimiento\\wwwroot\\",
+      "BasePath": "_content/sistema_reconocimiento",
+      "RelativePath": "theme-assets/css/tooltips.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\theme-assets\\css\\tooltips.css"
     },
     {
       "Identity": "E:\\Users\\XPC\\Documents\\Fidelitas\\Cuatrimestre VIII\\DiseñoyDesarrolloSistemas\\Workspace\\sistema_reconocimiento\\wwwroot\\theme-assets\\css\\vendors.css",

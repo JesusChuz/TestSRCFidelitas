@@ -16,7 +16,6 @@ CREATE TABLE Rewards (
     Picture VARBINARY(MAX),
 );
 -- Creación de la tabla "Ingeniero"
-<<<<<<< HEAD
 	CREATE TABLE Engineers (
 		ID_Engineer INT PRIMARY KEY IDENTITY,
 		Name_Engineer VARCHAR(50),
@@ -28,19 +27,6 @@ CREATE TABLE Rewards (
 		FOREIGN KEY (Position) REFERENCES Positions(ID_Position) ON DELETE NO ACTION ON UPDATE NO ACTION,
 		FOREIGN KEY (ID_Account) REFERENCES AspNetUsers(Id) ON DELETE CASCADE
 	);
-=======
-CREATE TABLE Engineers (
-    ID_Engineer INT PRIMARY KEY IDENTITY,
-    Name_Engineer VARCHAR(50),
-    LastName_Engineer VARCHAR(50),
-    Position INT,
-    Points INT,
-    Picture VARBINARY(MAX),
-	ID_Account NVARCHAR(450),
-    FOREIGN KEY (Position) REFERENCES Positions(ID_Position) ON DELETE NO ACTION ON UPDATE NO ACTION,
-	FOREIGN KEY (ID_Account) REFERENCES AspNetUsers(Id) ON DELETE CASCADE
-);
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
 
 -- Creación de la tabla "Log_CambioPassword"
 CREATE TABLE Log_PasswordUpdate (
@@ -125,7 +111,6 @@ END
 
 EXEC ChangeIsNew @email = 'jorge.granados@gmail.com', @newValue = 0;
 
-<<<<<<< HEAD
 CREATE PROCEDURE ShowPoints
     @email nvarchar(256)
 AS
@@ -215,5 +200,3 @@ END
 EXEC UpdateRecognitionState @ID_Recognition = 11, @newState = Pending;
 
 	
-=======
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76

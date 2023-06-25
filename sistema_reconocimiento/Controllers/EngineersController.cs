@@ -106,13 +106,8 @@ namespace sistema_reconocimiento.Controllers
                 return NotFound();
             }
 
-<<<<<<< HEAD
             //if (ModelState.IsValid)
             //{
-=======
-            if (ModelState.IsValid)
-            {
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
                 try
                 {
                     _context.Update(engineers);
@@ -130,11 +125,7 @@ namespace sistema_reconocimiento.Controllers
                     }
                 }
                 return RedirectToAction(nameof(Index));
-<<<<<<< HEAD
            // }
-=======
-            }
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
             ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", engineers.ID_Account);
             ViewData["ID_Manager"] = new SelectList(_context.Set<Manager>(), "ID_Manager", "LastName_Manager", engineers.ID_Manager);
             ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);

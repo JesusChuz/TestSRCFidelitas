@@ -2,12 +2,9 @@
 @{
     ViewData["Title"] = "Reconocimientos";
     Layout = "~/Views/Shared/_Layout.cshtml";
-<<<<<<< HEAD
 
     var pointsR = ViewBag.GetPointsRecognized;
     int ID_Engineer = ViewBag.GetIdEngineer;
-=======
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
 }
 <div class="app-content content">
     <div class="content-wrapper">
@@ -51,8 +48,8 @@
                                                 <i class="bx bx-search fs-4 lh-0"></i>
                                                 <input type="text"
                                                        class="form-control border-0 shadow-none"
-                                                       placeholder="Buscar"
-                                                       aria-label="Buscar" 
+                                                       placeholder="Search"
+                                                       aria-label="Search"
                                                        id="searchInputP" />
                                             </div>
                                         </div>
@@ -91,33 +88,39 @@
                                                 <td>@Html.DisplayFor(modelItem => item.Recognition_State)</td>
                                                 <td>@Html.DisplayFor(modelItem => item.Comment)</td>
                                                 <td>
-                                                    @using (Html.BeginForm("Aprobar_Reconocimiento", "Main", FormMethod.Post, new { @class = "submit-approval", role = "form" }))
-                                                    {
-                                                        @Html.AntiForgeryToken()
-                                                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                                                        <input asp-for="RecognitionsPOST.ID_Recognition" class="form-control hidden disabled" value="@item.ID_Recognition" />
-                                                        <input asp-for="RecognitionsPOST.Petitioner_Eng" class="form-control hidden disabled" value="@item.Petitioner_Eng" />
-                                                        <input asp-for="RecognitionsPOST.Recognized_Eng" class="form-control hidden disabled" value="@item.Recognized_Eng" />
-                                                        <input asp-for="RecognitionsPOST.ID_EngineerRec" class="form-control hidden disabled" value="@item.Recognized_Eng" />
-                                                        <input asp-for="RecognitionsPOST.Points_EngineerRec" class="form-control hidden disabled" value="@pointsR" />
-                                                        <div class="navbar-nav align-items-center">
-                                                            <button type="submit" class="btn btn-danger"><i class="fas fa-check"></i></button>
-                                                        </div>
-                                                    }
-                                                    @using (Html.BeginForm("Rechazar_Reconocimiento", "Main", FormMethod.Post, new { @class = "submit-rejection", role = "form" }))
-                                                    {
-                                                        @Html.AntiForgeryToken()
-                                                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                                                        <input asp-for="RecognitionsPOST.ID_Recognition" class="form-control hidden disabled" value="@item.ID_Recognition" />
-                                                        <input asp-for="RecognitionsPOST.Petitioner_Eng" class="form-control hidden disabled" value="@item.Petitioner_Eng" />
-                                                        <input asp-for="RecognitionsPOST.Recognized_Eng" class="form-control hidden disabled" value="@item.Recognized_Eng" />
-                                                        <div class="navbar-nav align-items-center">
-                                                            <button type="submit" class="btn btn-danger"><i class="fas fa-cancel"></i></button>
-                                                        </div>
-                                                    }
-@*                                                    <a class="btn btn-danger" href=""><i class="fas fa-check"></i></a>
-                                                    <a class="btn btn-danger" href=""><i class="fas fa-cancel"></i></a>
-                                                    <a class="btn btn-danger" href=""><i class="fas fa-trash"></i></a>*@
+                                                    <div style="display: flex;">
+                                                        @using (Html.BeginForm("Aprobar_Reconocimiento", "Main", FormMethod.Post, new { @class = "submit-approval", role = "form" }))
+                                                        {
+                                                            @Html.AntiForgeryToken()
+                                                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                                            <input asp-for="RecognitionsPOST.ID_Recognition" class="form-control hidden disabled" value="@item.ID_Recognition" />
+                                                            <input asp-for="RecognitionsPOST.Petitioner_Eng" class="form-control hidden disabled" value="@item.Petitioner_Eng" />
+                                                            <input asp-for="RecognitionsPOST.Recognized_Eng" class="form-control hidden disabled" value="@item.Recognized_Eng" />
+                                                            <input asp-for="RecognitionsPOST.ID_EngineerRec" class="form-control hidden disabled" value="@item.Recognized_Eng" />
+                                                            <input asp-for="RecognitionsPOST.Points_EngineerRec" class="form-control hidden disabled" value="@pointsR" />
+                                                            <div class="navbar-nav align-items-center" 
+                                                                data-toggle="tooltip" 
+                                                                data-placement="top" 
+                                                                title="Approve recognition">
+                                                                <button type="submit" class="btn btn-danger"><i class="fas fa-check"></i></button>
+                                                            </div>
+                                                        }
+
+                                                        @using (Html.BeginForm("Rechazar_Reconocimiento", "Main", FormMethod.Post, new { @class = "submit-rejection", role = "form" }))
+                                                        {
+                                                            @Html.AntiForgeryToken()
+                                                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                                            <input asp-for="RecognitionsPOST.ID_Recognition" class="form-control hidden disabled" value="@item.ID_Recognition" />
+                                                            <input asp-for="RecognitionsPOST.Petitioner_Eng" class="form-control hidden disabled" value="@item.Petitioner_Eng" />
+                                                            <input asp-for="RecognitionsPOST.Recognized_Eng" class="form-control hidden disabled" value="@item.Recognized_Eng" />
+                                                            <div class="navbar-nav align-items-center"
+                                                                 data-toggle="tooltip"
+                                                                 data-placement="top"
+                                                                 title="Reject recognition">
+                                                                <button type="submit" class="btn btn-danger"><i class="fas fa-cancel"></i></button>
+                                                            </div>
+                                                        }
+                                                    </div>
                                                 </td>
                                             </tr>
                                         }
@@ -160,8 +163,8 @@
                                                 <i class="bx bx-search fs-4 lh-0"></i>
                                                 <input type="text"
                                                        class="form-control border-0 shadow-none"
-                                                       placeholder="Buscar"
-                                                       aria-label="Buscar"
+                                                       placeholder="Search"
+                                                       aria-label="Search"
                                                        id="searchInputAR" />
                                             </div>
                                         </div>
@@ -205,7 +208,10 @@
                                                         @Html.AntiForgeryToken()
                                                         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                                                         <input asp-for="RecognitionsPOST.ID_Recognition" class="form-control hidden disabled" value="@item.ID_Recognition" />
-                                                        <div class="navbar-nav align-items-center">
+                                                        <div class="navbar-nav align-items-center"
+                                                             data-toggle="tooltip"
+                                                             data-placement="top"
+                                                             title="Delete recognition">
                                                             <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>
                                                         </div>
                                                     }
@@ -237,6 +243,96 @@
     </div>
 </div>
 <script src="~/theme-assets/vendors/libs/jquery/jquery.js"></script>
+<script>
+    var ReconoS = '@TempData["ReconoSuccess"]';
+        if (ReconoS === "True") {
+        // Mostrar notificación de éxito
+            toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-center",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+            };
+            toastr["success"]("Recognition sent");
+    }
+    var RecoApproved = '@TempData["RecogApproved"]';
+    if (RecoApproved === "True") {
+        // Mostrar notificación de éxito
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-center",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+        toastr["success"]("Recognition Approved");
+    }
+    var RecoRejected= '@TempData["RecogRejected"]';
+    if (RecoRejected === "True") {
+        // Mostrar notificación de éxito
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-center",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+        toastr["error"]("Recognition rejected");
+    }
+    var RecogDeleted = '@TempData["RecogDeleted"]';
+    if (RecogDeleted === "True") {
+        // Mostrar notificación de éxito
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-center",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+        toastr["error"]("Recognition deleted");
+    }
+</script>
 <script>
     // Función para filtrar las tablas por la búsqueda
     function filterTable(tableId, searchInputId) {
@@ -271,7 +367,6 @@
         }
     }
 
-
     // Evento para ejecutar la búsqueda al escribir en la barra de búsqueda
     document.getElementById("searchInputP").addEventListener("keyup", function () {
         filterTable("myTableP", "searchInputP"); // Modificar los valores según el ID de tus tablas y la barra de búsqueda
@@ -284,7 +379,7 @@
 <script>
     // Función para mostrar los elementos correspondientes a la página actual
     function showPage(page, tableId, paginationContainerId) {
-        var rowsPerPage = 3; // Número de filas por página
+        var rowsPerPage = 10; // Número de filas por página
         var startIndex = (page - 1) * rowsPerPage;
         var endIndex = startIndex + rowsPerPage;
 
@@ -316,7 +411,7 @@
 
         // Evento de clic para el botón "Siguiente" de la tabla reconocimientos pendings
         $('#paginationP .next-page').click(function () {
-            var totalPagesP = Math.ceil($('#myTableP tbody tr').length / 3); // Calcular el número total de páginas
+            var totalPagesP = Math.ceil($('#myTableP tbody tr').length / 10); // Calcular el número total de páginas
             if (currentPageP < totalPagesP) {
                 currentPageP++;
                 showPage(currentPageP, 'myTableP', 'paginationP');
@@ -333,7 +428,7 @@
 
         // Evento de clic para el botón "Siguiente" de la tabla Historial de reconocimientos
         $('#paginationAR .next-page').click(function () {
-            var totalPagesAR = Math.ceil($('#myTableAR tbody tr').length / 3); // Calcular el número total de páginas
+            var totalPagesAR = Math.ceil($('#myTableAR tbody tr').length / 10); // Calcular el número total de páginas
             if (currentPageAR < totalPagesAR) {
                 currentPageAR++;
                 showPage(currentPageAR, 'myTableAR', 'paginationAR');

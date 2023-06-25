@@ -44,15 +44,9 @@ namespace sistema_reconocimiento.Data
          .HasMany(u => u.engineer)
          .WithOne(a => a.position)
          .HasForeignKey(a => a.Position_ID);*/
-<<<<<<< HEAD
         //}
         //public DbSet<sistema_reconocimiento.Models.Ingeniero? Ingeniero { get; set; } 
         public DbSet<sistema_reconocimiento.Models.LoginModel>? LoginModel { get; set; }
-=======
-    //}
-    //public DbSet<sistema_reconocimiento.Models.Ingeniero? Ingeniero { get; set; } 
-    public DbSet<sistema_reconocimiento.Models.LoginModel>? LoginModel { get; set; }
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
     
         //public DbSet<sistema_reconocimiento.Models.Engineers>? Engineers { get; set; }
         public DbSet<sistema_reconocimiento.Models.CSAT>? CSAT { get; set; }

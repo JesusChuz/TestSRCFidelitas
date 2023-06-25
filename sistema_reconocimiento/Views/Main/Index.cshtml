@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ﻿@model sistema_reconocimiento.Models.SubmitPurchaseViewModel
 
 @{
@@ -7,12 +6,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     int points = ViewBag.GetPoints;
     int ID_Engineer = ViewBag.GetIdEngineer;
-=======
-﻿@{
-
-    ViewData["Title"] = "Principal";
-    Layout = "~/Views/Shared/_Layout.cshtml";
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
 }
 
 <!-------------rest of the page ------------->
@@ -24,11 +17,7 @@
         <div class="row match-height">
             <div class="col-12">
                 <div class="navbar-nav align-items-center">
-<<<<<<< HEAD
                     <h3 class="content-header-right">@TempData["p"]"None of us is as good as all together" -Ray Kroc.</h3>
-=======
-                    <h3 class="content-header-right">@TempData["p"]"Ninguno de nosotros es tan bueno como todos nosotros juntos." -Ray Kroc.</h3>
->>>>>>> 996bfd33ae1f3c389c05516131f52ce72c62ba76
                     </br>
                 </div>
                 </br>
@@ -208,6 +197,30 @@
 </div>
 <!-------------rest of the page ------------->
 <script src="~/theme-assets/vendors/libs/jquery/jquery.js"></script>
+<script>
+    var RenCreado = '@TempData["RewardBuy"]';
+    if (RenCreado === "True") {
+        // Mostrar notificación de éxito
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-center",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+        toastr["success"]("Reward Buyed!");
+    }
+</script>
 <script>
     $(document).ready(function () {
         $('.submit-purchase').click(function (e) {
