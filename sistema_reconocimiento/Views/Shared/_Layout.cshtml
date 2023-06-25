@@ -41,6 +41,8 @@
     <!-- Page CSS -->
     <!-- Helpers -->
     <script src="~/theme-assets/vendors/js/helpers.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="~/theme-assets/js/config.js"></script>
@@ -49,9 +51,12 @@
      <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
      <link rel="stylesheet" href="~/sistema_reconocimiento.styles.css" asp-append-version="true" /> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
     <script src="https://kit.fontawesome.com/c776b3f0ad.js" crossorigin="anonymous"> </script>
     <!--Sweetalerts-->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+
 </head>
 <body class="vertical-layout vertical-menu 2-columns menu-expanded fixed-navbar" data-open="click" data-menu="vertical-menu" data-color="bg-chartbg" data-col="2-columns">
     <!-- fixed-top-->
@@ -61,7 +66,7 @@
                 <div class="collapse navbar-collapse show" id="navbar-mobile">
                     <ul class="nav navbar-nav mr-auto float-left">
                         <li class="nav-item d-block d-md-none"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="ft-menu"></i></a></li>
-                        <a class="btn btn-danger btn-block btn-glow" asp-controller="Main" asp-action="Reconocer" target="_blank">Recognize</a>
+                        <a class="btn btn-danger btn-block btn-glow" asp-controller="Main" asp-action="Reconocer" target="">Recognize</a>
                     </ul>
                     <ul class="nav navbar-nav mr-auto float-left">
                         <li class="nav-item d-block d-md-none"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="ft-menu"></i></a></li>

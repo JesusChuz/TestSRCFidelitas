@@ -16,12 +16,6 @@
                     {
                         @Html.AntiForgeryToken()
                         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                        @if (TempData["msg"] != null)
-                        {
-                            <div class="text-center msg">
-                                <span class="text-danger">@TempData["msg"]</span>
-                            </div>
-                        }
                         <div class="mb-3">
                             <label class="form-label" for="basic-icon-default-name">Title</label>
                             <div class="input-group input-group-merge">
@@ -30,6 +24,7 @@
                                 </span>
                                 @Html.TextBoxFor(m => m.Reward_Name, new { @class = "form-control", value="@Model.Reward_Name"})
                             </div>
+                            <span class="text-danger">@TempData["msgReward_Name"]</span>
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="basic-icon-default-lastname">Description</label>
@@ -39,13 +34,15 @@
                                 </span>
                                 @Html.TextBoxFor(m => m.Reward_Description, new { @class = "form-control", value="@Model.Reward_Description"})
                             </div>
+                            <span class="text-danger">@TempData["msgReward_Description"]</span>
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="basic-icon-default-email">Price</label>
                             <div class="input-group input-group-merge">
                                 <span class="input-group-text"><i class="fas fa-money"></i></span>
-                                @Html.TextBoxFor(m => m.Price, new { @class = "form-control", value="@Model.Price"})
+                                @Html.TextBoxFor(m => m.Price, new { @class = "form-control", value="@Model.Price", type="number"})
                             </div>
+                            <span class="text-danger">@TempData["msgPrice"]</span>
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="basic-icon-default-email">Image</label>
@@ -53,6 +50,7 @@
                                 <span class="input-group-text"><i class="fas fa-photo"></i></span>
                                 @Html.TextBoxFor(m => m.PictureFile, new { @class = "form-control", type="file", name = "PictureFile"})
                             </div>
+                            <span class="text-danger">@TempData["msgPictureFile"]</span>
                         </div>
                         <button id="saveRewards" type="submit" class="btn btn-primary">Create Reward</button>
                     }

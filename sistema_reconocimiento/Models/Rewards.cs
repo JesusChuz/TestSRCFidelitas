@@ -9,10 +9,10 @@ namespace sistema_reconocimiento.Models
         [Required]
         public int ID_Reward { get; set; }
         [Required(ErrorMessage = "Name is required")]
-        [StringLength(30, MinimumLength = 5, ErrorMessage = "The name must be between 5 and 30 characters.")]
+        [StringLength(50, MinimumLength = 2, ErrorMessage = "The name must be between 2 and 50 characters.")]
         public string Reward_Name { get; set; }
         [Required(ErrorMessage = "Description requred")]
-        [StringLength(50, MinimumLength = 5, ErrorMessage = "Description must be between 5 and 50 characters.")]
+        [StringLength(150, MinimumLength = 5, ErrorMessage = "Description must be between 5 and 150 characters.")]
         public string Reward_Description { get; set; }
         [Required(ErrorMessage = "Reward's price is required")]
         [Range(1, 75000, ErrorMessage = "Price must be between 1 and 75000")]

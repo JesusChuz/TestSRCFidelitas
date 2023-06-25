@@ -7,7 +7,7 @@ namespace sistema_reconocimiento.Interface
         Task<Status> LoginAsync(LoginModel model);
         Task<Status> RegistrationAsync(AccountRegistration model);
         Task LogoutAsync();
-        Task<Status> UpdatePasswordAsync(LoginModel model);
+        Task<Status> UpdatePasswordAsync(ApplicationUser email_check, LoginModel model);
         Task<Status> SendResetEmail(LoginModel model);
     }
 }

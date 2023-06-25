@@ -20,7 +20,8 @@ namespace sistema_reconocimiento.Models
         public string Recognition_State { get; set; }
         [Required(ErrorMessage = "Case number required")]
         public string Case_Number { get; set; }
-        [Required(ErrorMessage = "Comments are requred")]
+        [Required(ErrorMessage = "Comments are required")]
+        [StringLength(500, ErrorMessage = "The comment should not be longer than 500 characters")]
         public string Comment { get; set; }
 
         public int Evaluator_Admin { get; set; }

@@ -263,8 +263,26 @@ namespace sistema_reconocimiento.Controllers
             };
             if (model.Email != null && model.Password != null && model.OldPassword != null && model.ConfirmPassword != null)
             {
-
-                var result = await _service.UpdatePasswordAsync(model);
+                var email_check = await userManager.FindByEmailAsync(model.Email);
+                //primero valida si el correo existe
+                if (email_check == null)
+                {
+                    status.StatusCode = 0;
+                    status.Message = "Invalid email";
+                    TempData["msgEmail"] = status.Message;
+                    ModelState.SetModelValue("Email", new ValueProviderResult(model.Email, CultureInfo.InvariantCulture));
+                    return View();
+                }
+                //valida si la contraseña es correcta, por detras desencripta hash 
+                if (!await userManager.CheckPasswordAsync(email_check, model.OldPassword))
+                {
+                    status.StatusCode = 0;
+                    status.Message = "Invalid password";
+                    TempData["msgOldPassword"] = status.Message;
+                    ModelState.SetModelValue("Email", new ValueProviderResult(model.Email, CultureInfo.InvariantCulture));
+                    return View();  
+                }
+                var result = await _service.UpdatePasswordAsync(email_check, model);
                 if (result.StatusCode == 1)
                 {   // Crear la conexión a la base de datos
                     using (SqlConnection connection = new SqlConnection(_varConnStr))
@@ -295,14 +313,14 @@ namespace sistema_reconocimiento.Controllers
                 else if(model.Password != model.ConfirmPassword)
                 {
                     status.Message = "Passwords does not match";
-                    TempData["msg"] = status.Message;
+                    TempData["msgCPassword"] = status.Message;
                     ModelState.SetModelValue("Email", new ValueProviderResult(model.Email, CultureInfo.InvariantCulture));
-                    return View();
+                   return View();
                 }
                 else
                 {
                     status.Message = "Passwords is too week, it needs to be at least 8 characters and you need to use a Capital letter, a lowercase, a symbol and a number";
-                    TempData["msg"] = status.Message;
+                    TempData["msgPassword"] = status.Message;
                     ModelState.SetModelValue("Email", new ValueProviderResult(model.Email, CultureInfo.InvariantCulture));
                     return View();
                 }

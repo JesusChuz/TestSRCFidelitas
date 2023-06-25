@@ -147,24 +147,10 @@ namespace sistema_reconocimiento.Services
               status.Message = "Password has been updated successfully!";
               return status;
           }*/
-        public async Task<Status> UpdatePasswordAsync(LoginModel model)
+        public async Task<Status> UpdatePasswordAsync(ApplicationUser email_check, LoginModel model)
         {
             var status = new Status();
-            var email_check = await userManager.FindByEmailAsync(model.Email);
-            //primero valida si el correo existe
-            if (email_check == null)
-            {
-                status.StatusCode = 0;
-                status.Message = "Invalid email";
-                return status;
-            }
-            //valida si la contraseña es correcta, por detras desencripta hash 
-            if (!await userManager.CheckPasswordAsync(email_check, model.OldPassword))
-            {
-                status.StatusCode = 0;
-                status.Message = "Invalid password";
-                return status;
-            }
+            
             var signInResult = await signInManager.PasswordSignInAsync(email_check, model.OldPassword, false, true);
             if (signInResult.Succeeded)
             {

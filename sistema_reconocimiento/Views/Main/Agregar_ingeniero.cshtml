@@ -10,80 +10,112 @@
         <div class="col-md-6" style="float:none;margin:auto;">
             <div class="card mb-2">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Complete la siguiente información</h5>
+                    <h5 class="mb-0">Complete the following information</h5>
                 </div>
                 <div class="card-body">
                     @using (Html.BeginForm("Agregar_ingeniero", "Main", FormMethod.Post, new { @class = "form-signin", role = "form" }))
                     {
                         @Html.AntiForgeryToken()
                         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                        @if (TempData["msg"] != null)
-                        {
-                            <div class="msg">
-                                <span class="text-danger">@TempData["msg"]</span>
-                            </div>
-                        }
                         <div class="mb-3">
-                            <label class="form-label" for="basic-icon-default-name">Nombre</label>
-                            <div class="input-group input-group-merge">
-                                <span id="basic-icon-default-name" class="input-group-text">
-                                    <i class="bx bx-user"></i>
-                                </span>
-                                @Html.TextBoxFor(m => m.Name_Engineer, new { @class = "form-control", placeholder = "Nombre", id="basic-icon-default-name"/*,required = "required", maxlength = "30",minlength = "3"*/})
-                            </div>
-                            
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label" for="basic-icon-default-lastname">Apellido</label>
-                            <div class="input-group input-group-merge">
+                            <div class="input-group"
+                                 data-toggle="tooltip"
+                                 data-placement="top"
+                                 title="The name of the engineer should be between 2 and 30 characters long">
                                 <span id="basic-icon-default-lastname" class="input-group-text">
+                                    <label class="form-label" for="basic-icon-default-name">
+                                        Name
                                     <i class="bx bx-user"></i>
+                                    </label>
                                 </span>
-                                @Html.TextBoxFor(m => m.LastName_Engineer, new { @class = "form-control", placeholder = "Apellido", id="basic-icon-default-name"})
+                                @Html.TextBoxFor(m => m.Name_Engineer, new { @class = "form-control", placeholder = "Name", id="basic-icon-default-name"})
                             </div>
+                            <span class="text-danger">@TempData["msgName_Engineer"]</span>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" for="basic-icon-default-email">Email</label>
-                            <div class="input-group input-group-merge">
-                                <span class="input-group-text"><i class="bx bx-envelope"></i></span>
-                                <input type="text" class="form-control" placeholder="Email" id="basic-icon-default-name" name="EmailA">
-                                <span class="text-danger" id="email-validation-message"></span>
-                                <span id="basic-icon-default-email2" class="input-group-text">tek-experts.com</span>
-                            </div>
-                            @Html.ValidationMessage("EmailA", "", new { @class = "text-danger" })
+                            <div class="input-group" 
+                                 data-toggle="tooltip"
+                                 data-placement="top"
+                                 title="The last name of the engineer should be between 2 and 30 characters long">
+                                <span id="basic-icon-default-lastname" class="input-group-text">
+                                    <label class="form-label" for="basic-icon-default-lastname">
+                                        Last name
+                                        <i class="bx bx-user"></i>
+                                    </label>   
+                                </span>
+                                @Html.TextBoxFor(m => m.LastName_Engineer, new { @class = "form-control", placeholder = "Last name", id="basic-icon-default-name"})
+                             </div>
+                            <span class="text-danger">@TempData["msgLastName_Engineer"]</span>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" for="basic-default-password12">Password</label>
-                            <div class="input-group input-group-merge">
-                                <span class="input-group-text"><i class="bx bx-envelope"></i></span>
-                                <input type="password" class="form-control" placeholder="Password" id="basic-icon-default-name" name="PasswordA">
-                                <span class="text-danger" id="password-validation-message"></span>
+                            <div class="input-group">
+                                <span id="basic-icon-default-lastname" class="input-group-text">
+                                    <label class="form-label" for="basic-icon-default-email">
+                                        Email
+                                        <i class="bx bx-envelope"></i>
+                                    </label>
+                                </span>
+                                <input type="text" class="form-control" placeholder="Email"
+                                data-toggle="tooltip"
+                                data-placement="top"
+                                title="Allowed domain: tek-experts.com"
+                                id="basic-icon-default-name" name="Email">
                             </div>
-                            @Html.ValidationMessage("PasswordA", "", new { @class = "text-danger" })
+                            <span class="text-danger">@TempData["msgEmail"]</span>
+                        </div>
+                        <div class="mb-3">
+                            <div class="input-group">
+                            <span id="basic-icon-default-lastname" class="input-group-text">
+                                <label class="form-label" for="basic-default-password12">
+                                    Password
+                                <i class="bx bx-lock"></i>
+                                </label>
+                                </span>
+                                <input type="password" class="form-control" placeholder="Password" 
+                                data-toggle="tooltip" 
+                                data-placement="top" 
+                                title="Needs to be at least 6 characters and you need to use a Capital letter, a lowercase, a symbol and a number" 
+                                id="basic-icon-default-name" name="Password">
+                            </div>
+                            <span class="text-danger">@TempData["msgPassword"]</span>
+                        </div>
+                        <div class="mb-3">
+                            <div class="input-group">
+                                <span id="basic-icon-default-lastname" class="input-group-text">
+                                    <label class="form-label" for="basic-default-password12">
+                                        Confirm Password
+                                        <i class="bx bx-lock"></i>
+                                    </label>
+                                </span>
+                                <input type="password" class="form-control" placeholder="Confirm Password"
+                                data-toggle="tooltip"
+                                data-placement="top"
+                                title="Needs to be at least 6 characters and you need to use a Capital letter, a lowercase, a symbol and a number"
+                                id="basic-icon-default-name" name="ConfirmPassword">
+                            </div>
+                            <span class="text-danger">@TempData["msgPassword"]</span>
                         </div>
                         <div class="mb-3">
                             <div class="input-group">
                                 <label class="input-group-text" for="inputGroupSelect01">
-                                    Posición
+                                    Position
                                     <i class="bx bx-buildings"></i>
                                 </label>
                                 <select asp-for="Position" class="form-control" asp-items="ViewBag.Position"></select>
                             </div>
-                            @Html.ValidationMessageFor(m => m.Position, "", new { @class = "text-danger" })
                         </div>
                         <div class="mb-3">
                             <div class="input-group">
                                 <label class="input-group-text" for="inputGroupSelect01">
-                                    Rol del usuario
+                                    User role
                                     <i class="bx bx-buildings"></i>
                                 </label>
                                 <select class="form-select" id="inputGroupSelect01" name="UserRole">
-                                    <option selected>Seleccionar...</option>
                                     <option value="comun">Common</option>
                                     <option value="admin">Administrator</option>
                                 </select>
-                                @Html.ValidationMessage("UserRole", "", new { @class = "text-danger" })
                             </div>
+                            <span class="text-danger">@TempData["msgRole"]</span>
                         </div>
                         <div class="mb-3">
                             <div class="input-group">
@@ -93,10 +125,10 @@
                                 </label>
                                 <select asp-for="ID_Manager" class="form-control" asp-items="ViewBag.ID_Manager"></select>
                             </div>
-                            @Html.ValidationMessageFor(m => m.ID_Manager, "", new { @class = "text-danger" })
+                            <span class="text-danger">@TempData["msgManager"]</span>
                         </div>
-                        <a class="btn btn-danger" asp-controller="Main" asp-action="Ingenieros">Regresar</a>
-                        <button type="submit" class="btn btn-primary">Crear cuenta</button>
+                        <a class="btn btn-danger" asp-controller="Main" asp-action="Ingenieros">Return</a>
+                        <button type="submit" class="btn btn-primary">Create account</button>
                     }
                     <!-- </form>  -->
                 </div>
