@@ -7,11 +7,11 @@ SELECT * FROM AspNetUserClaims;
 SELECT * FROM AspNetUserLogins;
 SELECT * FROM AspNetUserRoles;
 SELECT * FROM Engineers;
-SELECT * FROM AspNetUsers;
+SELECT Email, LockoutEnabled FROM AspNetUsers;
 SELECT * FROM __EFMigrationsHistory;
 
-Delete from AspNetUsers
-Delete from AspNetUserRoles
+--Delete from AspNetUsers
+--Delete from AspNetUserRoles
 
 SELECT * FROM CSAT;
 SELECT * FROM Phrases;

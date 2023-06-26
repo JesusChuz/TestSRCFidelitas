@@ -25,5 +25,7 @@ namespace sistema_reconocimiento.Models
         public virtual ICollection<Purchases> Purchases { get; set; }
         [NotMapped]
         public string Base64Image { get; set; }
+
+        public bool IsEnabled { get; set; }
     }
 }

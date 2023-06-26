@@ -28,6 +28,7 @@ using Newtonsoft.Json;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using System.Text.RegularExpressions;
 using MessagePack;
+using Microsoft.VisualBasic;
 
 namespace sistema_reconocimiento.Controllers
 {
@@ -218,7 +219,7 @@ namespace sistema_reconocimiento.Controllers
         }
         public async Task<List<Rewards>> LoadRewards()
         {
-            List<Rewards> rewards = await _context.Rewards.ToListAsync();
+            List<Rewards> rewards = await _context.Rewards.Where(e => e.IsEnabled == true).ToListAsync();
 
             return rewards;
         }
@@ -440,7 +441,8 @@ namespace sistema_reconocimiento.Controllers
                     Name = engineers.Name_Engineer + "  " + engineers.LastName_Engineer,
                     Email = Email,
                     Password = (string)(TempData["Password"] = Password),
-                    Role = UserRole
+                    Role = UserRole,
+                    IsNew = true
                 };
 
                 var accountResult = await _serviceAuth.RegistrationAsync(model);
@@ -690,6 +692,7 @@ namespace sistema_reconocimiento.Controllers
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> Eliminar_Ingeniero(int? id)
         {
+            var status = new Status();
             if (id == null || _context.Engineers == null)
             {
                 return NotFound();
@@ -720,16 +723,186 @@ namespace sistema_reconocimiento.Controllers
             }
 
             // Eliminar el usuario de la tabla AspNetUsers
-            var result = await _userManager.DeleteAsync(user);
-            if (!result.Succeeded)
+            try
             {
-                // Ocurrió un error al eliminar el usuario, manejarlo según sea necesario
-                return Problem("Error trying to delete the user");
+                var result = await _userManager.DeleteAsync(user);
+                if (result.Succeeded)
+                {
+                    await _context.SaveChangesAsync();
+                    TempData["IngEliminado"] = true;
+                    return RedirectToAction("Ingenieros", "Main");
+                }
+                else
+                {
+                    TempData["msg"] = "An error happened trying to delete this engineer";
+                    return RedirectToAction("Ingenieros", "Main");
+                }
             }
-            await _context.SaveChangesAsync();
-            TempData["IngEliminado"] = true;
-            return RedirectToAction("Ingenieros", "Main");
-
+            catch(Exception ex)
+            {
+                Console.WriteLine("Constraint problem when trying to delete this engineer, error: " +ex);
+                using (SqlConnection connection = new SqlConnection(_varConnStr))
+                {
+                    connection.Open();
+                    using (SqlCommand command_update = new SqlCommand("ChangeIsNew", connection))
+                    {
+                        command_update.CommandType = CommandType.StoredProcedure;
+                        command_update.Parameters.AddWithValue("@email", user.Email);
+                        command_update.Parameters.AddWithValue("@newValueIsNew", 0);
+                        command_update.Parameters.AddWithValue("@newValueLockout", 1);
+                        command_update.ExecuteNonQuery();
+                        connection.Close();
+                        TempData["msgEngineerConstraint"] = "True";
+                        return RedirectToAction("Ingenieros", "Main");
+                    }
+                }
+            }
+        }
+        public async Task<IActionResult> Change_lock(int? id) {
+            var status = new Status();
+            try
+            {
+                var engineers = await _context.Engineers
+                .Include(e => e.ApplicationUser)
+                .Include(e => e.Manager)
+                .Include(e => e.Positions)
+                .FirstOrDefaultAsync(m => m.ID_Engineer == id);
+                if (engineers == null)
+                {
+                    return NotFound();
+                }
+                if (_context.Engineers == null)
+                {
+                    return Problem("Entity set 'ApplicationDbContext.Engineers'  is null.");
+                }
+                var engineer = await _context.Engineers.FindAsync(id);
+                var user = await _userManager.FindByIdAsync(engineer.ID_Account);
+                using (SqlConnection connection = new SqlConnection(_varConnStr))
+                {
+                    connection.Open();
+                    // Crear el comando y asignar el stored procedure
+                    using (SqlCommand command = new SqlCommand("GetLockoutEnabledAndIsNew", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        // Agregar parámetro de entrada
+                        command.Parameters.AddWithValue("@Email", user.Email);
+                        // Ejecutar el stored procedure y leer los resultados
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                bool lockoutEnabled = (bool)reader["LockoutEnabled"];
+                                bool isNew = (bool)reader["IsNew"];
+                                if (lockoutEnabled == true)
+                                {
+                                    using (SqlCommand command_update = new SqlCommand("ChangeIsNew", connection))
+                                    {
+                                        command_update.CommandType = CommandType.StoredProcedure;
+                                        command_update.Parameters.AddWithValue("@email", user.Email);
+                                        command_update.Parameters.AddWithValue("@newValueIsNew", 0);
+                                        command_update.Parameters.AddWithValue("@newValueLockout", 0);
+                                        command_update.ExecuteNonQuery();
+                                        connection.Close();
+                                        TempData["msgAccountEnabled"] = "True";
+                                        return RedirectToAction("Ingenieros", "Main");
+                                    }
+                                }
+                                else
+                                {
+                                    using (SqlCommand command_update = new SqlCommand("ChangeIsNew", connection))
+                                    {
+                                        command_update.CommandType = CommandType.StoredProcedure;
+                                        command_update.Parameters.AddWithValue("@email", user.Email);
+                                        command_update.Parameters.AddWithValue("@newValueIsNew", 0);
+                                        command_update.Parameters.AddWithValue("@newValueLockout", 1);
+                                        command_update.ExecuteNonQuery();
+                                        connection.Close();
+                                        TempData["msgAccountDisabled"] = "True";
+                                        return RedirectToAction("Ingenieros", "Main");
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("No results found");
+                                connection.Close();
+                                return RedirectToAction("Ingenieros", "Main");
+                            }
+                        }
+                    }
+                }
+            }catch(Exception ex){
+                Console.WriteLine("An error occurred:" +ex);
+                status.Message = ex.Message;
+                TempData["msg"] = status.Message;
+                return View();
+            } 
+        }
+        public async Task<IActionResult> Change_RewardState(int? id)
+        {
+            var status = new Status();
+            try
+            {
+                var rewards = _context.Rewards.FirstOrDefault(r => r.ID_Reward == id);
+                using (SqlConnection connection = new SqlConnection(_varConnStr))
+                {
+                    connection.Open();
+                    // Crear el comando y asignar el stored procedure
+                    using (SqlCommand command = new SqlCommand("GetRewardState", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        // Agregar parámetro de entrada
+                        command.Parameters.AddWithValue("@ID_Reward", rewards.ID_Reward);
+                        // Ejecutar el stored procedure y leer los resultados
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                bool IsEnabled = (bool)reader["IsEnabled"];
+                                if (IsEnabled == true)
+                                {
+                                    using (SqlCommand command_update = new SqlCommand("ChangeRewardState", connection))
+                                    {
+                                        command_update.CommandType = CommandType.StoredProcedure;
+                                        command_update.Parameters.AddWithValue("@ID_Reward", rewards.ID_Reward);
+                                        command_update.Parameters.AddWithValue("@newValue", 0);
+                                        command_update.ExecuteNonQuery();
+                                        connection.Close();
+                                        TempData["msgRewardEnabled"] = "True";
+                                        return RedirectToAction("Recompensas", "Main");
+                                    }
+                                }
+                                else
+                                {
+                                    using (SqlCommand command_update = new SqlCommand("ChangeRewardState", connection))
+                                    {
+                                        command_update.CommandType = CommandType.StoredProcedure;
+                                        command_update.Parameters.AddWithValue("@ID_Reward", rewards.ID_Reward);
+                                        command_update.Parameters.AddWithValue("@newValue", 1);
+                                        command_update.ExecuteNonQuery();
+                                        connection.Close();
+                                        TempData["msgRewardDisabled"] = "True";
+                                        return RedirectToAction("Recompensas", "Main");
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("No results found");
+                                connection.Close();
+                                return RedirectToAction("Recompensas", "Main");
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occurred:" + ex);
+                status.Message = ex.Message;
+                TempData["msg"] = status.Message;
+                return View();
+            }
         }
         public async Task<List<Recognitions>> LoadRecognitionsPending(String recognitionState)
         {
@@ -971,6 +1144,7 @@ namespace sistema_reconocimiento.Controllers
                         rewards.Picture = memoryStream.ToArray();
                     }
                     _context.Add(rewards);
+                    rewards.IsEnabled = true;
                     await _context.SaveChangesAsync();
                     TempData["RenCreado"] = true;
                     return RedirectToAction("Recompensas");
@@ -1115,20 +1289,35 @@ namespace sistema_reconocimiento.Controllers
         [Authorize(Roles = "admin")]
         public IActionResult Eliminar_Recompensa(int id)
         {
+
             var rewards = _context.Rewards.FirstOrDefault(r => r.ID_Reward == id);
-            if (rewards == null)
+            try
             {
-                // Si no se encuentra la recompensa, muestra una vista de error o redirige a una página de error
-                return View("Error");
+                // Elimina el recompensa de la base de datos
+                _context.Rewards.Remove(rewards);
+                _context.SaveChanges();
+                TempData["RenEliminada"] = true;
+
+                // Redirige a la acción principal
+                return RedirectToAction("Recompensas", "Main");
+            }catch (Exception ex)
+            {
+                Console.WriteLine("Constraint problem when trying to delete this reward, error: " + ex);
+                using (SqlConnection connection = new SqlConnection(_varConnStr))
+                {
+                    connection.Open();
+                    using (SqlCommand command_update = new SqlCommand("ChangeRewardState", connection))
+                    {
+                        command_update.CommandType = CommandType.StoredProcedure;
+                        command_update.Parameters.AddWithValue("@ID_Reward", rewards.ID_Reward);
+                        command_update.Parameters.AddWithValue("@newValue", 0);
+                        command_update.ExecuteNonQuery();
+                        connection.Close();
+                        TempData["msgRewardConstraint"] = "True";
+                        return RedirectToAction("Recompensas", "Main");
+                    }
+                }
             }
-
-            // Elimina el recompensa de la base de datos
-            _context.Rewards.Remove(rewards);
-            _context.SaveChanges();
-            TempData["RenEliminada"] = true;
-
-            // Redirige a la acción principal
-            return RedirectToAction("Recompensas", "Main");
         }
         [Authorize(Roles = "admin")]
         public IActionResult Frases(bool result, Engineers model)

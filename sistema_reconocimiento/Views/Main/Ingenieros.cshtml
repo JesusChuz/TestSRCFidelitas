@@ -84,7 +84,16 @@
                                             <tr>
                                                 <th scope="row">@contador</th>
                                                 <td>@Html.DisplayFor(modelItem => item.Name_Engineer)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.ApplicationUser.Email)</td>
+                                                <td>
+                                                    <div data-toggle="tooltip"
+                                                         data-placement="top"
+                                                         title="Lock/Unlock account" style="display: flex;">
+                                                         @Html.DisplayFor(modelItem => item.ApplicationUser.Email) (Is locked out?: @Html.DisplayFor(modelItem => item.ApplicationUser.LockoutEnabled) (
+                                                        <a class="enlace-visitado" asp-controller="Main" asp-action="Change_lock" asp-route-id="@item.ID_Engineer"><i class="fas fa-lock"></i></a>
+                                                        )
+                                                        Is New?: @Html.DisplayFor(modelItem => item.ApplicationUser.IsNew) )
+                                                    </div>
+                                                </td>
                                                 <td>@Html.DisplayFor(modelItem => item.Manager.Name_Manager)  @Html.DisplayFor(modelItem => item.Manager.LastName_Manager)</td>
                                                 <td>@Html.DisplayFor(modelItem => item.ApplicationUser.Roles)</td>
                                                 <td>@Html.DisplayFor(modelItem => item.Positions.Position_Name)</td>
@@ -175,6 +184,72 @@
                 "hideMethod": "fadeOut"
             };
             toastr["error"]("Engineer deleted");
+        }
+        var DisableAccountafterDelete = '@TempData["msgEngineerConstraint"]';
+        if (DisableAccountafterDelete === "True") {
+            // Mostrar notificación de éxito
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toast-top-center",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+            toastr["error"]("There is Information associated to this engineer so we cannot delete it, however we have disabled the account.");
+        }
+        var DisableAccount = '@TempData["msgAccountDisabled"]';
+        if (DisableAccount === "True") {
+            // Mostrar notificación de éxito
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toast-top-center",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+            toastr["info"]("The account has been locked");
+        }
+        var EnableAccount = '@TempData["msgAccountEnabled"]';
+        if (EnableAccount === "True") {
+            // Mostrar notificación de éxito
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toast-top-center",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+            toastr["info"]("The account has been unlocked");
         }
         var RenM = '@TempData["IngModif"]';
         if (RenM === "True") {

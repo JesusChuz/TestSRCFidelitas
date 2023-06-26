@@ -97,15 +97,16 @@ EXEC GetLockoutEnabledAndIsNew @Email = 'john.wick@gmail.com';
 DROP PROCEDURE ChangeIsNew
 
 CREATE PROCEDURE ChangeIsNew
-    @email nvarchar(256),
-    @newValue bit
+	@email nvarchar(256),
+    @newValueIsNew bit,
+    @newValueLockout bit
 AS
 BEGIN
     UPDATE AspNetUsers
-    SET IsNew = @newValue
+    SET IsNew = @newValueIsNew
     WHERE Email = @email;
 	UPDATE AspNetUsers
-	SET LockoutEnabled = @newValue
+	SET LockoutEnabled = @newValueLockout
 	WHERE Email = @email;
 END
 
@@ -199,4 +200,29 @@ END
 
 EXEC UpdateRecognitionState @ID_Recognition = 11, @newState = Pending;
 
-	
+CREATE PROCEDURE GetRewardState
+	@ID_Reward int
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT ID_Reward, IsEnabled
+    FROM Rewards
+    WHERE ID_Reward = @ID_Reward;
+END;
+
+EXEC GetRewardState @ID_Reward = 6;
+
+DROP PROCEDURE GetRewardState
+
+CREATE PROCEDURE ChangeRewardState
+    @ID_Reward int,
+    @newValue bit
+AS
+BEGIN
+    UPDATE Rewards
+    SET IsEnabled = @newValue
+    WHERE ID_Reward = @ID_Reward;
+END
+
+EXEC ChangeRewardState @ID_Reward = 6, @newValue = 1;

@@ -44,7 +44,7 @@ namespace sistema_reconocimiento.Services
             if (!await userManager.CheckPasswordAsync(user, model.Password))
             {
                 status.StatusCode = 0;
-                status.Message = "Invalid password";
+                status.Message = "Invalid Password";
                 return status;
             }
             var signInResult = await signInManager.PasswordSignInAsync(user, model.Password, false, true);
@@ -97,16 +97,12 @@ namespace sistema_reconocimiento.Services
             {
                 Name = model.Name,
                 Email = model.Email,
-                UserName = model.Username
+                UserName = model.Username,
+                IsNew = model.IsNew
             };
 
             var result = await userManager.CreateAsync(user, model.Password);
-            if (!result.Succeeded)
-            {
-                status.StatusCode = 0;
-                status.Message = "User creation failed";
-                return status;
-            }
+
             if (!result.Succeeded)
             {
                 status.StatusCode = 0;

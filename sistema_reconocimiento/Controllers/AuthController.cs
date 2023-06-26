@@ -91,7 +91,13 @@ namespace sistema_reconocimiento.Controllers
                                     {
                                         bool lockoutEnabled = (bool)reader["LockoutEnabled"];
                                         bool isNew = (bool)reader["IsNew"];
-                                        if (lockoutEnabled == true || isNew == true) //-> redirija a la vista de cambio de password para que al cambiarla, se desbloquee (pase lockoutEnabled a false y isNew a false)
+                                        if (lockoutEnabled == true && isNew == false) // --> si el lockoutEnabled es true pero isNew es false quiere decir que la cuenta esta deshabilitada
+                                        {
+                                            TempData["msg"] = "This account is disabled";
+                                            connection.Close();
+                                            return RedirectToAction("Login", "Auth");
+                                        } 
+                                        else if (lockoutEnabled == true || lockoutEnabled == false && isNew == true) //-> redirija a la vista de cambio de password para que al cambiarla, se desbloquee (pase lockoutEnabled a false y isNew a false) -- si el lockoutEnabled es true y isNew es trie quiere decir que la cuenta es nueva
                                         {
                                             // Obtener el objeto de sesión
                                             ISession session = HttpContext.Session;
@@ -100,8 +106,9 @@ namespace sistema_reconocimiento.Controllers
                                             connection.Close();
                                             return RedirectToAction("Cambio_password", "Auth");
                                         }
-                                        else
-                                        {
+                                        //else (lockoutEnabled == false || lockoutEnabled == false && isNew == false)
+                                        else 
+                                        {                                        
                                             // Obtener el objeto de sesión
                                             ISession session = HttpContext.Session;
                                             //Establecer el valor en la sesión
@@ -112,7 +119,7 @@ namespace sistema_reconocimiento.Controllers
                                     }
                                     else
                                     {
-                                        Console.WriteLine("No se encontraron resultados.");
+                                        Console.WriteLine("No results found");
                                         connection.Close();
                                         return View();
                                     }
@@ -126,7 +133,9 @@ namespace sistema_reconocimiento.Controllers
                             return View();
                         }
                     }
-                }else{
+                }
+                else{
+                    status.Message = "Invalid Credentials";
                     TempData["msg"] = result.Message;
                     ModelState.SetModelValue("Email", new ValueProviderResult(model.Email, CultureInfo.InvariantCulture));
                     return View();
@@ -209,7 +218,8 @@ namespace sistema_reconocimiento.Controllers
                                 {
                                     command_update.CommandType = CommandType.StoredProcedure;
                                     command_update.Parameters.AddWithValue("@email", model.Email);
-                                    command_update.Parameters.AddWithValue("@newValue", 1);
+                                    command_update.Parameters.AddWithValue("@newValueIsNew", 1);
+                                    command_update.Parameters.AddWithValue("@newValueLockout", 1);
                                     command_update.ExecuteNonQuery();
                                     connection.Close();
                                     status.StatusCode = 1;
@@ -294,7 +304,9 @@ namespace sistema_reconocimiento.Controllers
                             {
                                 command_update.CommandType = CommandType.StoredProcedure;
                                 command_update.Parameters.AddWithValue("@email", model.Email);
-                                command_update.Parameters.AddWithValue("@newValue", 0);
+                                command_update.Parameters.AddWithValue("@newValueIsNew", 0);
+                                command_update.Parameters.AddWithValue("@newValueLockout", 0);
+
                                 command_update.ExecuteNonQuery();
                                 connection.Close();
                                 return RedirectToAction("Index", "Main");
