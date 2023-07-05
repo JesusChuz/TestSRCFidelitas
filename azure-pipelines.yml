@@ -1,27 +1,53 @@
-# ASP.NET
-# Build and test ASP.NET projects.
-# Add steps that publish symbols, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
-
 trigger:
-- main
+  branches:
+    include:
+      - main
 
 pool:
-  vmImage: 'windows-latest'
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Release'
 
 steps:
+- task: UseDotNet@2
+  displayName: 'Instalar .NET Core SDK'
+  inputs:
+    version: '6.x'
+    includePreviewVersions: true
+
 - task: DotNetCoreCLI@2
+  displayName: 'Restaurar dependencias'
+  inputs:
+    command: 'restore'
+    projects: '**/*.csproj'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Compilar la aplicación'
   inputs:
     command: 'build'
     projects: '**/*.csproj'
-    arguments: '--output publish_output --configuration Release'
-    
-- task: ArchiveFiles@2
-  displayName: 'Archive files'
+    arguments: '--configuration $(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Publicar la aplicación'
   inputs:
-    rootFolderOrFile: 'publish_output/'
-    includeRootFolder: false
+    command: 'publish'
+    publishWebProjects: true
+    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
 
 - task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact: drop'
-
+  displayName: 'Publicar artefactos de compilación'
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+  
+- task: AzureWebApp@1
+  displayName: 'Desplegar a Azure Web App'
+  inputs:
+    azureSubscription: 'Test'
+    appType: 'webApp'
+    appName: 'src-app'
+    package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    deploymentMethod: 'zipDeploy'
