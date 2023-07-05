@@ -35,3 +35,10 @@ steps:
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Test'
+    appType: 'webApp'
+    WebAppName: 'src-app'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
