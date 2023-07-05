@@ -43,11 +43,3 @@ steps:
     ArtifactName: 'drop'
     publishLocation: 'Container'
   
-- task: AzureWebApp@1
-  displayName: 'Desplegar a Azure Web App'
-  inputs:
-    azureSubscription: 'Test'
-    appType: 'webApp'
-    appName: 'src-app'
-    package: '$(System.DefaultWorkingDirectory)/**/*.zip'
-    deploymentMethod: 'zipDeploy'
