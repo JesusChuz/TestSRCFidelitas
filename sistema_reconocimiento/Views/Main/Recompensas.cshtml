@@ -82,7 +82,15 @@
                                         {
                                             <tr>
                                                 <td>@contador</td>
-                                                <td>@Html.DisplayFor(modelItem => item.Reward_Name)</td>
+                                                <td>
+                                                    <div data-toggle="tooltip"
+                                                         data-placement="top"
+                                                         title="Enable/disable reward">
+                                                    @Html.DisplayFor(modelItem => item.Reward_Name) (Is Enabled?: @Html.DisplayFor(modelItem => item.IsEnabled) (
+                                                        <a class="enlace-visitado" asp-controller="Main" asp-action="Change_RewardState" asp-route-id="@item.ID_Reward"><i class="fas fa-eye"></i></a>
+                                                    )
+                                                    </div>
+                                                </td>
                                                 <td>@Html.DisplayFor(modelItem => item.Reward_Description)</td>
                                                 <td>
                                                     <svg width="50" height="50">
@@ -203,6 +211,73 @@
             }
             toastr["info"]("Reward modified");
         }
+        var DisableRewardafterDelete = '@TempData["msgRewardConstraint"]';
+        if (DisableRewardafterDelete === "True") {
+            // Mostrar notificación de éxito
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toast-top-center",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+            toastr["error"]("There is Information associated to this reward so we cannot delete it, however we have disabled it.");
+        }
+        var DisableReward = '@TempData["msgRewardEnabled"]';
+        if (DisableReward === "True") {
+            // Mostrar notificación de éxito
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toast-top-center",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+            toastr["info"]("The reward has been disabled");
+        }
+        var EnableReward = '@TempData["msgRewardDisabled"]';
+        if (EnableReward === "True") {
+            // Mostrar notificación de éxito
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toast-top-center",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+            toastr["info"]("The reward has been enabled");
+        }
+
     </script>
     <script>
         // Función para filtrar las tablas por la búsqueda
