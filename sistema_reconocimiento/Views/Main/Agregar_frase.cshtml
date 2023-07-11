@@ -1,4 +1,5 @@
-﻿@{
+﻿@model sistema_reconocimiento.Models.Phrases
+@{
     ViewData["Title"] = "Agregar Frase";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -7,35 +8,39 @@
         <div class="col-md-6" style="float:none;margin:auto;">
             <div class="card mb-2">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Escribe la nueva frase</h5>
+                    <h5 class="mb-0">Add the new phrase</h5>
                 </div>
                 <div class="card-body">
-                    <form>
+                    <form asp-action="Agregar_frase">
                         <div class="mb-3">
-                            <label class="form-label" for="basic-icon-default-name">Frase</label>
+                            <label class="form-label" for="basic-icon-default-name">Phrase</label>
                             <div class="input-group input-group-merge">
                                 <input type="text"
                                        class="form-control"
                                        id="basic-icon-default-name"
-                                       placeholder="Frase motivacional" />
+                                       placeholder="Motivational phrase"
+                                       name="Phrase"
+                                       asp-for="Phrase"
+                                       maxlength="100" />
                             </div>
+                            @Html.ValidationMessageFor(m => m.Phrase,"", new { @class = "text-danger" })
                         </div>
                         <div class="mb-3">
                             <div class="input-group">
                                 <label class="input-group-text" for="inputGroupSelect01">
-                                    Estado
+                                    State
                                     <i class="bx bx-buildings"></i>
                                 </label>
-                                <select class="form-select" id="inputGroupSelect01">
-                                    <option selected>Seleccionar...</option>
-                                    <option value="1">Activa</option>
-                                    <option value="2">Desactiva</option>
+                                <select class="form-select" id="inputGroupSelect01" name="States" asp-for="States">
+                                    <option value="True">Active</option>
+                                    <option value="False">Inactive</option>
                                 </select>
                             </div>
+                            @Html.ValidationMessageFor(m => m.States, "", new { @class = "text-danger" })
                         </div>
                         </br>
-                        <button type="submit" class="btn btn-primary">Crear Frase</button>
-                        <a asp-controller="Main" asp-action="Frases" class="btn btn-primary">Volver</a>
+                        <button type="submit" class="btn btn-primary">Create Phrase</button>
+                        <a asp-controller="Main" asp-action="Frases" class="btn btn-primary">Return</a>
                     </form>
                 </div>
             </div>
