@@ -268,7 +268,7 @@ namespace sistema_reconocimiento.Controllers
                         var user = await _userManager.FindByIdAsync(engineer.ApplicationUser.Id);
                         var roles = await _userManager.GetRolesAsync(user);
                         // Aquí podrías asignar los roles a un nuevo campo en tu modelo, por ejemplo:
-                        engineer.ApplicationUser.Roles = (List<string>)roles;
+                        engineer.ApplicationUser.Roles = (List<string>)roles;   
                     }
                     return View(await applicationDbContext.ToListAsync());
                 }
