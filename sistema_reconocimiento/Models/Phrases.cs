@@ -8,8 +8,9 @@ namespace sistema_reconocimiento.Models
         public int Phrases_ID { get; set; }
 
         [Required]
+        [StringLength(100, MinimumLength = 8, ErrorMessage = "The phrase must be between 8 and 100 characters.")]
         public string Phrase { get; set; }
         [Required]
-        public int Engineer_ID { get; set; }
+        public Boolean States { get; set; }
     }
 }

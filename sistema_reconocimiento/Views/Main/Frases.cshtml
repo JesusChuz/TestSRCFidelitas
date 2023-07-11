@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<sistema_reconocimiento.Models.Phrases>
+@{
     ViewData["Title"] = "Reconocimientos";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -14,7 +15,7 @@
                     <div class="breadcrumb-wrapper mr-1">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item">
-                                <a href="index.html">Principal</a>
+                                <a href="">Principal</a>
                             </li>
                             <li class="breadcrumb-item active">
                                 Phrases
@@ -44,7 +45,7 @@
                                                 <input type="text"
                                                        class="form-control border-0 shadow-none"
                                                        placeholder="Search"
-                                                       aria-label="Search" 
+                                                       aria-label="Search"
                                                        id="searchInput" />
                                             </div>
                                         </div>
@@ -70,46 +71,33 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <th scope="row">1</th>
-                                            <td>El triunfo verdadero del hombre surge de las cenizas del error. Pablo Neruda.</td>
-                                            <td>Activa</td>
-                                            <td>
-                                                <a class="btn btn-danger enter-edit" asp-controller="Main" asp-action="Editar_frase"><i class="fas fa-pen"></i></a>
-                                                <a class="btn btn-danger submit-delete" href="#"><i class="fas fa-trash"></i></a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">2</th>
-                                            <td>Ninguno de nosotros es tan bueno como todos nosotros juntos. Ray Kroc.</td>
-                                            <td>Activa</td>
-                                            <td>
-                                                <a class="btn btn-danger enter-edit" asp-controller="Main" asp-action="Editar_frase"><i class="fas fa-pen"></i></a>
-                                                <a class="btn btn-danger submit-delete" href="#"><i class="fas fa-trash"></i></a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">3</th>
-                                            <td>Cuando las arañas tejen juntas, pueden atar a un león. Proverbio etíope.</td>
-                                            <td>Activa</td>
-                                            <td>
-                                                <div style="display: flex;">
-                                                    <div data-toggle="tooltip"
-                                                         data-placement="top"
-                                                         title="Edit phrase">
-                                                            <a class="btn btn-danger enter-edit" asp-controller="Main" asp-action="Editar_frase"><i class="fas fa-pen"></i></a>
-                                                    </div>
-                                                    <div data-toggle="tooltip"
-                                                         data-placement="top"
-                                                         title="Delete phrase">
-                                                            <a class="btn btn-danger submit-delete" href="#"><i class="fas fa-trash"></i></a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                        @{
+                                            int contador = 1;
+                                        }
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <th scope="row">@contador</th>
+                                                <td>@Html.DisplayFor(modelItem => item.Phrase)</td>
+                                                <td>
+                                                    @if (item.States)
+                                                    {
+                                                        <span>Active</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>Inactive</span>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    <a class="btn btn-danger  enter-edit" asp-route-id="@item.Phrases_ID" asp-controller="Main" asp-action="Editar_frase"><i class="fas fa-pen"></i></a>
+                                                    <a class="btn btn-danger submit-delete" asp-route-id="@item.Phrases_ID" asp-controller="Main" asp-action="Eliminar_frase"><i class="fas fa-trash"></i></a>
+                                                </td>
+                                            </tr>
+                                            contador++;
+                                        }
                                     </tbody>
                                 </table>
-
                             </div>
                         </div>
                         <div id="paginationAR" class="pagination-container navbar-nav align-items-center">
@@ -129,6 +117,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </div>

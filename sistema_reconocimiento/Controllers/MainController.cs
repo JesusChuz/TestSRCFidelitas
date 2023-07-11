@@ -28,7 +28,6 @@ using Newtonsoft.Json;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using System.Text.RegularExpressions;
 using MessagePack;
-using Microsoft.VisualBasic;
 
 namespace sistema_reconocimiento.Controllers
 {
@@ -233,10 +232,13 @@ namespace sistema_reconocimiento.Controllers
                     LoadPoints(model);
                     LoadIdEngineer(model);
                     var applicationDbContext = _context.Rewards;
+                    var activePhrases = await _context.Phrases.Where(p => p.States == true).Select(p => p.Phrase).ToListAsync();
                     var viewModel = new SubmitPurchaseViewModel
                     {
                         Purchases = new Purchases(),
-                        Rewards = await LoadRewards()
+                        Rewards = await LoadRewards(),
+                           // Obtienen las frases activas desde la bd
+                        Phrases = activePhrases
                     };
                    
                    // var applicationDbContext = _context.Purchases.Include(e => e.Rewards);
@@ -462,7 +464,6 @@ namespace sistema_reconocimiento.Controllers
                 return RedirectToAction("Index", "Main");
             }
         }
-
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> Editar_ingeniero(int? id, Engineers model)
         {
@@ -684,7 +685,6 @@ namespace sistema_reconocimiento.Controllers
                 }
             }
         }
-
         private bool EngineersExists(int iD_Engineer)
         {
             throw new NotImplementedException();
@@ -1320,7 +1320,7 @@ namespace sistema_reconocimiento.Controllers
             }
         }
         [Authorize(Roles = "admin")]
-        public IActionResult Frases(bool result, Engineers model)
+        public async Task<IActionResult> FrasesAsync(bool result, Engineers model)
         {
             if (result == false)
             {
@@ -1328,6 +1328,8 @@ namespace sistema_reconocimiento.Controllers
                 if (result == true)
                 {
                     LoadPoints(model);
+                    View(await _context.Phrases.ToListAsync());
+                    Problem("Entity set 'ApplicationDbContext.Phrases'  is null.");
                     return View();
                 }
                 else
@@ -1355,8 +1357,24 @@ namespace sistema_reconocimiento.Controllers
             }
             return RedirectToAction("Login", "Auth");
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         [Authorize(Roles = "admin")]
-        public IActionResult Editar_frase(bool result, Engineers model)
+        public async Task<IActionResult> Agregar_frase([Bind("Phrases_ID,Phrase,States")] Phrases phrases, Engineers model)
+        {
+            LoadPoints(model);
+            if (!string.IsNullOrEmpty(phrases.Phrase) && phrases.Phrase.Length <= 100 && phrases.Phrase.Length >= 8)
+            {
+                _context.Add(phrases);
+                await _context.SaveChangesAsync();
+                TempData["FraseCrea"] = true;
+                return RedirectToAction("Frases", "Main");
+            }
+            return View(phrases);
+        }
+
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> Editar_fraseAsync(bool result, Engineers model, int? id)
         {
             if (result == false)
             {
@@ -1364,7 +1382,12 @@ namespace sistema_reconocimiento.Controllers
                 if (result == true)
                 {
                     LoadPoints(model);
-                    return View();
+                    var phrases = await _context.Phrases.FindAsync(id);
+                    if (phrases == null)
+                    {
+                        return NotFound();
+                    }
+                    return View(phrases);
                 }
                 else
                 {
@@ -1372,6 +1395,55 @@ namespace sistema_reconocimiento.Controllers
                 }
             }
             return RedirectToAction("Login", "Auth");
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Editar_frase(int id, [Bind("Phrases_ID,Phrase,States")] Phrases phrases, Engineers model)
+        {
+            LoadPoints(model);
+            if (id != phrases.Phrases_ID)
+            {
+                return NotFound();
+            }
+
+            if (!string.IsNullOrEmpty(phrases.Phrase) && phrases.Phrase.Length <= 100 && phrases.Phrase.Length >= 8)
+            {
+                try
+                {
+                    _context.Update(phrases);
+                    await _context.SaveChangesAsync();
+                    TempData["FraseModifi"] = true;
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!PhrasesExists(phrases.Phrases_ID))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction("Frases", "Main");
+            }
+            return View(phrases);
+        }
+
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> Eliminar_frase(int? id)
+        {
+            var frase = _context.Phrases.Find(id);
+            if (frase == null)
+            {
+                return NotFound();
+            }
+
+            _context.Phrases.Remove(frase);
+            _context.SaveChanges();
+            TempData["FraseElimi"] = true;
+
+            return RedirectToAction("Frases", "Main");
         }
         public async Task<IActionResult> Mis_ReconocimientosAsync(bool result, Engineers model)
         {
@@ -1627,6 +1699,10 @@ namespace sistema_reconocimiento.Controllers
         private bool RewardsExists(int id)
         {
             return (_context.Rewards?.Any(e => e.ID_Reward == id)).GetValueOrDefault();
+        }
+        private bool PhrasesExists(int id)
+        {
+            return (_context.Phrases?.Any(e => e.Phrases_ID == id)).GetValueOrDefault();
         }
     }
 }
