@@ -34,7 +34,7 @@ namespace sistema_reconocimiento.Services
         private static string GetHtmlTemplate(string templateFileName)
         {
             // Leer el contenido del archivo de plantilla HTML desde el disco o cualquier otra fuente de datos
-            string templatePath = Path.Combine("Views", "MailTemplates", templateFileName);
+            string templatePath = Path.Combine("wwwroot", "MailTemplates", templateFileName);
             string htmlTemplate = File.ReadAllText(templatePath);
             return htmlTemplate;
         }
