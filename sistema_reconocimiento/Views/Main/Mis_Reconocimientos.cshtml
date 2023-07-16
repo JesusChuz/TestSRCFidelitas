@@ -28,7 +28,7 @@
                     <div class="breadcrumb-wrapper mr-1">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item">
-                                <a href="index.html">Principal</a>
+                                <a asp-action="Index">Principal</a>
                             </li>
                             <li class="breadcrumb-item active">My recognitions history</li>
                         </ol>
@@ -41,18 +41,16 @@
                 <div class="row">
                     <!-- Custom content with heading -->
                     <div class="col-lg-6">
+                        <h3 class="content-header-right">When I recognized someone</h3>
                         <div class="demo-inline-spacing mt-2">
                             <div class="list-group">
-                                <a href="" class="list-group-item list-group-item-action flex-column align-items-start active">
-                                    <h3 class="content-header-right">When I recognized someone</h3>
-                                </a>
                                 @foreach (var item in Model)
                                 {
                                     if (item.Petitioner_Eng == (int?)ViewData["Login"] && (item.Recognition_State == "Approved" || item.Recognition_State == "Rejected"))
                                     {
                                         <a href="" class="list-group-item list-group-item-action flex-column align-items-start">
                                             <div class="d-flex justify-content-between w-100">
-                                                <small>Sent by: @ViewData[$"RecognizedEngineerName_{item.ID_Recognition}"]</small>
+                                                <small>Sent to: @ViewData[$"RecognizedEngineerName_{item.ID_Recognition}"]</small>
                                                 <small>Date: @item.Recognition_Date.ToString("dd/MMM/yyyy")</small>
                                                 <small>State: @Html.DisplayFor(modelItem => item.Recognition_State)</small>
                                                 <p class="mb-1 break-word">
@@ -70,11 +68,9 @@
                     </div>
                     <!-- Custom content with heading -->
                     <div class="col-lg-6">
+                        <h3 class="content-header-right">When I was recognized by someone</h3>
                         <div class="demo-inline-spacing mt-2">
                             <div class="list-group">
-                                <a href="" class="list-group-item list-group-item-action flex-column align-items-start active">
-                                    <h3 class="content-header-right">When I recognized someone</h3>
-                                </a>
                                 @foreach (var item in Model)
                                 {
                                     if (item.Recognized_Eng == (int?)ViewData["Login"] && (item.Recognition_State == "Approved" || item.Recognition_State == "Rejected"))

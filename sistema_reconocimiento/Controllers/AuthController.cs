@@ -56,6 +56,7 @@ namespace sistema_reconocimiento.Controllers
                 return View(model);
             model.Role = "user";
             var result = await _service.RegistrationAsync(model);
+            result.Message = "Account registered";
             TempData["msg"] = result.Message;
             return RedirectToAction(nameof(Registration));
         }
@@ -93,7 +94,7 @@ namespace sistema_reconocimiento.Controllers
                                         bool isNew = (bool)reader["IsNew"];
                                         if (lockoutEnabled == true && isNew == false) // --> si el lockoutEnabled es true pero isNew es false quiere decir que la cuenta esta deshabilitada
                                         {
-                                            TempData["msg"] = "This account is disabled";
+                                            TempData["msgLoginState"] = "This account is disabled";
                                             connection.Close();
                                             return RedirectToAction("Login", "Auth");
                                         } 
@@ -120,6 +121,7 @@ namespace sistema_reconocimiento.Controllers
                                     else
                                     {
                                         Console.WriteLine("No results found");
+                                        TempData["msg"] = "No results found";
                                         connection.Close();
                                         return View();
                                     }
@@ -129,6 +131,7 @@ namespace sistema_reconocimiento.Controllers
                         catch (Exception ex)
                         {
                             Console.WriteLine($"Error: {ex.Message}");
+                            TempData["msgEx"] = ex.Message;
                             connection.Close();
                             return View();
                         }
@@ -136,13 +139,13 @@ namespace sistema_reconocimiento.Controllers
                 }
                 else{
                     status.Message = "Invalid Credentials";
-                    TempData["msg"] = result.Message;
+                    TempData["msgLoginState"] = result.Message;
                     ModelState.SetModelValue("Email", new ValueProviderResult(model.Email, CultureInfo.InvariantCulture));
                     return View();
                 }
             }else{
                 status.Message = "Please enter your email and password";
-                TempData["msg"] = status.Message;
+                TempData["msgLoginState"] = status.Message;
                 ModelState.SetModelValue("Email", new ValueProviderResult(model.Email, CultureInfo.InvariantCulture));
                 return View();
             }
@@ -167,7 +170,7 @@ namespace sistema_reconocimiento.Controllers
                 Email = "melany.quesada@gmail.com",
                 Password = "Admin@12345#"
             };
-            model.Role = "comun";
+            model.Role = "common";
             var result = await _service.RegistrationAsync(model);
             return Ok(result);
         }
@@ -196,6 +199,9 @@ namespace sistema_reconocimiento.Controllers
             {
                 Email = email
             };
+            var loadEngineerID = await _context.Engineers
+                .Include(e => e.ApplicationUser).Include(e => e.Manager).Include(e => e.Positions)
+                .AsNoTracking().FirstOrDefaultAsync(e => e.ApplicationUser.Email == email);
             if (model.Email != null)
             {
                 var check_email = await userManager.FindByEmailAsync(model.Email);
@@ -203,7 +209,7 @@ namespace sistema_reconocimiento.Controllers
                 {
                     status.StatusCode = 0;
                     status.Message = "Email has not been registered";
-                    TempData["msg"] = status.Message;
+                    TempData["msgLoginState"] = status.Message;
                     return View();
                 } else{
                     var result = await _service.SendResetEmail(model);
@@ -222,9 +228,18 @@ namespace sistema_reconocimiento.Controllers
                                     command_update.Parameters.AddWithValue("@newValueLockout", 1);
                                     command_update.ExecuteNonQuery();
                                     connection.Close();
+                                    //Loggear cambio de password
+                                    var logPasswordUpdate = new Log_PasswordUpdate
+                                    {
+                                        Reason = "Password reset",
+                                        ID_Engineer = loadEngineerID.ID_Engineer,
+                                        Change_Date = DateTime.Now
+                                    };
+                                    _context.Add(logPasswordUpdate);
+                                    await _context.SaveChangesAsync();
                                     status.StatusCode = 1;
                                     status.Message = "Now try log in with the new password that we sent to your email";
-                                    TempData["msg"] = status.Message;
+                                    TempData["msgLoginState"] = status.Message;
                                     ModelState.SetModelValue("Email", new ValueProviderResult(model.Email, CultureInfo.InvariantCulture));
                                     return RedirectToAction("Login", "Auth");
                                 }
@@ -233,7 +248,7 @@ namespace sistema_reconocimiento.Controllers
                             {
                                 Console.WriteLine($"Error: {ex.Message}");
                                 status.Message = "An error has happened: " + ex.Message;
-                                TempData["msg"] = result.Message;
+                                TempData["msgEx"] = result.Message;
                                 connection.Close();
                                 ModelState.SetModelValue("Email", new ValueProviderResult(model.Email, CultureInfo.InvariantCulture));
                                 return View();
@@ -242,7 +257,8 @@ namespace sistema_reconocimiento.Controllers
                     }
                     else
                     {
-                        TempData["msg"] = result.Message;
+                        result.Message = "Failed to send reset email";
+                        TempData["msgLoginState"] = result.Message;
                         ModelState.SetModelValue("Email", new ValueProviderResult(model.Email, CultureInfo.InvariantCulture));
                         return RedirectToAction("Login", "Auth");
                     }
@@ -251,7 +267,7 @@ namespace sistema_reconocimiento.Controllers
             else
             {
                 status.Message = "Please enter your email";
-                TempData["msg"] = status.Message;
+                TempData["msgLoginState"] = status.Message;
                 return RedirectToAction(nameof(Recuperar_password));
             }
         }
@@ -271,6 +287,10 @@ namespace sistema_reconocimiento.Controllers
                 Password = password,
                 ConfirmPassword = confirmpassword
             };
+            var loadEngineerID = await _context.Engineers
+                    .Include(e => e.ApplicationUser).Include(e => e.Manager).Include(e => e.Positions)
+                    .AsNoTracking().FirstOrDefaultAsync(e => e.ApplicationUser.Email == email);
+
             if (model.Email != null && model.Password != null && model.OldPassword != null && model.ConfirmPassword != null)
             {
                 var email_check = await userManager.FindByEmailAsync(model.Email);
@@ -283,6 +303,7 @@ namespace sistema_reconocimiento.Controllers
                     ModelState.SetModelValue("Email", new ValueProviderResult(model.Email, CultureInfo.InvariantCulture));
                     return View();
                 }
+               
                 //valida si la contraseña es correcta, por detras desencripta hash 
                 if (!await userManager.CheckPasswordAsync(email_check, model.OldPassword))
                 {
@@ -309,6 +330,15 @@ namespace sistema_reconocimiento.Controllers
 
                                 command_update.ExecuteNonQuery();
                                 connection.Close();
+                                //Loggear cambio de password
+                                var logPasswordUpdate = new Log_PasswordUpdate
+                                {
+                                    Reason = "Security change, first log in.",
+                                    ID_Engineer = loadEngineerID.ID_Engineer,
+                                    Change_Date = DateTime.Now
+                                };
+                                _context.Add(logPasswordUpdate);
+                                await _context.SaveChangesAsync();
                                 return RedirectToAction("Index", "Main");
                             }
                         }
@@ -317,7 +347,7 @@ namespace sistema_reconocimiento.Controllers
                             Console.WriteLine($"Error: {ex.Message}");
                             connection.Close();
                             status.Message = "An unhandled error happened: " + ex.Message;
-                            TempData["msg"] = status.Message;
+                            TempData["msgEx"] = status.Message;
                             return View();
                         }
                     }
@@ -339,12 +369,44 @@ namespace sistema_reconocimiento.Controllers
             }
             else
             {
+                if (model.Email == null)
+                {
+                    status.StatusCode = 0;
+                    status.Message = "Please enter your email";
+                    TempData["msgEmail"] = status.Message;
+                    ModelState.SetModelValue("Email", new ValueProviderResult(model.Email, CultureInfo.InvariantCulture));
+                    return View();
+                }
+                if (model.OldPassword == null)
+                {
+                    status.StatusCode = 0;
+                    status.Message = "Please enter your password";
+                    TempData["msgOldPassword"] = status.Message;
+                    ModelState.SetModelValue("Email", new ValueProviderResult(model.Email, CultureInfo.InvariantCulture));
+                    return View();
+                }
+                if (model.Password == null)
+                {
+                    status.StatusCode = 0;
+                    status.Message = "Please enter your new password";
+                    TempData["msgPassword"] = status.Message;
+                    ModelState.SetModelValue("Email", new ValueProviderResult(model.Email, CultureInfo.InvariantCulture));
+                    return View();
+                }
+                if (model.ConfirmPassword == null)
+                {
+                    status.StatusCode = 0;
+                    status.Message = "Please confirm your new password";
+                    TempData["msgCPassword"] = status.Message;
+                    ModelState.SetModelValue("Email", new ValueProviderResult(model.Email, CultureInfo.InvariantCulture));
+                    return View();
+                }
                 status.Message = "Please complete the requested information";
-                TempData["msg"] = status.Message;
+                TempData["msgLoginState"] = status.Message;
                 ModelState.SetModelValue("Email", new ValueProviderResult(model.Email, CultureInfo.InvariantCulture));
                 return View();
             }
-            
+
         }
     }
-}
+ }

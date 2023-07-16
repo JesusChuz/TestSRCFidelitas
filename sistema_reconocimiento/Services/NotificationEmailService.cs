@@ -12,7 +12,7 @@ using System.Data;
 using System.Data.SqlClient;
 using Microsoft.AspNetCore.Authentication;
 using System.Configuration;
-
+using Microsoft.Build.Framework;
 
 namespace sistema_reconocimiento.Services
 {
@@ -63,9 +63,9 @@ namespace sistema_reconocimiento.Services
                                 manager.Name_Manager = (string)reader["Name_Manager"];
                                 login.Email = (string)reader["EmailE"];
                                 engineer.Name_Engineer = (string)reader["Name_Engineer"];
-                                engineer.Points = (int)reader["Points"];
+                                //engineer.Points = (int)reader["Points"];
+                                //reward.Price = (int)reader["Price"];
                                 reward.Reward_Name = (string)reader["Reward_Name"];
-                                reward.Price = (int)reader["Price"];
                             }
                             connection.Close();
                         }
@@ -100,8 +100,10 @@ namespace sistema_reconocimiento.Services
 
                 // Cargar la plantilla HTML
                 string htmlBody = GetHtmlTemplate("NewPurchase.html");
+                int preciocalculo = purchase.Reward_Price;
                 string precio = purchase.Reward_Price.ToString();
-                string points = engineer.Points.ToString();
+                int newpoints = engineer.Points - preciocalculo;
+                string points = newpoints.ToString();
 
                 // Reemplazar los marcadores de posición en la plantilla con los valores específicos
                 htmlBody = htmlBody.Replace("[NameEngineer]", engineer.Name_Engineer);
@@ -115,7 +117,6 @@ namespace sistema_reconocimiento.Services
                 {
                     Text = htmlBody
                 };
-
                 // Adjuntar el contenido al mensaje
                 email_notification.Body = body;
 
@@ -173,7 +174,6 @@ namespace sistema_reconocimiento.Services
                 }
             }
         }
-
         public void GetManagerForRecognition(LoginModel login, Engineers engineer, Recognitions recogniton, Manager manager)
         {
             using (SqlConnection connection = new SqlConnection(_varConnStr))
@@ -188,8 +188,6 @@ namespace sistema_reconocimiento.Services
                         // Agregar parámetro de entrada
                         command.Parameters.AddWithValue("@ID_Engineer", recogniton.Recognized_Eng);
                         command.Parameters.AddWithValue("@ID_Recognition", recogniton.ID_Recognition);
-
-
                         // Ejecutar el stored procedure y leer los resultados
                         using (SqlDataReader reader = command.ExecuteReader())
                         {
@@ -214,7 +212,6 @@ namespace sistema_reconocimiento.Services
                 }
             }
         }
-
         public async Task<Status> SendNewRecognition(LoginModel login, Engineers engineer, Recognitions recogniton, Manager manager)
         {
             var status = new Status();

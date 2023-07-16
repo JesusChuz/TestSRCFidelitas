@@ -6,12 +6,21 @@
     var pointsR = ViewBag.GetPointsRecognized;
     int ID_Engineer = ViewBag.GetIdEngineer;
 }
+<style>
+    .long-column {
+        white-space: wrap;
+    }
+
+    .long-column1 {
+        white-space: wrap;
+    }
+</style>
 <div class="app-content content">
     <div class="content-wrapper">
         <div class="content-wrapper-before"></div>
         <div class="content-header row">
             <div class="content-header-left col-md-4 col-12 mb-2">
-                <h3 class="content-header-title">Recognitionss</h3>
+                <h3 class="content-header-title">Recognitions</h3>
             </div>
             <div class="content-header-right col-md-8 col-12">
                 <div class="breadcrumbs-top float-md-right">
@@ -86,7 +95,9 @@
                                                 <td>@Html.DisplayFor(modelItem => item.PetitionerEngineer.Name_Engineer)  @Html.DisplayFor(modelItem => item.PetitionerEngineer.LastName_Engineer)</td>
                                                 <td>@Html.DisplayFor(modelItem => item.RecognizedEngineer.Name_Engineer)  @Html.DisplayFor(modelItem => item.RecognizedEngineer.LastName_Engineer)</td>
                                                 <td>@Html.DisplayFor(modelItem => item.Recognition_State)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.Comment)</td>
+                                                <td class="long-column1">
+                                                    @Html.DisplayFor(modelItem => item.Comment)
+                                                </td>
                                                 <td>
                                                     <div style="display: flex;">
                                                         @using (Html.BeginForm("Aprobar_Reconocimiento", "Main", FormMethod.Post, new { @class = "submit-approval", role = "form" }))
@@ -157,6 +168,7 @@
                             <div class="heading-elements">
                                 <ul class="list-inline mb-0">
                                     <li>
+                                       
                                         <!-- Search -->
                                         <div class="navbar-nav align-items-center">
                                             <div class="nav-item d-flex align-items-center">
@@ -179,6 +191,13 @@
                         <div class="card-content collapse show">
                             <div class="card-body">
                             </div>
+                            
+                            @using (Html.BeginForm("Eliminar_MultiplesReconocimientos", "Main", FormMethod.Post, new { @class = "submit-delete", role = "form", id = "deleteForm" }))
+                            {
+                            <div class="navbar-nav align-items-center">
+                                <button type="submit" class="btn btn-danger" id="btndelete">Delete selected items</button>
+                            </div>
+                            <br/>
                             <div class="table-responsive text-nowrap">
                                 <table class="table" id="myTableAR">
                                     <thead class="thead-default">
@@ -189,7 +208,7 @@
                                             <th scope="col">Recognized Engineer</th>
                                             <th scope="col">State</th>
                                             <th scope="col">Comments</th>
-                                            <th scope="col">Actions</th>
+                                            <th scope="col"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -201,25 +220,19 @@
                                                 <td>@Html.DisplayFor(modelItem => item.PetitionerEngineer.Name_Engineer)  @Html.DisplayFor(modelItem => item.PetitionerEngineer.LastName_Engineer)</td>
                                                 <td>@Html.DisplayFor(modelItem => item.RecognizedEngineer.Name_Engineer)  @Html.DisplayFor(modelItem => item.RecognizedEngineer.LastName_Engineer)</td>
                                                 <td>@Html.DisplayFor(modelItem => item.Recognition_State)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.Comment)</td>
-                                                <td>
-                                                    @using (Html.BeginForm("Eliminar_Reconocimiento", "Main", FormMethod.Post, new { @class = "submit-delete", role = "form" }))
-                                                    {
-                                                        @Html.AntiForgeryToken()
-                                                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                                                        <input asp-for="RecognitionsPOST.ID_Recognition" class="form-control hidden disabled" value="@item.ID_Recognition" />
-                                                        <div class="navbar-nav align-items-center"
-                                                             data-toggle="tooltip"
-                                                             data-placement="top"
-                                                             title="Delete recognition">
-                                                            <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>
-                                                        </div>
-                                                    }
+                                                 <td class="long-column">
+                                                        @Html.DisplayFor(modelItem => item.Comment)
+                                                </td>
+                                                 <td>
+                                                    <div style="display: flex;">
+                                                        <input type="checkbox" name="selectedRecords" value="@item.ID_Recognition" />
+                                                    </div>
                                                 </td>
                                             </tr>
                                         }
                                 </table>
                             </div>
+                             }
                         </div>
                         <div id="paginationAR" class="pagination-container navbar-nav align-items-center">
                             <ul class="pagination">
@@ -244,28 +257,42 @@
 </div>
 <script src="~/theme-assets/vendors/libs/jquery/jquery.js"></script>
 <script>
-    var ReconoS = '@TempData["ReconoSuccess"]';
-        if (ReconoS === "True") {
-        // Mostrar notificación de éxito
-            toastr.options = {
-            "closeButton": false,
-            "debug": false,
-            "newestOnTop": false,
-            "progressBar": true,
-            "positionClass": "toast-top-center",
-            "preventDuplicates": false,
-            "onclick": null,
-            "showDuration": "300",
-            "hideDuration": "1000",
-            "timeOut": "5000",
-            "extendedTimeOut": "1000",
-            "showEasing": "swing",
-            "hideEasing": "linear",
-            "showMethod": "fadeIn",
-            "hideMethod": "fadeOut"
-            };
-            toastr["success"]("Recognition sent");
-    }
+    document.getElementById('deleteForm').addEventListener('submit', function (e) {
+        e.preventDefault(); // Evita que el formulario se envíe automáticamente
+
+        var form = e.target;
+
+        var checkboxes = form.querySelectorAll('input[name="selectedRecords"]:checked');
+        var selectedIds = Array.from(checkboxes).map(function (checkbox) {
+            return checkbox.value;
+        });
+
+        // Agrega un campo oculto con los IDs seleccionados al formulario
+        var selectedIdsInput = document.createElement('input');
+        selectedIdsInput.type = 'hidden';
+        selectedIdsInput.name = 'selectedIds';
+        selectedIdsInput.value = selectedIds.join(',');
+
+        @*alert(selectedIdsInput.value);*@
+        form.appendChild(selectedIdsInput);
+        @*form.submit();*@
+        Swal.fire({
+            title: 'Are you sure that you want to delete this recognition?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#79d4f7',
+            cancelButtonColor: 'red',
+            confirmButtonText: 'Yes, delete it',
+            cancelButtonText: 'No, cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Envía el formulario
+                form.submit();
+            }
+        });
+    });
+</script>
+<script>
     var RecoApproved = '@TempData["RecogApproved"]';
     if (RecoApproved === "True") {
         // Mostrar notificación de éxito
@@ -330,7 +357,7 @@
             "showMethod": "fadeIn",
             "hideMethod": "fadeOut"
         }
-        toastr["error"]("Recognition deleted");
+        toastr["error"]("Recognition(s) deleted");
     }
 </script>
 <script>
@@ -476,10 +503,24 @@
                 }
             });
         });
-        $('.submit-delete').click(function (e) {
+       @* $('#btndelete').click(function (e) {
             e.preventDefault(); // Evita que el formulario se envíe automáticamente
+            
+            var form = e.target;
 
-            var form = $(this).closest('form');
+            var checkboxes = form.querySelectorAll('input[name="selectedRecords"]:checked');
+            var selectedIds = Array.from(checkboxes).map(function (checkbox) {
+                return checkbox.value;
+            });
+
+            // Agrega un campo oculto con los IDs seleccionados al formulario
+            var selectedIdsInput = document.createElement('input');
+            selectedIdsInput.type = 'hidden';
+            selectedIdsInput.name = 'selectedIds';
+            selectedIdsInput.value = selectedIds.join(',');
+
+            alert(selectedIdsInput.value);
+            form.appendChild(selectedIdsInput);
 
             Swal.fire({
                 title: 'Are you sure that you want to delete this recognition?',
@@ -491,9 +532,10 @@
                 cancelButtonText: 'No, cancel'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    form.submit(); // Envía el formulario más cercano al botón clickeado
+                    // Envía el formulario
+                    form.submit();
                 }
             });
-        });
+        });*@
     });
 </script>
