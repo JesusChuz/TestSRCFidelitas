@@ -207,6 +207,28 @@
             };
             toastr["error"]("There is Information associated to this engineer so we cannot delete it, however we have disabled the account.");
         }
+        var DisableAccountafterDelete = '@TempData["msgUnableDeleteLeaseManager"]';
+        if (DisableAccountafterDelete === "True") {
+            // Mostrar notificación de éxito
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toast-top-center",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+            toastr["error"]("Since there are records like engineers and recognitions leased to this manager, we cannot delete it and automatically point them to another manager.");
+        }
         var DisableAccount = '@TempData["msgAccountDisabled"]';
         if (DisableAccount === "True") {
             // Mostrar notificación de éxito

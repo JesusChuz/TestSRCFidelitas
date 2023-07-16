@@ -28,6 +28,7 @@ using Newtonsoft.Json;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using System.Text.RegularExpressions;
 using MessagePack;
+using NuGet.Packaging.Signing;
 
 namespace sistema_reconocimiento.Controllers
 {
@@ -237,15 +238,12 @@ namespace sistema_reconocimiento.Controllers
                     {
                         Purchases = new Purchases(),
                         Rewards = await LoadRewards(),
-                           // Obtienen las frases activas desde la bd
+                        // Obtienen las frases activas desde la bd
                         Phrases = activePhrases
                     };
-                   
                    // var applicationDbContext = _context.Purchases.Include(e => e.Rewards);
-
                     //return View(await applicationDbContext.ToListAsync());
                     return View(viewModel);
-
                 }
                 else
                 {
@@ -427,7 +425,7 @@ namespace sistema_reconocimiento.Controllers
                     ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
                     return View(engineers);
                 }
-                if (string.IsNullOrWhiteSpace(UserRole) || (UserRole != "comun" && UserRole != "admin"))
+                if (string.IsNullOrWhiteSpace(UserRole) || (UserRole != "common" && UserRole != "admin"))
                 {
                     status.Message = "Select a role for the user";
                     TempData["msgRole"] = status.Message;
@@ -453,6 +451,17 @@ namespace sistema_reconocimiento.Controllers
 
                 _context.Add(engineers);
                 await _context.SaveChangesAsync();
+                if (engineers.Position == 1)
+                {
+                    var modelManager = new Manager
+                    {
+                        Name_Manager = engineers.Name_Engineer,
+                        LastName_Manager = engineers.LastName_Engineer,
+                        Email = model.Email
+                    };
+                    _context.Add(modelManager);
+                    await _context.SaveChangesAsync();
+                }
                 TempData["IngCreado"] = true;
                 return RedirectToAction("Ingenieros", "Main");
             }
@@ -503,25 +512,30 @@ namespace sistema_reconocimiento.Controllers
             {
                 ViewData["Rol"] = "Not assigned";
             }
+            var loadall = await _context.Engineers
+                .Include(e => e.ApplicationUser).Include(e => e.Manager).Include(e => e.Positions)
+                .AsNoTracking().FirstOrDefaultAsync(e => e.ID_Engineer == engineers.ID_Engineer);
 
-            var loadmanager = _context.Set<Manager>()
+            var loadmanagers = _context.Set<Manager>()
             .Select(m => new
             {
                 ID_Manager = m.ID_Manager,
-                FullName = m.Name_Manager + " " + m.LastName_Manager + " (" + m.Email + ")"
+                FullName = m.Name_Manager + " " + m.LastName_Manager + " (" + m.Email + ")",
+                Email = m.Email
             })
+            .Where(m => m.Email != loadall.ApplicationUser.Email)
             .ToList();
 
             ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id");
-            ViewData["ID_Manager"] = new SelectList(loadmanager, "ID_Manager", "FullName");
+            ViewData["ID_Manager"] = new SelectList(loadmanagers, "ID_Manager", "FullName");
             ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name");
             return View(engineers);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Editar_ingeniero(int id, [Bind("ID_Engineer,Name_Engineer,LastName_Engineer,Position,ID_Account,ID_Manager")] Engineers engineers, string Email, string Password, string ConfirmPassword, string UserRole)
+        public async Task<IActionResult> Editar_ingeniero(int id, [Bind("ID_Engineer,Name_Engineer,LastName_Engineer,Position,ID_Account,ID_Manager")] Engineers engineers, string Email, string Password, string ConfirmPassword, string UserRole, Engineers admineng)
         {
-            LoadPoints(engineers);
+            LoadPoints(admineng);
             var loadmanager = _context.Set<Manager>()
             .Select(m => new
             {
@@ -529,6 +543,15 @@ namespace sistema_reconocimiento.Controllers
                 FullName = m.Name_Manager + " " + m.LastName_Manager + " (" + m.Email + ")"
             })
             .ToList();
+
+            var loadcurrentpoints = await _context.Engineers
+                    .Include(e => e.ApplicationUser).Include(e => e.Manager).Include(e => e.Positions)
+                    .AsNoTracking().FirstOrDefaultAsync(e => e.ID_Engineer == engineers.ID_Engineer);
+
+            var loadManagerID = await _context.Manager
+                    .AsNoTracking().FirstOrDefaultAsync(m => m.Email == loadcurrentpoints.ApplicationUser.Email);
+
+            engineers.Points = loadcurrentpoints.Points;
             var status = new Status();
             try
             {
@@ -619,7 +642,7 @@ namespace sistema_reconocimiento.Controllers
                     ViewData["Position"] = new SelectList(_context.Positions, "ID_Position", "Position_Name", engineers.Position);
                     return View(engineers);
                 }
-                if (string.IsNullOrWhiteSpace(UserRole) || (UserRole != "comun" && UserRole != "admin"))
+                if (string.IsNullOrWhiteSpace(UserRole) || (UserRole != "common" && UserRole != "admin"))
                 {
                     status.Message = "Select a role for the user";
                     TempData["msgRole"] = status.Message;
@@ -638,6 +661,7 @@ namespace sistema_reconocimiento.Controllers
                 applicationUser.UserName = engineers.Name_Engineer;
                 applicationUser.Email = Email;
                 applicationUser.PasswordHash = _userManager.PasswordHasher.HashPassword(applicationUser, Password);
+
 
                 // Actualizar el ApplicationUser en la base de datos.
                 var updateResult = await _userManager.UpdateAsync(applicationUser);
@@ -668,7 +692,65 @@ namespace sistema_reconocimiento.Controllers
                 // Añadir el nuevo rol.
                 var addResult = await _userManager.AddToRoleAsync(user, UserRole);
 
-                _context.Update(engineers);
+                _context.Engineers.Update(engineers);
+                //si la posicion es manager(1)
+                if (engineers.Position == 1)
+                {
+                    if (loadManagerID != null)
+                    {
+                        var modelManagerwithID = new Manager
+                        {
+                            ID_Manager = loadManagerID.ID_Manager,
+                            Name_Manager = engineers.Name_Engineer,
+                            LastName_Manager = engineers.LastName_Engineer,
+                            Email = applicationUser.Email
+                        };
+                        _context.Update(modelManagerwithID);
+                    }
+                    else
+                    {
+                        var modelManagerwithoutID = new Manager
+                        {
+                            Name_Manager = engineers.Name_Engineer,
+                            LastName_Manager = engineers.LastName_Engineer,
+                            Email = applicationUser.Email
+                        };
+                        _context.Update(modelManagerwithoutID);
+                    }
+                }
+                if (engineers.Position != 1)
+                {
+                    if (loadManagerID != null)
+                    {
+                        var loadall = _context.Engineers.Include(e => e.ApplicationUser).Include(e => e.Manager).Include(e => e.Positions)
+                            .Where(e => e.ID_Manager == loadManagerID.ID_Manager);
+                        foreach (var engreleaseManager in loadall)
+                        {
+                            var engreleaseManagerPoints = await _context.Engineers
+                                    .Include(e => e.ApplicationUser).Include(e => e.Manager).Include(e => e.Positions)
+                                    .AsNoTracking().FirstOrDefaultAsync(e => e.ID_Engineer == engreleaseManager.ID_Engineer);
+
+                            //liberamos el manager que vamos a borrar de registro asociados
+                            _context.Engineers.Update(engreleaseManager);
+                        }
+                        var manager = await _context.Manager
+                        .FirstOrDefaultAsync(m => m.ID_Manager == loadManagerID.ID_Manager);
+                        try
+                        {
+                            _context.Manager.Remove(manager);
+                            await _context.SaveChangesAsync();
+                        }
+                        catch(Exception ex) {
+                            TempData["msgUnableDeleteLeaseManager"] = "True";
+                            //We are not able to unlease this manager, since there are records related to this Manager, we cannot delete it.
+                            return RedirectToAction("Ingenieros", "Main");
+                        }    
+                    }
+                    else
+                    {
+                        Console.WriteLine("Nothing to delete");
+                    }
+                }
                 await _context.SaveChangesAsync();
                 TempData["IngModif"] = true;
                 return RedirectToAction("Ingenieros", "Main");
@@ -685,10 +767,7 @@ namespace sistema_reconocimiento.Controllers
                 }
             }
         }
-        private bool EngineersExists(int iD_Engineer)
-        {
-            throw new NotImplementedException();
-        }
+
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> Eliminar_Ingeniero(int? id)
         {
@@ -703,11 +782,16 @@ namespace sistema_reconocimiento.Controllers
                 .Include(e => e.Manager)
                 .Include(e => e.Positions)
                 .FirstOrDefaultAsync(m => m.ID_Engineer == id);
+
             if (engineers == null)
             {
                 return NotFound();
             }
             if (_context.Engineers == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.Engineers'  is null.");
+            }
+            if (_context.Manager == null)
             {
                 return Problem("Entity set 'ApplicationDbContext.Engineers'  is null.");
             }
@@ -728,6 +812,13 @@ namespace sistema_reconocimiento.Controllers
                 var result = await _userManager.DeleteAsync(user);
                 if (result.Succeeded)
                 {
+                    if (engineers.Position == 1)
+                    {
+
+                        var manager = await _context.Manager
+                            .FirstOrDefaultAsync(m => m.Email == user.Email);
+                        _context.Manager.Remove(manager);
+                    }
                     await _context.SaveChangesAsync();
                     TempData["IngEliminado"] = true;
                     return RedirectToAction("Ingenieros", "Main");
@@ -735,12 +826,12 @@ namespace sistema_reconocimiento.Controllers
                 else
                 {
                     TempData["msg"] = "An error happened trying to delete this engineer";
-                    return RedirectToAction("Ingenieros", "Main");
+                    return RedirectToAction("Index", "Main");
                 }
             }
             catch(Exception ex)
             {
-                Console.WriteLine("Constraint problem when trying to delete this engineer, error: " +ex);
+               // Console.WriteLine("Constraint problem when trying to delete this engineer, error: " +ex);
                 using (SqlConnection connection = new SqlConnection(_varConnStr))
                 {
                     connection.Open();
@@ -834,7 +925,7 @@ namespace sistema_reconocimiento.Controllers
             }catch(Exception ex){
                 Console.WriteLine("An error occurred:" +ex);
                 status.Message = ex.Message;
-                TempData["msg"] = status.Message;
+                TempData["msgEx"] = status.Message;
                 return View();
             } 
         }
@@ -900,16 +991,18 @@ namespace sistema_reconocimiento.Controllers
             {
                 Console.WriteLine("An error occurred:" + ex);
                 status.Message = ex.Message;
-                TempData["msg"] = status.Message;
+                TempData["msgEx"] = status.Message;
                 return View();
             }
         }
-        public async Task<List<Recognitions>> LoadRecognitionsPending(String recognitionState)
+        public async Task<List<Recognitions>> LoadRecognitionsPending(String recognitionState, int myown)
         {
             List<Recognitions> recognitions = await _context.Recognitions
                 .Include(e => e.PetitionerEngineer)
                 .Include(e => e.RecognizedEngineer)
                 .Where(e => e.Recognition_State == recognitionState)
+                .Where(e => e.Petitioner_Eng != myown)
+                .Where(e => e.Recognized_Eng != myown)
                 .ToListAsync();
 
             return recognitions;
@@ -938,7 +1031,7 @@ namespace sistema_reconocimiento.Controllers
                     var viewModel = new SubmitStateRecognition
                     {
                         RecognitionsPOST = new Recognitions(),
-                        RecognitionsP = await LoadRecognitionsPending("Pending"),
+                        RecognitionsP = await LoadRecognitionsPending("Pending", modelE.ID_Engineer),
                         RecognitionsAR = await LoadRecognitionsAR("Pending")
                     };
                     return View(viewModel);
@@ -972,43 +1065,35 @@ namespace sistema_reconocimiento.Controllers
                         var resultNotification = await _service.SendStateRecognition(login, engineers, strecognitions, manager);
                         if (resultNotification.StatusCode == 1)
                         {
-                            if (resultNotification.StatusCode == 1)
+                            LoadRecognizedPoints(engineers, strecognitions);
+                            status.StatusCode = 1;
+                            int newPoints = engineers.Points + 100;
+                            using (SqlCommand points_update = new SqlCommand("UpdatePoints", connection))
                             {
-                                LoadRecognizedPoints(engineers, strecognitions);
-                                status.StatusCode = 1;
-                                int newPoints = engineers.Points + 100;
-                                using (SqlCommand points_update = new SqlCommand("UpdatePoints", connection))
-                                {
-                                    points_update.CommandType = CommandType.StoredProcedure;
-                                    points_update.Parameters.AddWithValue("@Engineer_ID", strecognitions.RecognitionsPOST.ID_EngineerRec);
-                                    points_update.Parameters.AddWithValue("@newPoints", newPoints);
-                                    points_update.ExecuteNonQuery();
-                                    connection.Close();
-                                }
-                                status.Message = "The recognition has been approved";
-                                TempData["RecogApproved"] = true;
-                                return RedirectToAction("Reconocimientos", "Main");
+                                points_update.CommandType = CommandType.StoredProcedure;
+                                points_update.Parameters.AddWithValue("@Engineer_ID", strecognitions.RecognitionsPOST.ID_EngineerRec);
+                                points_update.Parameters.AddWithValue("@newPoints", newPoints);
+                                points_update.ExecuteNonQuery();
+                                connection.Close();
                             }
-                            else
-                            {
-                                TempData["msg"] = resultNotification.Message;
-                                return RedirectToAction("Index", "Main");
-                            }
+                            status.Message = "The recognition has been approved";
+                            TempData["RecogApproved"] = true;
+                            return RedirectToAction("Reconocimientos", "Main");
                         }
                         else
                         {
+                            resultNotification.Message = "Failed to send the notification";
                             TempData["msg"] = resultNotification.Message;
                             return RedirectToAction("Index", "Main");
                         }
                     }
-
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Error: {ex.Message}");
                     connection.Close();
                     status.Message = "An unhandled error happened: " + ex.Message;
-                    TempData["msg"] = status.Message;
+                    TempData["msgEx"] = status.Message;
                     return RedirectToAction("Reconocimientos", "Main");
                 }
             }
@@ -1036,22 +1121,14 @@ namespace sistema_reconocimiento.Controllers
                         var resultNotification = await _service.SendStateRecognition(login, engineers, strecognitions, manager);
                         if (resultNotification.StatusCode == 1)
                         {
-
-                            if (resultNotification.StatusCode == 1)
-                            {
                                 status.StatusCode = 1;
                                 status.Message = "The recognition has been rejected";
                                 TempData["RecogRejected"] = true;
                                 return RedirectToAction("Reconocimientos", "Main");
-                            }
-                            else
-                            {
-                                TempData["msg"] = resultNotification.Message;
-                                return RedirectToAction("Index", "Main");
-                            }
                         }
                         else
                         {
+                            resultNotification.Message = "Failed to send the notification";
                             TempData["msg"] = resultNotification.Message;
                             return RedirectToAction("Index", "Main");
                         }
@@ -1062,31 +1139,57 @@ namespace sistema_reconocimiento.Controllers
                     Console.WriteLine($"Error: {ex.Message}");
                     connection.Close();
                     status.Message = "An unhandled error happened: " + ex.Message;
-                    TempData["msg"] = status.Message;
+                    TempData["msgEx"] = status.Message;
                     return View();
                 }
             }
         }
         [HttpPost]
         [Authorize(Roles = "admin")]
-        public async Task<IActionResult> Eliminar_Reconocimiento(SubmitStateRecognition strecognitions)
+        //public async Task<IActionResult> Eliminar_Reconocimiento(SubmitStateRecognition strecognitions)
+        //{
+        //    var status = new Status();
+        //    var login = new LoginModel();
+        //    var manager = new Manager();
+        //    if (_context.Recognitions == null)
+        //    {
+        //        return Problem("Entity set 'ApplicationDbContext.Recognitions'  is null.");
+        //    }
+        //    var recognitions = await _context.Recognitions.FindAsync(strecognitions.RecognitionsPOST.ID_Recognition);
+        //    if (recognitions != null)
+        //    {
+        //        _context.Recognitions.Remove(recognitions);
+        //    }
+        //    await _context.SaveChangesAsync();
+        //    TempData["RecogDeleted"] = true;
+        //    return RedirectToAction(nameof(Reconocimientos));
+        //}
+        
+        [HttpPost]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> Eliminar_MultiplesReconocimientos(string selectedIds)
         {
-            var status = new Status();
-            var login = new LoginModel();
-            var manager = new Manager();
-            if (_context.Recognitions == null)
+          
+            if (!string.IsNullOrEmpty(selectedIds))
             {
-                return Problem("Entity set 'ApplicationDbContext.Recognitions'  is null.");
-            }
-            var recognitions = await _context.Recognitions.FindAsync(strecognitions.RecognitionsPOST.ID_Recognition);
-            if (recognitions != null)
-            {
-                _context.Recognitions.Remove(recognitions);
-            }
+                List<int> ids = selectedIds.Split(',').Select(int.Parse).ToList();
 
-            await _context.SaveChangesAsync();
-            TempData["RecogDeleted"] = true;
-            return RedirectToAction(nameof(Reconocimientos));
+                // Aquí puedes utilizar el método DeleteMultipleRecords que implementaste anteriormente
+                foreach (var recognitionId in ids)
+                {
+                    //var auxid = strecognitions.RecognitionsAR.Select(r => r.ID_Recognition);
+                    var recognition = await _context.Recognitions.FindAsync(recognitionId);
+                    if (recognition != null)
+                    {
+                        _context.Recognitions.Remove(recognition);
+                    }
+                }
+                TempData["RecogDeleted"] = true;
+                await _context.SaveChangesAsync();
+            }
+           
+            // Redirige a la vista de listado o realiza alguna otra acción
+            return RedirectToAction("Reconocimientos");
         }
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> RecompensasAsync(bool result, Engineers model)
@@ -1196,7 +1299,6 @@ namespace sistema_reconocimiento.Controllers
             }
             return View();
         }
-
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> Editar_recompensa(bool result, Engineers model, int? id)
         {
@@ -1289,7 +1391,6 @@ namespace sistema_reconocimiento.Controllers
         [Authorize(Roles = "admin")]
         public IActionResult Eliminar_Recompensa(int id)
         {
-
             var rewards = _context.Rewards.FirstOrDefault(r => r.ID_Reward == id);
             try
             {
@@ -1525,6 +1626,7 @@ namespace sistema_reconocimiento.Controllers
                         ID_Engineer = e.ID_Engineer,
                         FullName = e.Name_Engineer + " " + e.LastName_Engineer + " (" + e.ApplicationUser.Email + ")"
                     })
+                    .Where(e => e.ID_Engineer != model.ID_Engineer)
                     .ToList();
 
                     ViewData["ID_EngineerToRecognize"] = new SelectList(engineers, "ID_Engineer", "FullName");
@@ -1586,15 +1688,15 @@ namespace sistema_reconocimiento.Controllers
                 if (resultNotification.StatusCode == 1)
                 {
                     status.StatusCode = 1; 
-                    return RedirectToAction("Reconocimientos", "Main");
+                    return RedirectToAction("Index", "Main");
                 }
                 else
                 {
-                    status.Message = "We were unable to send the recognition";
+                    resultNotification.Message = "Failed to send the notification";
                     TempData["msg"] = resultNotification.Message;
+                    return RedirectToAction("Index", "Main");
                 }
             }
-            return RedirectToAction("Index", "Main");
         }
         [Authorize]
         public IActionResult Privacy(bool result, Engineers model)
@@ -1674,6 +1776,7 @@ namespace sistema_reconocimiento.Controllers
                             }
                             else
                             {
+                                resultNotification.Message = "Failed to send the notification";
                                 TempData["msg"] = resultNotification.Message;
                                 return RedirectToAction("Index", "Main");
                             }        
@@ -1681,10 +1784,9 @@ namespace sistema_reconocimiento.Controllers
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine($"Error: {ex.Message}");
                         connection.Close();
                         status.Message = "An unhandled error happened: " + ex.Message;
-                        TempData["msg"] = status.Message;
+                        TempData["msgEx"] = status.Message;
                         return View();
                     }
                 }
@@ -1695,6 +1797,10 @@ namespace sistema_reconocimiento.Controllers
                 TempData["msg"] = status.Message;
                 return RedirectToAction("Index", "Main");
             }
+        }
+        private bool EngineersExists(int iD_Engineer)
+        {
+            throw new NotImplementedException();
         }
         private bool RewardsExists(int id)
         {

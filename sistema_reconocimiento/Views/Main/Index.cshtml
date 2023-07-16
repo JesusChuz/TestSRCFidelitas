@@ -199,6 +199,30 @@
 <!-------------rest of the page ------------->
 <script src="~/theme-assets/vendors/libs/jquery/jquery.js"></script>
 <script>
+    var ReconoS = '@TempData["ReconoSuccess"]';
+    if (ReconoS === "True") {
+        // Mostrar notificación de éxito
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-center",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+        toastr["success"]("Recognition sent");
+    }
+</script>
+<script>
     var RenCreado = '@TempData["RewardBuy"]';
     if (RenCreado === "True") {
         // Mostrar notificación de éxito

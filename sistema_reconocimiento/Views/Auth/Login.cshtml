@@ -101,6 +101,12 @@
                                     <span class="text-danger">@TempData["msg"]</span>
                                 </div>
                             }
+                            @if (TempData["msgLoginState"] != null)
+                            {
+                                <div class="text-center msg">
+                                    <span class="text-danger">@TempData["msgLoginState"]</span>
+                                </div>
+                            }
                             <div class="mb-3">
                                 @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email", value="@Model.Email"})
                                 @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
