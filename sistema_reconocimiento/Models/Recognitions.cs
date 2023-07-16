@@ -37,7 +37,6 @@ namespace sistema_reconocimiento.Models
         public int ID_EngineerRec { get; set; }
         [NotMapped]
         public int Points_EngineerRec { get; set; }
-
         public DateTime Recognition_Date { get; set; }
 
     }

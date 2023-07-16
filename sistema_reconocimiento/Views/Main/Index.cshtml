@@ -49,86 +49,32 @@
                         </ul>
                     </div>
                 </div>
-                <div class="card-content">
-                    <div id="recent-buyers" class="media-list">
-                        <a href="#" class="media border-0">
-                            <div class="media-left pr-1">
-                                <span class="avatar avatar-md avatar-online">
-                                    <img class="media-object rounded-circle" src="~/theme-assets/images/portrait/small/avatar-s-7.png" alt="Generic placeholder image">
-                                    <i></i>
-                                </span>
+                @foreach (var listTop in Model.Top5)
+                {
+                    <div class="card-content">
+                        <div id="recent-buyers" class="media-list">
+                            <div>
+                                <a href="#" class="media border-0">
+                                    <div class="media-left pr-1">
+                                        <span class="avatar avatar-md avatar-online">
+                                            <img class="media-object rounded-circle" src="">
+                                            <i></i>
+                                        </span>
+                                    </div>
+                                    <div class="media-body w-100">
+                                        <span class="list-group-item-heading">
+                                            @listTop.FullName (@listTop.Email)
+                                        </span>
+                                        <p class="list-group-item-text mb-0">
+                                            <span class="blue-grey lighten-2 font-small-3"> @listTop.PositionName</span>
+                                        </p>
+                                    </div>
+                                    <i class="fas fa-star">@listTop.Count</i>
+                                </a>
                             </div>
-                            <div class="media-body w-100">
-                                <span class="list-group-item-heading">
-                                    Kristopher Candy
-                                </span>
-                                <p class="list-group-item-text mb-0">
-                                    <span class="blue-grey lighten-2 font-small-3"></i> Support Engineer S3</span>
-                                </p>
-                            </div>
-                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                        </a>
-                        <a href="#" class="media border-0">
-                            <div class="media-left pr-1">
-                                <span class="avatar avatar-md avatar-away">
-                                    <img class="media-object rounded-circle" src="~/theme-assets/images/portrait/small/avatar-s-8.png" alt="Generic placeholder image">
-                                </span>
-                            </div>
-                            <div class="media-body w-100">
-                                <span class="list-group-item-heading">Lawrence Fowler</span>
-                                <p class="list-group-item-text mb-0">
-                                    <span class="blue-grey lighten-2 font-small-3"></i> Support Engineer S3</span>
-                                </p>
-                            </div>
-                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                        </a>
-                        <a href="#" class="media border-0">
-                            <div class="media-left pr-1">
-                                <span class="avatar avatar-md avatar-busy">
-                                    <img class="media-object rounded-circle" src="~/theme-assets/images/portrait/small/avatar-s-9.png" alt="Generic placeholder image">
-                                    <i></i>
-                                </span>
-                            </div>
-                            <div class="media-body w-100">
-                                <span class="list-group-item-heading">Linda Olson</span>
-                                <p class="list-group-item-text mb-0">
-                                    <span class="blue-grey lighten-2 font-small-3"></i> Technical Lead</span>
-                                </p>
-                            </div>
-                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                        </a>
-                        <a href="#" class="media border-0">
-                            <div class="media-left pr-1">
-                                <span class="avatar avatar-md avatar-online">
-                                    <img class="media-object rounded-circle" src="~/theme-assets/images/portrait/small/avatar-s-10.png" alt="Generic placeholder image">
-                                    <i></i>
-                                </span>
-                            </div>
-                            <div class="media-body w-100">
-                                <span class="list-group-item-heading">Roy Clark</span>
-                                <p class="list-group-item-text mb-0">
-                                    <span class="blue-grey lighten-2 font-small-3"> Technical Lead </span>
-                                </p>
-                            </div>
-                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                        </a>
-                        <a href="#" class="media border-0">
-                            <div class="media-left pr-1">
-                                <span class="avatar avatar-md avatar-online">
-                                    <img class="media-object rounded-circle" src="~/theme-assets/images/portrait/small/avatar-s-11.png" alt="Generic placeholder image">
-                                    <i></i>
-                                </span>
-                            </div>
-                            <div class="media-body w-100">
-                                <span class="list-group-item-heading">Kristopher Candy</span>
-                                <p class="list-group-item-text mb-0">
-                                    <span class="blue-grey lighten-2 font-small-3">Subject Matter Expert</span>
-                                </p>
-                            </div>
-                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                        </a>
+                        </div>
                     </div>
-                </div>
+                }
             </div>
         </div>
         <div class="col-xl-4 col-lg-12">

@@ -147,6 +147,52 @@ namespace sistema_reconocimiento.Controllers
                 }
             }
         }
+        public List<Top5> GetTop5()
+        {
+            List<Top5> top5List = new List<Top5>();
+            using (SqlConnection connection = new SqlConnection(_varConnStr))
+            {
+                try
+                {
+                    connection.Open();
+                    // Crear el comando y asignar el stored procedure
+                    using (SqlCommand command = new SqlCommand("GetTop5", connection))
+                    {
+                        // Ejecutar el stored procedure y leer los resultados
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                int top5_recognizedeng = (int)reader["Recognized_Eng"];
+                                int top5_count = (int)reader["repeticiones"];
+                                string top5_email = (string)reader["Email"];
+                                string top5_fullname = (string)reader["FullName"];
+                                string top5_position = (string)reader["Position_Name"];
+                                //string top5_picture = (string)reader["Picture"];
+                                // Create a new Top5Data instance and add it to the list
+                                Top5 data = new Top5
+                                {
+                                    RecognizedEng = top5_recognizedeng,
+                                    Count = top5_count,
+                                    Email = top5_email,
+                                    FullName = top5_fullname,
+                                    PositionName = top5_position,
+                                    //Picture = top5_picture
+                                };
+                                top5List.Add(data);
+                            }
+                            connection.Close();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: {ex.Message}");
+                    connection.Close();
+                }
+            }
+            return top5List;
+        }
         public void LoadRecognizedPoints(Engineers model, SubmitStateRecognition recognitions)
         {
             using (SqlConnection connection = new SqlConnection(_varConnStr))
@@ -239,7 +285,8 @@ namespace sistema_reconocimiento.Controllers
                         Purchases = new Purchases(),
                         Rewards = await LoadRewards(),
                         // Obtienen las frases activas desde la bd
-                        Phrases = activePhrases
+                        Phrases = activePhrases,
+                        Top5 = GetTop5()
                     };
                    // var applicationDbContext = _context.Purchases.Include(e => e.Rewards);
                     //return View(await applicationDbContext.ToListAsync());
@@ -665,6 +712,15 @@ namespace sistema_reconocimiento.Controllers
 
                 // Actualizar el ApplicationUser en la base de datos.
                 var updateResult = await _userManager.UpdateAsync(applicationUser);
+                //Loggear cambio de password
+                var logPasswordUpdate = new Log_PasswordUpdate
+                {
+                    Reason = "Possible password change by admin",
+                    ID_Engineer = engineers.ID_Engineer,
+                    Change_Date = DateTime.Now
+                };
+                _context.Add(logPasswordUpdate);
+                await _context.SaveChangesAsync();
 
                 // Asegúrar de que el rol existe.
                 var user = await _userManager.FindByIdAsync(engineers.ID_Account);

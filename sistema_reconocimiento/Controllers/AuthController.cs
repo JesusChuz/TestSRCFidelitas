@@ -199,6 +199,9 @@ namespace sistema_reconocimiento.Controllers
             {
                 Email = email
             };
+            var loadEngineerID = await _context.Engineers
+                .Include(e => e.ApplicationUser).Include(e => e.Manager).Include(e => e.Positions)
+                .AsNoTracking().FirstOrDefaultAsync(e => e.ApplicationUser.Email == email);
             if (model.Email != null)
             {
                 var check_email = await userManager.FindByEmailAsync(model.Email);
@@ -225,6 +228,15 @@ namespace sistema_reconocimiento.Controllers
                                     command_update.Parameters.AddWithValue("@newValueLockout", 1);
                                     command_update.ExecuteNonQuery();
                                     connection.Close();
+                                    //Loggear cambio de password
+                                    var logPasswordUpdate = new Log_PasswordUpdate
+                                    {
+                                        Reason = "Password reset",
+                                        ID_Engineer = loadEngineerID.ID_Engineer,
+                                        Change_Date = DateTime.Now
+                                    };
+                                    _context.Add(logPasswordUpdate);
+                                    await _context.SaveChangesAsync();
                                     status.StatusCode = 1;
                                     status.Message = "Now try log in with the new password that we sent to your email";
                                     TempData["msgLoginState"] = status.Message;
@@ -275,6 +287,10 @@ namespace sistema_reconocimiento.Controllers
                 Password = password,
                 ConfirmPassword = confirmpassword
             };
+            var loadEngineerID = await _context.Engineers
+                    .Include(e => e.ApplicationUser).Include(e => e.Manager).Include(e => e.Positions)
+                    .AsNoTracking().FirstOrDefaultAsync(e => e.ApplicationUser.Email == email);
+
             if (model.Email != null && model.Password != null && model.OldPassword != null && model.ConfirmPassword != null)
             {
                 var email_check = await userManager.FindByEmailAsync(model.Email);
@@ -314,6 +330,15 @@ namespace sistema_reconocimiento.Controllers
 
                                 command_update.ExecuteNonQuery();
                                 connection.Close();
+                                //Loggear cambio de password
+                                var logPasswordUpdate = new Log_PasswordUpdate
+                                {
+                                    Reason = "Security change, first log in.",
+                                    ID_Engineer = loadEngineerID.ID_Engineer,
+                                    Change_Date = DateTime.Now
+                                };
+                                _context.Add(logPasswordUpdate);
+                                await _context.SaveChangesAsync();
                                 return RedirectToAction("Index", "Main");
                             }
                         }
