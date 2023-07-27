@@ -9,7 +9,7 @@
         <div class="col-md-6" style="float:none;margin:auto;">
             <div class="card mb-2">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Complete the following information</h5>
+                    <h5 class="mb-0">Add Reward</h5>
                 </div>
                 <div class="card-body">
                     @using (Html.BeginForm("Agregar_recompensa", "Main", FormMethod.Post, new { enctype = "multipart/form-data"}))
@@ -48,7 +48,7 @@
                             <label class="form-label" for="basic-icon-default-email">Image</label>
                             <div class="input-group input-group-merge">
                                 <span class="input-group-text"><i class="fas fa-photo"></i></span>
-                                @Html.TextBoxFor(m => m.PictureFile, new { @class = "form-control", type="file", name = "PictureFile"})
+                                @Html.TextBoxFor(m => m.PictureFile, new { @class = "form-control", type = "file", name = "PictureFile", accept = ".jpg, .jpeg, .png"})
                             </div>
                             <span class="text-danger">@TempData["msgPictureFile"]</span>
                         </div>
@@ -59,3 +59,30 @@
         </div>
     </div>
 </div>
+<script src="~/theme-assets/vendors/libs/jquery/jquery.js"></script>
+<script>
+    $(document).ready(function () {
+        $("input[name='PictureFile']").change(function () {
+            validateImageFile(this);
+        });
+    });
+
+    function validateImageFile(input) {
+        const allowedExtensions = ['jpg', 'jpeg', 'png'];
+        const fileExtension = input.value.split('.').pop().toLowerCase();
+
+        if (!allowedExtensions.includes(fileExtension)) {
+            // Mostrar SweetAlert con el mensaje de error
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'The only allowed formats are .jpg, .jpeg o .png.',
+                confirmButtonColor: '#79d4f7',
+                confirmButtonText: 'OK'
+            });
+
+            // Limpiar el campo para evitar la selección incorrecta
+            $(input).val('');
+        }
+    }
+</script>
