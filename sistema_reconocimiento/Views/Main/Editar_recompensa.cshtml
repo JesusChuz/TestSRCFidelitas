@@ -8,7 +8,7 @@
 }
 <div class="app-content content">
     <div class="content-wrapper">
-        <h4 class="fw-bold py-3"><span class="text-muted fw-light">Rewards/</span>Edit</h4>
+        <h4 class="fw-bold py-3"><span class="text-muted fw-light">Rewards/</span>Edit Reward</h4>
         <div class="row">
             <div class="col-xxl">
                 <div class="card mb-4">
@@ -61,7 +61,7 @@
                                             <label class="form-label" for="basic-icon-default-email">Select the Image</label>
                                             <div class="input-group input-group-merge">
                                                 <span class="input-group-text"><i class="fas fa-photo"></i></span>
-                                                <input type="file" class="account-file-input" accept="image/png, image/jpeg" name="picture" required/>
+                                                <input type="file" class="account-file-input" accept="image/png, image/jpeg" name="PictureFile" required />
                                             </div>
                                             @Html.ValidationMessageFor(model => model.PictureFile, "", new { @class = "text-danger" })
                                         </div>
@@ -138,3 +138,30 @@
             </div>
         </div>
     </div>
+    <script src="~/theme-assets/vendors/libs/jquery/jquery.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("input[name='PictureFile']").change(function () {
+                validateImageFile(this);
+            });
+        });
+
+        function validateImageFile(input) {
+            const allowedExtensions = ['jpg', 'jpeg', 'png'];
+            const fileExtension = input.value.split('.').pop().toLowerCase();
+
+            if (!allowedExtensions.includes(fileExtension)) {
+                // Mostrar SweetAlert con el mensaje de error
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'The only allowed formats are .jpg, .jpeg o .png.',
+                    confirmButtonColor: '#79d4f7',
+                    confirmButtonText: 'OK'
+                });
+
+                // Limpiar el campo para evitar la selección incorrecta
+                $(input).val('');
+            }
+        }
+    </script>

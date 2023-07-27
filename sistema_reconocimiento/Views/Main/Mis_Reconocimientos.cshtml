@@ -16,7 +16,16 @@
         overflow-y: auto;
     }
 </style>
-<div class="app-content content">
+<style>
+    .long-column {
+        white-space: wrap;
+    }
+
+    .long-column1 {
+        white-space: wrap;
+    }
+</style>
+@*<div class="app-content content">
     <div class="content-wrapper">
         <div class="content-wrapper-before"></div>
         <div class="content-header row">
@@ -97,4 +106,301 @@
             </div>
         </div>
     </div>
+</div>*@
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-wrapper-before"></div>
+        <div class="content-header row">
+            <div class="content-header-left col-md-4 col-12 mb-2">
+                <h3 class="content-header-title">My recognitions history</h3>
+            </div>
+            <div class="content-header-right col-md-8 col-12">
+                <div class="breadcrumbs-top float-md-right">
+                    <div class="breadcrumb-wrapper mr-1">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="index.html">Principal</a>
+                            </li>
+                            <li class="breadcrumb-item active">
+                                Recognitions
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="navbar-nav align-items-center">
+                                <h3 class="content-header-right">When I recognized someone</h3>
+                            </div>
+                            <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                            <div class="heading-elements">
+                                <ul class="list-inline mb-0">
+                                    <li>
+                                        <!-- Search -->
+                                        <div class="navbar-nav align-items-center">
+                                            <div class="nav-item d-flex align-items-center">
+                                                <i class="bx bx-search fs-4 lh-0"></i>
+                                                <input type="text"
+                                                       class="form-control border-0 shadow-none"
+                                                       placeholder="Search"
+                                                       aria-label="Search"
+                                                       id="searchInputIrecog" />
+                                            </div>
+                                        </div>
+                                        <!-- /Search -->
+                                    </li>
+                                    <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                    <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                                    <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-content collapse show">
+                            <div class="card-body">
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table" id="myTableP">
+                                    <thead class="thead-default">
+                                        <tr>
+                                            <th scope="col">Case number</th>
+                                            <th scope="col">Date</th>
+                                            <th scope="col">Who did I recognized?</th>
+                                            <th scope="col">State</th>
+                                            <th scope="col">Comments</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model)
+                                        {
+                                            if (item.Petitioner_Eng == (int?)ViewData["Login"] && (item.Recognition_State == "Approved" || item.Recognition_State == "Rejected"))
+                                            {
+                                                <tr>
+                                                    <td>@Html.DisplayFor(modelItem => item.Case_Number)</td>
+                                                    <td>@item.Recognition_Date.ToString("dd/MMM/yyyy")</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.RecognizedEngineer.Name_Engineer)  @Html.DisplayFor(modelItem => item.RecognizedEngineer.LastName_Engineer)</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.Recognition_State)</td>
+                                                    <td class="long-column1">
+                                                        @Html.DisplayFor(modelItem => item.Comment)
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                </table>
+                            </div>
+                        </div>
+                        <div id="paginationI" class="pagination-container navbar-nav align-items-center">
+                            <ul class="pagination">
+                                <li class="page-item prev-page"><a class="btn btn-danger" href="#">Previous</a></li>
+                                <li class="page-item">
+                                    @*<span class="page-link">*@
+                                    <svg width="40" height="40">
+                                        <circle cx="20" cy="20" r="15" fill="#79d4f7" />
+                                        <text class="current-page" x="50%" y="55%" text-anchor="middle" fill="white" font-size="12px">1</text>
+                                    </svg>
+                                    @*</span>*@
+                                </li>
+                                <li class="page-item next-page"><a class="btn btn-danger" href="#">Next</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="navbar-nav align-items-center">
+                                <h3 class="content-header-left">When I was recognized by someone</h3>
+                            </div>
+                            <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                            <div class="heading-elements">
+                                <ul class="list-inline mb-0">
+                                    <li>
+
+                                        <!-- Search -->
+                                        <div class="navbar-nav align-items-center">
+                                            <div class="nav-item d-flex align-items-center">
+                                                <i class="bx bx-search fs-4 lh-0"></i>
+                                                <input type="text"
+                                                       class="form-control border-0 shadow-none"
+                                                       placeholder="Search"
+                                                       aria-label="Search"
+                                                       id="searchInputIwasrecog" />
+                                            </div>
+                                        </div>
+                                        <!-- /Search -->
+                                    </li>
+                                    <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                    <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                                    <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-content collapse show">
+                            <div class="card-body">
+                            </div>
+
+                            @using (Html.BeginForm("", "Main", FormMethod.Post, new { @class = "submit-delete", role = "form", id = "deleteForm" }))
+                            {
+                                <br />
+                                <div class="table-responsive text-nowrap">
+                                    <table class="table" id="myTableAR">
+                                        <thead class="thead-default">
+                                            <tr>
+                                                <th scope="col">Case number</th>
+                                                <th scope="col">Date</th>
+                                                <th scope="col">Who recognized me?</th>
+                                                <th scope="col">State</th>
+                                                <th scope="col">Comments</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model)
+                                            {
+                                                if (item.Recognized_Eng == (int?)ViewData["Login"] && (item.Recognition_State == "Approved" || item.Recognition_State == "Rejected"))
+                                                {
+                                                    <tr>
+                                                        <td>@Html.DisplayFor(modelItem => item.Case_Number)</td>
+                                                        <td>@item.Recognition_Date.ToString("dd/MMM/yyyy")</td>
+                                                        <td>@Html.DisplayFor(modelItem => item.PetitionerEngineer.Name_Engineer)  @Html.DisplayFor(modelItem => item.PetitionerEngineer.LastName_Engineer)</td>
+                                                        <td>@Html.DisplayFor(modelItem => item.Recognition_State)</td>
+                                                        <td class="long-column1">
+                                                            @Html.DisplayFor(modelItem => item.Comment)
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                    </table>
+                                </div>
+                            }
+                        </div>
+                        <div id="paginationIwas" class="pagination-container navbar-nav align-items-center">
+                            <ul class="pagination">
+                                <li class="page-item prev-page"><a class="btn btn-danger" href="#">Previous</a></li>
+                                <li class="page-item">
+                                    @*<span class="page-link">*@
+                                    <svg width="40" height="40">
+                                        <circle cx="20" cy="20" r="15" fill="#79d4f7" />
+                                        <text class="current-page" x="50%" y="55%" text-anchor="middle" fill="white" font-size="12px">1</text>
+                                    </svg>
+                                    @*</span>*@
+                                </li>
+                                <li class="page-item next-page"><a class="btn btn-danger" href="#">Next</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>
+<script src="~/theme-assets/vendors/libs/jquery/jquery.js"></script>
+<script>
+    // Función para filtrar las tablas por la búsqueda
+    function filterTable(tableId, searchInputId) {
+        let input, filter, table, tr, td, i, j, txtValue;
+        input = document.getElementById(searchInputId);
+        filter = input.value.toUpperCase();
+        table = document.getElementById(tableId);
+        tr = table.getElementsByTagName("tr");
+
+        // Iterar sobre las filas de la tabla y mostrar/ocultar según el filtro de búsqueda
+        for (i = 0; i < tr.length; i++) {
+            if (i === 0) {
+                // Saltar la primera fila (títulos de las columnas)
+                continue;
+            }
+            let found = false;
+            td = tr[i].getElementsByTagName("td");
+
+            for (j = 0; j < td.length; j++) {
+                txtValue = td[j].textContent || td[j].innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (found) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+
+    // Evento para ejecutar la búsqueda al escribir en la barra de búsqueda
+    document.getElementById("searchInputIrecog").addEventListener("keyup", function () {
+        filterTable("myTableP", "searchInputIrecog"); // Modificar los valores según el ID de tus tablas y la barra de búsqueda
+    });
+    // Evento para ejecutar la búsqueda al escribir en la barra de búsqueda
+    document.getElementById("searchInputIwasrecog").addEventListener("keyup", function () {
+        filterTable("myTableAR", "searchInputIwasrecog");
+    });
+</script>
+<script>
+    // Función para mostrar los elementos correspondientes a la página actual
+    function showPage(page, tableId, paginationContainerId) {
+        var rowsPerPage = 10; // Número de filas por página
+        var startIndex = (page - 1) * rowsPerPage;
+        var endIndex = startIndex + rowsPerPage;
+
+        // Ocultar todas las filas de la tabla
+        $('#' + tableId + ' tbody tr').hide();
+
+        // Mostrar las filas de la página actual
+        $('#' + tableId + ' tbody tr').slice(startIndex, endIndex).show();
+
+        // Actualizar el número de página actual en el elemento correspondiente
+        $('#' + paginationContainerId + ' .current-page').text(page);
+    }
+
+    $(document).ready(function () {
+        var currentPageP = 1; // Página actual inicial para la tabla reconocimientos pendings
+        var currentPageAR = 1; // Página actual inicial para la tabla Historial de reconocimientos
+
+        // Mostrar la página actual al cargar la página
+        showPage(currentPageP, 'myTableP', 'paginationI');
+        showPage(currentPageAR, 'myTableAR', 'paginationIwas');
+
+        // Evento de clic para el botón "Anterior" de la tabla reconocimientos pendings
+        $('#paginationI .prev-page').click(function () {
+            if (currentPageP > 1) {
+                currentPageP--;
+                showPage(currentPageP, 'myTableP', 'paginationI');
+            }
+        });
+
+        // Evento de clic para el botón "Siguiente" de la tabla reconocimientos pendings
+        $('#paginationI .next-page').click(function () {
+            var totalPagesP = Math.ceil($('#myTableP tbody tr').length / 10); // Calcular el número total de páginas
+            if (currentPageP < totalPagesP) {
+                currentPageP++;
+                showPage(currentPageP, 'myTableP', 'paginationI');
+            }
+        });
+
+        // Evento de clic para el botón "Anterior" de la tabla Historial de reconocimientos
+        $('#paginationIwas .prev-page').click(function () {
+            if (currentPageAR > 1) {
+                currentPageAR--;
+                showPage(currentPageAR, 'myTableAR', 'paginationIwas');
+            }
+        });
+
+        // Evento de clic para el botón "Siguiente" de la tabla Historial de reconocimientos
+        $('#paginationIwas .next-page').click(function () {
+            var totalPagesAR = Math.ceil($('#myTableAR tbody tr').length / 10); // Calcular el número total de páginas
+            if (currentPageAR < totalPagesAR) {
+                currentPageAR++;
+                showPage(currentPageAR, 'myTableAR', 'paginationIwas');
+            }
+        });
+    });
+</script>

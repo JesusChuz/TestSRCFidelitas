@@ -88,7 +88,7 @@
                                                          title="Enable/disable reward">
                                                     @Html.DisplayFor(modelItem => item.Reward_Name) (Is Enabled?: @Html.DisplayFor(modelItem => item.IsEnabled) (
                                                         <a class="enlace-visitado" asp-controller="Main" asp-action="Change_RewardState" asp-route-id="@item.ID_Reward"><i class="fas fa-eye"></i></a>
-                                                    )
+                                                    ))
                                                     </div>
                                                 </td>
                                                 <td>@Html.DisplayFor(modelItem => item.Reward_Description)</td>
