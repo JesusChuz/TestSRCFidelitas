@@ -17,7 +17,6 @@ namespace sistema_reconocimiento.Models
         [Required(ErrorMessage = "Reward's price is required")]
         [Range(1, 75000, ErrorMessage = "Price must be between 1 and 75000")]
         public int Price { get; set; }
-        [Required]
         public byte[]? Picture { get; set; }
         [NotMapped]
         public IFormFile PictureFile { get; set; }

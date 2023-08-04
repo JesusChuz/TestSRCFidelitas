@@ -1180,18 +1180,6 @@ E:\Users\XPC\Documents\Fidelitas\Cuatrimestre VIII\DiseñoyDesarrolloSistemas\Wo
 E:\Users\XPC\Documents\Fidelitas\Cuatrimestre VIII\DiseñoyDesarrolloSistemas\Workspace\sistema_reconocimiento\bin\Debug\net6.0\Microsoft.DotNet.PlatformAbstractions.dll
 E:\Users\XPC\Documents\Fidelitas\Cuatrimestre VIII\DiseñoyDesarrolloSistemas\Workspace\sistema_reconocimiento\bin\Debug\net6.0\Microsoft.Extensions.DependencyModel.dll
 E:\Users\XPC\Documents\Fidelitas\Cuatrimestre VIII\DiseñoyDesarrolloSistemas\Workspace\sistema_reconocimiento\bin\Debug\net6.0\Newtonsoft.Json.Bson.dll
-E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\obj\Debug\net6.0\sistema_reconocimiento.csproj.AssemblyReference.cache
-E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\obj\Debug\net6.0\sistema_reconocimiento.GeneratedMSBuildEditorConfig.editorconfig
-E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\obj\Debug\net6.0\sistema_reconocimiento.AssemblyInfoInputs.cache
-E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\obj\Debug\net6.0\sistema_reconocimiento.AssemblyInfo.cs
-E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\obj\Debug\net6.0\sistema_reconocimiento.csproj.CoreCompileInputs.cache
-E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\obj\Debug\net6.0\sistema_reconocimiento.MvcApplicationPartsAssemblyInfo.cs
-E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\obj\Debug\net6.0\sistema_reconocimiento.MvcApplicationPartsAssemblyInfo.cache
-E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\obj\Debug\net6.0\sistema_reconocimiento.RazorAssemblyInfo.cache
-E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\obj\Debug\net6.0\sistema_reconocimiento.RazorAssemblyInfo.cs
-E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\obj\Debug\net6.0\sistema_reconocimiento.dll
-E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\obj\Debug\net6.0\refint\sistema_reconocimiento.dll
-E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\obj\Debug\net6.0\sistema_reconocimiento.pdb
 E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\bin\Debug\net6.0\appsettings.Development.json
 E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\bin\Debug\net6.0\appsettings.json
 E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\bin\Debug\net6.0\sistema_reconocimiento.staticwebassets.runtime.json
@@ -1462,6 +1450,15 @@ E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\bin\Debug\net6.
 E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Security.Cryptography.Pkcs.dll
 E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
+E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\obj\Debug\net6.0\sistema_reconocimiento.csproj.AssemblyReference.cache
+E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\obj\Debug\net6.0\sistema_reconocimiento.GeneratedMSBuildEditorConfig.editorconfig
+E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\obj\Debug\net6.0\sistema_reconocimiento.AssemblyInfoInputs.cache
+E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\obj\Debug\net6.0\sistema_reconocimiento.AssemblyInfo.cs
+E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\obj\Debug\net6.0\sistema_reconocimiento.csproj.CoreCompileInputs.cache
+E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\obj\Debug\net6.0\sistema_reconocimiento.MvcApplicationPartsAssemblyInfo.cs
+E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\obj\Debug\net6.0\sistema_reconocimiento.MvcApplicationPartsAssemblyInfo.cache
+E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\obj\Debug\net6.0\sistema_reconocimiento.RazorAssemblyInfo.cache
+E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\obj\Debug\net6.0\sistema_reconocimiento.RazorAssemblyInfo.cs
 E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\obj\Debug\net6.0\staticwebassets\msbuild.sistema_reconocimiento.Microsoft.AspNetCore.StaticWebAssets.props
 E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\obj\Debug\net6.0\staticwebassets\msbuild.build.sistema_reconocimiento.props
 E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\obj\Debug\net6.0\staticwebassets\msbuild.buildMultiTargeting.sistema_reconocimiento.props
@@ -1473,5 +1470,8 @@ E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\obj\Debug\net6.
 E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\obj\Debug\net6.0\scopedcss\bundle\sistema_reconocimiento.styles.css
 E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\obj\Debug\net6.0\scopedcss\projectbundle\sistema_reconocimiento.bundle.scp.css
 E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\obj\Debug\net6.0\sistema_reconocimiento.csproj.CopyComplete
+E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\obj\Debug\net6.0\sistema_reconocimiento.dll
+E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\obj\Debug\net6.0\refint\sistema_reconocimiento.dll
+E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\obj\Debug\net6.0\sistema_reconocimiento.pdb
 E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\obj\Debug\net6.0\sistema_reconocimiento.genruntimeconfig.cache
 E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\obj\Debug\net6.0\ref\sistema_reconocimiento.dll

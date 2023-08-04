@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "bnM3mXcUMK3iFyNeUCw3wn+68YxWJ9iX9gz4oE1IhCY=",
+  "Hash": "yEsxp8pC997GRAsS5dyADLsta8rlEZX8nI6/P9W+54A=",
   "Source": "sistema_reconocimiento",
   "BasePath": "_content/sistema_reconocimiento",
   "Mode": "Default",
@@ -1188,6 +1188,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\assets\\img\\avatars\\7.png"
+    },
+    {
+      "Identity": "E:\\GHDesktopRepros\\SistemaReconocimientos\\sistema_reconocimiento\\wwwroot\\assets\\img\\avatars\\default.png",
+      "SourceId": "sistema_reconocimiento",
+      "SourceType": "Discovered",
+      "ContentRoot": "E:\\GHDesktopRepros\\SistemaReconocimientos\\sistema_reconocimiento\\wwwroot\\",
+      "BasePath": "_content/sistema_reconocimiento",
+      "RelativePath": "assets/img/avatars/default.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\assets\\img\\avatars\\default.png"
     },
     {
       "Identity": "E:\\GHDesktopRepros\\SistemaReconocimientos\\sistema_reconocimiento\\wwwroot\\assets\\img\\backgrounds\\18.jpg",

@@ -1,6 +1,8 @@
-﻿@{
-    ViewData["Title"] = "Perfil";
+﻿@model sistema_reconocimiento.Models.Engineers
+@{
+    ViewData["Title"] = "Profile";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    int points = ViewBag.GetPoints;
 }
 <div class="app-content content">
     <div class="card-body">
@@ -10,56 +12,162 @@
                     <h5 class="mb-0">Complete the information to update</h5>
                 </div>
                 <div class="card-body">
-                    <form>
+                   @* <form asp-action="Editar_Perfil" enctype="multipart/form-data" class="update-profile">*@
+                    @using (Html.BeginForm("Editar_Perfil", "Main", FormMethod.Post, new { @class = "update-profile", role = "form", enctype = "multipart/form-data" }))
+                    {
+                        <input type="hidden" asp-for="ID_Engineer" />
                         <div class="card-body">
                             <div class="navbar-nav align-items-center">
                                 <div class="navbar-nav align-items-center">
-                                    <img src="~/assets/img/avatars/1.png"
+@*                                    <img src="~/assets/img/avatars/1.png"
                                          alt="user-avatar"
                                          class="d-block rounded"
                                          height="100"
                                          width="100"
-                                         id="uploadedAvatar" />
+                                         id="uploadedAvatar" />*@
+                                    @if (!string.IsNullOrEmpty(Model.Base64Image))
+                                    {
+                                        <img class="d-block rounded" alt="user-avatar" src="data:image;base64,@Model.Base64Image" width="200" height="200" id="uploadedAvatar" />
+                                    }
+                                    else
+                                    {
+                                        <span>Couldn't found any image.</span>
+                                    }
                                 </div>
                                 <br/>
                                 <div class="navbar-nav align-items-center">
                                     <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
                                         <span class="d-none d-sm-block">Change photo</span>
                                         <i class="bx bx-upload d-block d-sm-none"></i>
-                                        <input type="file"
-                                               id="upload"
-                                               class="account-file-input"
-                                               hidden
-                                               accept="image/png, image/jpeg" />
+                                        <input type="file" class="account-file-input" accept="image/png, image/jpeg" name="picture" />
                                     </label>
                                 </div>
                             </div>
                         </div>
+                        <div class="navbar-nav align-items-center">
+                            <span class="text-danger">@TempData["msgnewPasswordConf"]</span>
+                        </div>
                         <div class="form-password-toggle">
                             <label class="form-label" for="basic-default-password12"> Password</label>
                             <div class="input-group">
-                                <input type="password"
-                                       class="form-control"
-                                       id="password1"
-                                       placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                                       aria-describedby="basic-default-password2" />
+                                <input type="password" class="form-control" placeholder="Password"
+                                       data-toggle="tooltip"
+                                       data-placement="top"
+                                       title="Needs to be at least 6 characters and you need to use a Capital letter, a lowercase, a symbol and a number"
+                                       id="basic-icon-default-name" name="Password">
                             </div>
                         </div>
                         <div class="form-password-toggle">
                             <label class="form-label" for="basic-default-password12">Confirm password</label>
                             <div class="input-group">
-                                <input type="password"
-                                       class="form-control"
-                                       id="password2"
-                                       placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                                       aria-describedby="basic-default-password2" />
+                                <input type="password" class="form-control" placeholder="Confirm Password"
+                                       data-toggle="tooltip"
+                                       data-placement="top"
+                                       title="Needs to be at least 6 characters and you need to use a Capital letter, a lowercase, a symbol and a number"
+                                       id="basic-icon-default-name" name="ConfirmPassword">
                             </div>
                         </div>
-                        </br>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
-                    </form>
+                        <br/>
+                        <div class="navbar-nav align-items-center">
+                           <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                     }
+                   @* </form>*@
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script src="~/theme-assets/vendors/libs/jquery/jquery.js"></script>
+<script>
+    $(document).ready(function () {
+        $("input[name='picture']").change(function () {
+            validateImageFile(this);
+        });
+    });
+
+    function validateImageFile(input) {
+        const allowedExtensions = ['jpg', 'jpeg', 'png'];
+        const fileExtension = input.value.split('.').pop().toLowerCase();
+
+        if (!allowedExtensions.includes(fileExtension)) {
+            // Mostrar SweetAlert con el mensaje de error
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'The only allowed formats are .jpg, .jpeg o .png.',
+                confirmButtonColor: '#79d4f7',
+                confirmButtonText: 'OK'
+            });
+            // Limpiar el campo para evitar la selección incorrecta
+            $(input).val('');
+        }
+    }
+</script>
+<script>
+    $(document).ready(function () {
+        $('.update-profile').submit(function (e) { // Cambiado de .click() a .submit()
+            e.preventDefault(); // Evita que el formulario se envíe automáticamente
+
+            Swal.fire({
+                title: 'Are you sure you want to update your profile?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: 'red',
+                cancelButtonColor: '#79d4f7',
+                confirmButtonText: 'Yes, update profile',
+                cancelButtonText: 'No, cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.submit(); // Envía el formulario actual si el usuario confirma
+                }
+            });
+        });
+    });
+</script>
+<script>
+    var alert = '@TempData["ProfileUpdated"]';
+    if (alert === "True") {
+        // Mostrar notificación de éxito
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-center",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+        toastr["success"]("Profile updated successfully!");
+    }
+    var alertF = '@TempData["FProfileUpdated"]';
+    if (alertF === "True") {
+        // Mostrar notificación de éxito
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-center",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+        toastr["error"]("Failed to update profile");
+    }
+</script>

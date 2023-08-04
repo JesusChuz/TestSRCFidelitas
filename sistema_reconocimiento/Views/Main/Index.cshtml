@@ -57,7 +57,14 @@
                                 <a href="#" class="media border-0">
                                     <div class="media-left pr-1">
                                         <span class="avatar avatar-md avatar-online">
-                                            <img class="media-object rounded-circle" src="">
+                                            @if (!string.IsNullOrEmpty(@listTop.Base64Image))
+                                            {
+                                                <img class="d-block rounded" alt="user-avatar" src="data:image;base64,@listTop.Base64Image"/>
+                                            }
+                                            else
+                                            {
+                                                <img class="d-block rounded" alt="user-avatar" src="~/assets/img/avatars/default.png" />
+                                            }
                                             <i></i>
                                         </span>
                                     </div>
