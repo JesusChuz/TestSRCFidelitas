@@ -24,7 +24,12 @@ namespace sistema_reconocimiento.Models
         public int Position { get; set; }
         [ForeignKey("Position")]
         public virtual Positions Positions { get; set; }
-        //public byte[] Picture { get; set; }
+
+        public byte[]? Picture { get; set; }
+        [NotMapped]
+        public IFormFile PictureFile { get; set; }
+        [NotMapped]
+        public string Base64Image { get; set; }
 
         public String ID_Account { get; set; }
         [ForeignKey("ID_Account")]

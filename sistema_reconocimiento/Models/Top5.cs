@@ -14,8 +14,10 @@ namespace sistema_reconocimiento.Models
         public string FullName { get; set; }
         [NotMapped]
         public string PositionName { get; set; }
-        //[NotMapped]
-        //public string Picture { get; set; }
+        [NotMapped]
+        public byte[] Picture { get; set; }
+        [NotMapped]
+        public string Base64Image { get; set; }
     }
 
 }

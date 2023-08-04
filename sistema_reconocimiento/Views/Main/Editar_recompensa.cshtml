@@ -1,6 +1,5 @@
 ﻿@model sistema_reconocimiento.Models.Rewards
 
-
 @{
     ViewData["Title"] = "Editar Recompensa";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -61,7 +60,7 @@
                                             <label class="form-label" for="basic-icon-default-email">Select the Image</label>
                                             <div class="input-group input-group-merge">
                                                 <span class="input-group-text"><i class="fas fa-photo"></i></span>
-                                                <input type="file" class="account-file-input" accept="image/png, image/jpeg" name="PictureFile" required />
+                                                <input type="file" class="account-file-input" accept="image/png, image/jpeg" name="picture"/>
                                             </div>
                                             @Html.ValidationMessageFor(model => model.PictureFile, "", new { @class = "text-danger" })
                                         </div>

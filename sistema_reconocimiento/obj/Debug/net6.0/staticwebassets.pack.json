@@ -49,6 +49,10 @@
       "PackagePath": "staticwebassets\\assets\\img\\avatars\\7.png"
     },
     {
+      "Id": "E:\\GHDesktopRepros\\SistemaReconocimientos\\sistema_reconocimiento\\wwwroot\\assets\\img\\avatars\\default.png",
+      "PackagePath": "staticwebassets\\assets\\img\\avatars\\default.png"
+    },
+    {
       "Id": "E:\\GHDesktopRepros\\SistemaReconocimientos\\sistema_reconocimiento\\wwwroot\\assets\\img\\backgrounds\\18.jpg",
       "PackagePath": "staticwebassets\\assets\\img\\backgrounds\\18.jpg"
     },

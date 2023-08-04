@@ -29,6 +29,8 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using System.Text.RegularExpressions;
 using MessagePack;
 using NuGet.Packaging.Signing;
+using Org.BouncyCastle.Utilities;
+using System.Text;
 
 namespace sistema_reconocimiento.Controllers
 {
@@ -168,8 +170,20 @@ namespace sistema_reconocimiento.Controllers
                                 string top5_email = (string)reader["Email"];
                                 string top5_fullname = (string)reader["FullName"];
                                 string top5_position = (string)reader["Position_Name"];
-                                //string top5_picture = (string)reader["Picture"];
-                                // Create a new Top5Data instance and add it to the list
+                                //var getphotoandname = _context.Engineers.Where(e => e.ID_Engineer == model.ID_Engineer).AsNoTracking().FirstOrDefault();
+                                byte[] top5_picture = null; // Inicializar como null
+
+                                // Verificar si el valor es nulo antes de intentar leer el contenido
+                                if (!reader.IsDBNull(reader.GetOrdinal("Picture")))
+                                {
+                                    top5_picture = (byte[])reader["Picture"];
+                                }
+                                // Convertir los datos binarios de la imagen a una cadena Base64
+                                string base64Image = top5_picture != null ? Convert.ToBase64String(top5_picture) : "";
+
+                                // Asignar la cadena Base64 a una propiedad del modelo para mostrarla en la vista
+                              //  getphotoandname.Base64Image = base64Image;
+                                // Crear una nueva instancia de Top5Data y agregarla a la lista
                                 Top5 data = new Top5
                                 {
                                     RecognizedEng = top5_recognizedeng,
@@ -177,11 +191,10 @@ namespace sistema_reconocimiento.Controllers
                                     Email = top5_email,
                                     FullName = top5_fullname,
                                     PositionName = top5_position,
-                                    //Picture = top5_picture
+                                    Base64Image = base64Image
                                 };
                                 top5List.Add(data);
                             }
-                            connection.Close();
                         }
                     }
                 }
@@ -263,6 +276,25 @@ namespace sistema_reconocimiento.Controllers
                 }
             }
         }
+        public void LoadProfile(Engineers model)
+        {
+            LoadIdEngineer(model);
+            var getphotoandname = _context.Engineers.Where(e => e.ID_Engineer == model.ID_Engineer).AsNoTracking().FirstOrDefault();
+            // Obtener la imagen actual desde la base de datos
+            byte[] imageData = getphotoandname.Picture;
+            if (getphotoandname.Picture != null)
+            {
+                // Convertir los datos binarios de la imagen a una cadena Base64
+                string base64Image = imageData != null ? Convert.ToBase64String(imageData) : "";
+
+                // Asignar la cadena Base64 a una propiedad del modelo para mostrarla en la vista
+                getphotoandname.Base64Image = base64Image;
+                // Almacena la cadena Base64 en la sesión
+                HttpContext.Session.SetString("ImagenBase64", base64Image);
+            }
+
+            ViewBag.getFullName = getphotoandname.Name_Engineer + " " + getphotoandname.LastName_Engineer;
+        }
         public async Task<List<Rewards>> LoadRewards()
         {
             List<Rewards> rewards = await _context.Rewards.Where(e => e.IsEnabled == true).ToListAsync();
@@ -278,6 +310,7 @@ namespace sistema_reconocimiento.Controllers
                 {
                     LoadPoints(model);
                     LoadIdEngineer(model);
+                    LoadProfile(model);
                     var applicationDbContext = _context.Rewards;
                     var activePhrases = await _context.Phrases.Where(p => p.States == true).Select(p => p.Phrase).ToListAsync();
                     var viewModel = new SubmitPurchaseViewModel
@@ -288,7 +321,7 @@ namespace sistema_reconocimiento.Controllers
                         Phrases = activePhrases,
                         Top5 = GetTop5()
                     };
-                   // var applicationDbContext = _context.Purchases.Include(e => e.Rewards);
+                   //var applicationDbContext = _context.Purchases.Include(e => e.Rewards);
                     //return View(await applicationDbContext.ToListAsync());
                     return View(viewModel);
                 }
@@ -309,6 +342,7 @@ namespace sistema_reconocimiento.Controllers
                 {
                     LoadPoints(model);
                     LoadIdEngineer(model);
+                    LoadProfile(model);
                     var applicationDbContext = _context.Engineers.Include(e => e.ApplicationUser).Include(e => e.Manager).Include(e => e.Positions);
                     foreach (var engineer in applicationDbContext)
                     {
@@ -336,6 +370,7 @@ namespace sistema_reconocimiento.Controllers
                 {
                     LoadPoints(model);
                     LoadIdEngineer(model);
+                    LoadProfile(model);
                     var loadmanager = _context.Set<Manager>()
                     .Select(m => new
                     {
@@ -786,7 +821,7 @@ namespace sistema_reconocimiento.Controllers
                                     .Include(e => e.ApplicationUser).Include(e => e.Manager).Include(e => e.Positions)
                                     .AsNoTracking().FirstOrDefaultAsync(e => e.ID_Engineer == engreleaseManager.ID_Engineer);
 
-                            //liberamos el manager que vamos a borrar de registro asociados
+                            //intentamos liberar el manager que vamos a borrar de registro asociados
                             _context.Engineers.Update(engreleaseManager);
                         }
                         var manager = await _context.Manager
@@ -1083,6 +1118,7 @@ namespace sistema_reconocimiento.Controllers
                 {
                     LoadPoints(modelE);
                     LoadIdEngineer(modelE);
+                    LoadProfile(modelE);
                     // LoadRecognizedPoints(modelE, model);
                     var viewModel = new SubmitStateRecognition
                     {
@@ -1257,6 +1293,7 @@ namespace sistema_reconocimiento.Controllers
                 {
                     LoadPoints(model);
                     LoadIdEngineer(model);
+                    LoadProfile(model);
                     List<Rewards> rewards = await _context.Rewards.ToListAsync();
 
                     return View(rewards);
@@ -1277,6 +1314,7 @@ namespace sistema_reconocimiento.Controllers
                 if (result == true)
                 {
                     LoadPoints(model);
+                    LoadProfile(model);
                     return View();
                 }
                 else
@@ -1364,6 +1402,7 @@ namespace sistema_reconocimiento.Controllers
                 if (result == true)
                 {
                     LoadPoints(model);
+                    LoadProfile(model);
                     if (id == null || _context.Rewards == null)
                     {
                         return NotFound();
@@ -1377,12 +1416,16 @@ namespace sistema_reconocimiento.Controllers
                     }
                     // Obtener la imagen actual desde la base de datos
                     byte[] imageData = rewards.Picture;
+                    if (rewards.Picture != null)
+                    {
+                        // Guardar el byte[] directamente en la sesión
+                        HttpContext.Session.Set("DefaultPicture", rewards.Picture);
+                        // Convertir los datos binarios de la imagen a una cadena Base64
+                        string base64Image = imageData != null ? Convert.ToBase64String(imageData) : "";
 
-                    // Convertir los datos binarios de la imagen a una cadena Base64
-                    string base64Image = imageData != null ? Convert.ToBase64String(imageData) : "";
-
-                    // Asignar la cadena Base64 a una propiedad del modelo para mostrarla en la vista
-                    rewards.Base64Image = base64Image;
+                        // Asignar la cadena Base64 a una propiedad del modelo para mostrarla en la vista
+                        rewards.Base64Image = base64Image;
+                    }
 
                     return View(rewards);
                 }
@@ -1393,7 +1436,6 @@ namespace sistema_reconocimiento.Controllers
             }
             return RedirectToAction("Login", "Auth");
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Editar_recompensa(int id, [Bind("ID_Reward,Reward_Name,Reward_Description,Price,Picture")] Rewards rewards, IFormFile picture)
@@ -1402,16 +1444,10 @@ namespace sistema_reconocimiento.Controllers
             {
                 return NotFound();
             }
-
             //if (ModelState.IsValid)
             //{
             try
             {
-                if (picture == null || picture.Length == 0)
-                {
-                    ModelState.AddModelError("PictureFile", "You need to reupload the image.");
-                    return View(rewards);
-                }
                 if (rewards.Price < 1 || rewards.Price > 75000)
                 {
                     ViewData["PriceE"] = "The price should be between 1 and 75000";
@@ -1419,6 +1455,10 @@ namespace sistema_reconocimiento.Controllers
                 }
                 if (picture != null && picture.Length > 0)
                 {
+                    //ModelState.AddModelError("PictureFile", "You need to reupload the image.");
+                    byte[] defaulpic = HttpContext.Session.Get("DefaultPicture") as byte[];
+
+                    rewards.Picture = defaulpic;
                     using (var memoryStream = new MemoryStream())
                     {
                         await picture.CopyToAsync(memoryStream);
@@ -1485,6 +1525,7 @@ namespace sistema_reconocimiento.Controllers
                 if (result == true)
                 {
                     LoadPoints(model);
+                    LoadProfile(model);
                     View(await _context.Phrases.ToListAsync());
                     Problem("Entity set 'ApplicationDbContext.Phrases'  is null.");
                     return View();
@@ -1505,6 +1546,7 @@ namespace sistema_reconocimiento.Controllers
                 if (result == true)
                 {
                     LoadPoints(model);
+                    LoadProfile(model);
                     return View();
                 }
                 else
@@ -1539,6 +1581,7 @@ namespace sistema_reconocimiento.Controllers
                 if (result == true)
                 {
                     LoadPoints(model);
+                    LoadProfile(model);
                     var phrases = await _context.Phrases.FindAsync(id);
                     if (phrases == null)
                     {
@@ -1649,7 +1692,7 @@ namespace sistema_reconocimiento.Controllers
             return RedirectToAction("Index");
         }
         [Authorize]
-        public IActionResult Perfil(bool result, Engineers model)
+        public async Task<IActionResult> Perfil(bool result, Engineers model)
         {
             if (result == false)
             {
@@ -1657,7 +1700,33 @@ namespace sistema_reconocimiento.Controllers
                 if (result == true)
                 {
                     LoadPoints(model);
-                    return View();
+                    LoadIdEngineer(model);
+                    LoadProfile(model);
+                    if (model.ID_Engineer == null || _context.Engineers == null)
+                    {
+                        return NotFound();
+                    }
+
+                    var engineers = await _context.Engineers.FindAsync(model.ID_Engineer);
+
+                    if (engineers == null)
+                    {
+                        return NotFound();
+                    }
+                    // Obtener la imagen actual desde la base de datos
+                    byte[] imageData = engineers.Picture;
+                    if (engineers.Picture != null)
+                    {                  
+                        // Guardar el byte[] directamente en la sesión
+                        HttpContext.Session.Set("DefaultProfilePicture", engineers.Picture);
+                        // Convertir los datos binarios de la imagen a una cadena Base64
+                        string base64Image = imageData != null ? Convert.ToBase64String(imageData) : "";
+
+                        // Asignar la cadena Base64 a una propiedad del modelo para mostrarla en la vista
+                        engineers.Base64Image = base64Image;
+                    }
+
+                    return View(engineers);
                 }
                 else
                 {
@@ -1665,7 +1734,97 @@ namespace sistema_reconocimiento.Controllers
                 }
             }
             return RedirectToAction("Login", "Auth");
+
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Editar_Perfil([Bind("ID_Engineer,Name_Engineer,LastName_Engineer,Position,ID_Account,ID_Manager,Picture")] Engineers engineers, string Password, string ConfirmPassword, IFormFile picture)
+        {
+            var status = new Status();
+            try
+            {
+                var getIDaccount = _context.Engineers.Where(e => e.ID_Engineer == engineers.ID_Engineer).AsNoTracking().FirstOrDefault();
+                getIDaccount.PictureFile = picture;
+                if (picture != null && picture.Length > 0)
+                {
+                    byte[] defaulpic = HttpContext.Session.Get("DefaultProfilePicture") as byte[];
+
+                    engineers.Picture = defaulpic;
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await picture.CopyToAsync(memoryStream);
+                        getIDaccount.Picture = memoryStream.ToArray();
+                    }
+                }
+                if (string.IsNullOrWhiteSpace(Password) || Password.Length < 6 || !Regex.IsMatch(Password, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).{6,}$"))
+                {
+
+                    status.Message = "Password is required, needs to be at least 6 characters and you need to use a Capital letter, a lowercase, a symbol and a number";
+                    TempData["msgnewPasswordConf"] = status.Message;
+
+                    return RedirectToAction("Perfil", "Main");
+                }
+                if (Password != ConfirmPassword)
+                {
+                    status.Message = "Verify that is the same password";
+                    TempData["msgnewPasswordConf"] = status.Message;
+
+                    ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", getIDaccount.ID_Account);
+                    TempData["FProfileUpdated"] = true;
+                    return RedirectToAction("Perfil", "Main");
+                }
+                if (Password == null || ConfirmPassword == null)
+                {
+                    status.Message = "Enter and confirm your new password";
+                    TempData["msgnewPasswordConf"] = status.Message;
+
+                    ViewData["ID_Account"] = new SelectList(_context.ApplicationUser, "Id", "Id", getIDaccount.ID_Account);
+                    TempData["FProfileUpdated"] = true;
+                    return RedirectToAction("Perfil", "Main");
+                }
+                if (Password != null)
+                {
+                    // Cargar el ApplicationUser relacionado.
+                    var applicationUser = await _userManager.FindByIdAsync(getIDaccount.ID_Account);
+
+                    // Modificar las propiedades.
+                    applicationUser.PasswordHash = _userManager.PasswordHasher.HashPassword(applicationUser, Password);
+
+                    // Actualizar el ApplicationUser en la base de datos.
+                    var updateResult = await _userManager.UpdateAsync(applicationUser);
+                    if (updateResult.Succeeded)
+                    {
+                        //Loggear cambio de password
+                        var logPasswordUpdate = new Log_PasswordUpdate
+                        {
+                            Reason = "Password updated by user",
+                            ID_Engineer = engineers.ID_Engineer,
+                            Change_Date = DateTime.Now
+                        };
+                        _context.Add(logPasswordUpdate);
+                    }
+                }
+                //getIDaccount.ID_Engineer = 0;
+                _context.Engineers.Update(getIDaccount);
+                //_context.Engineers.Add(getIDaccount);
+
+                await _context.SaveChangesAsync();
+                TempData["ProfileUpdated"] = true;
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!RewardsExists(engineers.ID_Engineer))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction("Perfil", "Main");
+        }
+
         [Authorize]
         public IActionResult Reconocer(bool result, Engineers model)
         {
@@ -1676,6 +1835,7 @@ namespace sistema_reconocimiento.Controllers
                 {
                     LoadPoints(model);
                     LoadIdEngineer(model);
+                    LoadProfile(model);
                     var engineers = _context.Engineers
                     .Select(e => new
                     {
@@ -1787,6 +1947,7 @@ namespace sistema_reconocimiento.Controllers
                 if (result == true)
                 {
                     LoadPoints(model);
+                    LoadProfile(model);
                     return View();
                 }
                 else

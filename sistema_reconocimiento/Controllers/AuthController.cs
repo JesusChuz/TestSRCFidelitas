@@ -155,6 +155,7 @@ namespace sistema_reconocimiento.Controllers
         public async Task<IActionResult> Logout()
         {
             await _service.LogoutAsync();
+
             return RedirectToAction(nameof(Login));
         }
         //comentar cuando ya no es necesario
