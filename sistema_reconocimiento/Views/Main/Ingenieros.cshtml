@@ -138,285 +138,281 @@
         </div>
     </div>
 </div>
-@section scripts {
-    <script src="~/theme-assets/vendors/libs/jquery/jquery.js"></script>
-    <script>
-        var RenCreado = '@TempData["IngCreado"]';
-        if (RenCreado === "True") {
-            // Mostrar notificación de éxito
-            toastr.options = {
-                "closeButton": false,
-                "debug": false,
-                "newestOnTop": false,
-                "progressBar": true,
-                "positionClass": "toast-top-center",
-                "preventDuplicates": false,
-                "onclick": null,
-                "showDuration": "300",
-                "hideDuration": "1000",
-                "timeOut": "5000",
-                "extendedTimeOut": "1000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
-            };
-            toastr["success"]("Engineer created");
+<script src="~/theme-assets/vendors/libs/jquery/jquery.js"></script>
+<script>
+    $(document).ready(function () {
+        $('a.submit-delete').click(function (e) {
+            e.preventDefault(); // Evita que el enlace se siga al hacer clic
+
+            Swal.fire({
+                title: 'Are you sure that you want to delete this reward?',
+                text: 'This action cannot be reverted',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: 'red',
+                cancelButtonColor: '#79d4f7',
+                confirmButtonText: 'Yes, delete it',
+                cancelButtonText: 'No, cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = $(this).attr('href');
+                }
+            });
+        });
+
+        $('a.enter-edit').click(function (e) {
+            e.preventDefault(); // Evita que el enlace se siga al hacer clic
+
+            Swal.fire({
+                title: 'Are you sure that you want to edit this reward?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: 'red',
+                cancelButtonColor: '#79d4f7',
+                confirmButtonText: 'Yes, I am gonna edit it',
+                cancelButtonText: 'No, cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = $(this).attr('href');
+                }
+            });
+        });
+    });
+</script>
+<script>
+    var RenCreado = '@TempData["IngCreado"]';
+    if (RenCreado === "True") {
+        // Mostrar notificación de éxito
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-center",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+        toastr["success"]("Engineer created");
+    }
+    var RenEliminada = '@TempData["IngEliminado"]';
+    if (RenEliminada === "True") {
+        // Mostrar notificación de éxito
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-center",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+        toastr["error"]("Engineer deleted");
+    }
+    var DisableAccountafterDelete = '@TempData["msgEngineerConstraint"]';
+    if (DisableAccountafterDelete === "True") {
+        // Mostrar notificación de éxito
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-center",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+        toastr["error"]("There is Information associated to this engineer so we cannot delete it, however we have disabled the account.");
+    }
+    var DisableAccountafterDelete = '@TempData["msgUnableDeleteLeaseManager"]';
+    if (DisableAccountafterDelete === "True") {
+        // Mostrar notificación de éxito
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-center",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+        toastr["error"]("Since there are records like engineers and recognitions leased to this manager, we cannot delete it and automatically point them to another manager.");
+    }
+    var DisableAccount = '@TempData["msgAccountDisabled"]';
+    if (DisableAccount === "True") {
+        // Mostrar notificación de éxito
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-center",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+        toastr["info"]("The account has been locked");
+    }
+    var EnableAccount = '@TempData["msgAccountEnabled"]';
+    if (EnableAccount === "True") {
+        // Mostrar notificación de éxito
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-center",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+        toastr["info"]("The account has been unlocked");
+    }
+    var RenM = '@TempData["IngModif"]';
+    if (RenM === "True") {
+        // Mostrar notificación de éxito
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-center",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
         }
-        var RenEliminada = '@TempData["IngEliminado"]';
-        if (RenEliminada === "True") {
-            // Mostrar notificación de éxito
-            toastr.options = {
-                "closeButton": false,
-                "debug": false,
-                "newestOnTop": false,
-                "progressBar": true,
-                "positionClass": "toast-top-center",
-                "preventDuplicates": false,
-                "onclick": null,
-                "showDuration": "300",
-                "hideDuration": "1000",
-                "timeOut": "5000",
-                "extendedTimeOut": "1000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
-            };
-            toastr["error"]("Engineer deleted");
-        }
-        var DisableAccountafterDelete = '@TempData["msgEngineerConstraint"]';
-        if (DisableAccountafterDelete === "True") {
-            // Mostrar notificación de éxito
-            toastr.options = {
-                "closeButton": false,
-                "debug": false,
-                "newestOnTop": false,
-                "progressBar": true,
-                "positionClass": "toast-top-center",
-                "preventDuplicates": false,
-                "onclick": null,
-                "showDuration": "300",
-                "hideDuration": "1000",
-                "timeOut": "5000",
-                "extendedTimeOut": "1000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
-            };
-            toastr["error"]("There is Information associated to this engineer so we cannot delete it, however we have disabled the account.");
-        }
-        var DisableAccountafterDelete = '@TempData["msgUnableDeleteLeaseManager"]';
-        if (DisableAccountafterDelete === "True") {
-            // Mostrar notificación de éxito
-            toastr.options = {
-                "closeButton": false,
-                "debug": false,
-                "newestOnTop": false,
-                "progressBar": true,
-                "positionClass": "toast-top-center",
-                "preventDuplicates": false,
-                "onclick": null,
-                "showDuration": "300",
-                "hideDuration": "1000",
-                "timeOut": "5000",
-                "extendedTimeOut": "1000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
-            };
-            toastr["error"]("Since there are records like engineers and recognitions leased to this manager, we cannot delete it and automatically point them to another manager.");
-        }
-        var DisableAccount = '@TempData["msgAccountDisabled"]';
-        if (DisableAccount === "True") {
-            // Mostrar notificación de éxito
-            toastr.options = {
-                "closeButton": false,
-                "debug": false,
-                "newestOnTop": false,
-                "progressBar": true,
-                "positionClass": "toast-top-center",
-                "preventDuplicates": false,
-                "onclick": null,
-                "showDuration": "300",
-                "hideDuration": "1000",
-                "timeOut": "5000",
-                "extendedTimeOut": "1000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
-            };
-            toastr["info"]("The account has been locked");
-        }
-        var EnableAccount = '@TempData["msgAccountEnabled"]';
-        if (EnableAccount === "True") {
-            // Mostrar notificación de éxito
-            toastr.options = {
-                "closeButton": false,
-                "debug": false,
-                "newestOnTop": false,
-                "progressBar": true,
-                "positionClass": "toast-top-center",
-                "preventDuplicates": false,
-                "onclick": null,
-                "showDuration": "300",
-                "hideDuration": "1000",
-                "timeOut": "5000",
-                "extendedTimeOut": "1000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
-            };
-            toastr["info"]("The account has been unlocked");
-        }
-        var RenM = '@TempData["IngModif"]';
-        if (RenM === "True") {
-            // Mostrar notificación de éxito
-            toastr.options = {
-                "closeButton": false,
-                "debug": false,
-                "newestOnTop": false,
-                "progressBar": true,
-                "positionClass": "toast-top-center",
-                "preventDuplicates": false,
-                "onclick": null,
-                "showDuration": "300",
-                "hideDuration": "1000",
-                "timeOut": "5000",
-                "extendedTimeOut": "1000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
+        toastr["info"]("Engineer data modified");
+    }
+</script>
+<script>
+    // Función para filtrar las tablas por la búsqueda
+    function filterTable(tableId, searchInputId) {
+        let input, filter, table, tr, td, i, j, txtValue;
+        input = document.getElementById(searchInputId);
+        filter = input.value.toUpperCase();
+        table = document.getElementById(tableId);
+        tr = table.getElementsByTagName("tr");
+
+        // Iterar sobre las filas de la tabla y mostrar/ocultar según el filtro de búsqueda
+        for (i = 0; i < tr.length; i++) {
+            if (i === 0) {
+                // Saltar la primera fila (títulos de las columnas)
+                continue;
             }
-            toastr["info"]("Engineer data modified");
-        }
-    </script>
-    <script>
-        // Función para filtrar las tablas por la búsqueda
-        function filterTable(tableId, searchInputId) {
-            let input, filter, table, tr, td, i, j, txtValue;
-            input = document.getElementById(searchInputId);
-            filter = input.value.toUpperCase();
-            table = document.getElementById(tableId);
-            tr = table.getElementsByTagName("tr");
+            let found = false;
+            td = tr[i].getElementsByTagName("td");
 
-            // Iterar sobre las filas de la tabla y mostrar/ocultar según el filtro de búsqueda
-            for (i = 0; i < tr.length; i++) {
-                if (i === 0) {
-                    // Saltar la primera fila (títulos de las columnas)
-                    continue;
-                }
-                let found = false;
-                td = tr[i].getElementsByTagName("td");
-
-                for (j = 0; j < td.length; j++) {
-                    txtValue = td[j].textContent || td[j].innerText;
-                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        found = true;
-                        break;
-                    }
-                }
-
-                if (found) {
-                    tr[i].style.display = "";
-                } else {
-                    tr[i].style.display = "none";
+            for (j = 0; j < td.length; j++) {
+                txtValue = td[j].textContent || td[j].innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    found = true;
+                    break;
                 }
             }
+
+            if (found) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
         }
+    }
 
-        // Evento para ejecutar la búsqueda al escribir en la barra de búsqueda
-        document.getElementById("searchInput").addEventListener("keyup", function () {
-            filterTable("myTable", "searchInput"); // Modificar los valores según el ID de tus tablas y la barra de búsqueda
+    // Evento para ejecutar la búsqueda al escribir en la barra de búsqueda
+    document.getElementById("searchInput").addEventListener("keyup", function () {
+        filterTable("myTable", "searchInput"); // Modificar los valores según el ID de tus tablas y la barra de búsqueda
+    });
+</script>
+<script>
+    // Función para mostrar los elementos correspondientes a la página actual
+    function showPage(page, tableId, paginationContainerId) {
+        var rowsPerPage = 10; // Número de filas por página
+        var startIndex = (page - 1) * rowsPerPage;
+        var endIndex = startIndex + rowsPerPage;
+
+        // Ocultar todas las filas de la tabla
+        $('#' + tableId + ' tbody tr').hide();
+
+        // Mostrar las filas de la página actual
+        $('#' + tableId + ' tbody tr').slice(startIndex, endIndex).show();
+
+        // Actualizar el número de página actual en el elemento correspondiente
+        $('#' + paginationContainerId + ' .current-page').text(page);
+    }
+
+    $(document).ready(function () {
+        var currentPageP = 1; // Página actual inicial para la tabla reconocimientos pendings
+        var currentPageAR = 1; // Página actual inicial para la tabla Historial de reconocimientos
+
+        // Mostrar la página actual al cargar la página
+        showPage(currentPageAR, 'myTable', 'paginationAR');
+
+        // Evento de clic para el botón "Anterior" de la tabla Historial de reconocimientos
+        $('#paginationAR .prev-page').click(function () {
+            if (currentPageAR > 1) {
+                currentPageAR--;
+                showPage(currentPageAR, 'myTable', 'paginationAR');
+            }
         });
-    </script>
-    <script>
-        // Función para mostrar los elementos correspondientes a la página actual
-        function showPage(page, tableId, paginationContainerId) {
-            var rowsPerPage = 10; // Número de filas por página
-            var startIndex = (page - 1) * rowsPerPage;
-            var endIndex = startIndex + rowsPerPage;
 
-            // Ocultar todas las filas de la tabla
-            $('#' + tableId + ' tbody tr').hide();
-
-            // Mostrar las filas de la página actual
-            $('#' + tableId + ' tbody tr').slice(startIndex, endIndex).show();
-
-            // Actualizar el número de página actual en el elemento correspondiente
-            $('#' + paginationContainerId + ' .current-page').text(page);
-        }
-
-        $(document).ready(function () {
-            var currentPageP = 1; // Página actual inicial para la tabla reconocimientos pendings
-            var currentPageAR = 1; // Página actual inicial para la tabla Historial de reconocimientos
-
-            // Mostrar la página actual al cargar la página
-            showPage(currentPageAR, 'myTable', 'paginationAR');
-
-            // Evento de clic para el botón "Anterior" de la tabla Historial de reconocimientos
-            $('#paginationAR .prev-page').click(function () {
-                if (currentPageAR > 1) {
-                    currentPageAR--;
-                    showPage(currentPageAR, 'myTable', 'paginationAR');
-                }
-            });
-
-            // Evento de clic para el botón "Siguiente" de la tabla Historial de reconocimientos
-            $('#paginationAR .next-page').click(function () {
-                var totalPagesAR = Math.ceil($('#myTable tbody tr').length / 10); // Calcular el número total de páginas
-                if (currentPageAR < totalPagesAR) {
-                    currentPageAR++;
-                    showPage(currentPageAR, 'myTable', 'paginationAR');
-                }
-            });
+        // Evento de clic para el botón "Siguiente" de la tabla Historial de reconocimientos
+        $('#paginationAR .next-page').click(function () {
+            var totalPagesAR = Math.ceil($('#myTable tbody tr').length / 10); // Calcular el número total de páginas
+            if (currentPageAR < totalPagesAR) {
+                currentPageAR++;
+                showPage(currentPageAR, 'myTable', 'paginationAR');
+            }
         });
-    </script>
-    <script>
-        $(document).ready(function () {
-            $('a.submit-delete').click(function (e) {
-                e.preventDefault(); // Evita que el enlace se siga al hacer clic
-
-                Swal.fire({
-                    title: 'Are you sure that you want to delete this engineer?',
-                    text: 'This action cannot be reverted',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#79d4f7',
-                    cancelButtonColor: 'red',
-                    confirmButtonText: 'Yes, delete it',
-                    cancelButtonText: 'No, cancel'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = $(this).attr('href');
-                    }
-                });
-            });
-
-            $('a.enter-edit').click(function (e) {
-                e.preventDefault(); // Evita que el enlace se siga al hacer clic
-
-                Swal.fire({
-                    title: 'Are you sure that you want to edit this engineer?',
-                    text: 'The password will be resetted so if you do not know which is the current password, you will have to set a new one and inform the engineer about the change',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#79d4f7',
-                    cancelButtonColor: 'red',
-                    confirmButtonText: 'Yes, I am gonna edit it',
-                    cancelButtonText: 'No, cancel'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = $(this).attr('href');
-                    }
-                });
-            });
-        });
-    </script>
-
-}
+    });
+</script>
