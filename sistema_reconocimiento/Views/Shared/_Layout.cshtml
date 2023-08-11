@@ -113,11 +113,12 @@
         </div>
         <div class="main-menu-content">
             <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
-                @if (User.IsInRole("admin"))
+
+                <li class="nav-item"">
+                    <a asp-controller="Main" asp-action="Index"><i class="ft-home"></i><span class="menu-title" data-i18n="">Main</span></a>
+                </li>
+                 @if (User.IsInRole("admin"))
                 {
-                    <li class="active">
-                        <a asp-controller="Main" asp-action="Index"><i class="ft-home"></i><span class="menu-title" data-i18n="">Main</span></a>
-                    </li>
                     <li class=" nav-item">
                         <a asp-controller="Main" asp-action="Ingenieros"><i class="ft-user"></i><span class="menu-title">Engineers</span></a>
                     </li>
