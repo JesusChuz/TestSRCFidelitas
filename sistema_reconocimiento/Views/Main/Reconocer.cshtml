@@ -62,10 +62,9 @@
                                 @*@Html.TextBoxFor(m => m.Recognitions.Comment, new { @class = "form-control", rows="3", type="text", value="@Model.SubmitRecognitionViewModel.Recognitions.Comment"})*@                            </div>
                             <span class="text-danger">@TempData["msgComment"]</span>
                         </div>
-                        <br/>
-                        <div class="navbar-nav align-items-center">
-                            <button type="submit" class="btn btn-primary">Submit Recognition</button>
-                        </div>
+                        <br /> 
+                        <a class="btn btn-danger" asp-controller="Main" asp-action="Ingenieros">Return</a>
+                        <button type="submit" class="btn btn-primary">Submit Recognition</button>
                      }
                 </div>
             </div>
