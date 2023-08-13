@@ -9,6 +9,7 @@
 <head>
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
     <script src="~/assets/js/config.js"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -23,29 +24,27 @@
     <link rel="stylesheet" type="text/css" href="~/theme-assets/vendors/css/charts/chartist.css">
     <!-- END VENDOR CSS-->
     <!-- BEGIN CHAMELEON  CSS-->
-    <link rel="stylesheet" type="text/css" href="~/theme-assets/css/app-lite.css">
+ @*   <link rel="stylesheet" type="text/css" href="~/theme-assets/css/app-lite.css">*@
     <!-- END CHAMELEON  CSS-->
     <!-- BEGIN Page Level CSS-->
-    <link rel="stylesheet" type="text/css" href="~/theme-assets/css/core/menu/menu-types/vertical-menu.css">
-    <link rel="stylesheet" type="text/css" href="~/theme-assets/css/core/colors/palette-gradient.css">
-    <link rel="stylesheet" type="text/css" href="~/theme-assets/css/pages/dashboard-ecommerce.css">
+@*    <link rel="stylesheet" type="text/css" href="~/theme-assets/css/core/menu/menu-types/vertical-menu.css">*@
+@*    <link rel="stylesheet" type="text/css" href="~/theme-assets/css/core/colors/palette-gradient.css">*@
+@*    <link rel="stylesheet" type="text/css" href="~/theme-assets/css/pages/dashboard-ecommerce.css">*@
     <!-- END Page Level CSS-->
-    <!-- BEGIN Custom CSS-->
-    <!-- END Custom CSS-->
-    <!-- Sneat template -->
+    <!-- Start Sneat template -->
     <!-- Fonts -->
     <!-- Icons. Uncomment required icon fonts -->
     <link rel="stylesheet" href="~/theme-assets/vendors/fonts/boxicons.css" />
     <!-- Core CSS -->
-    <!-- turns everything red
+    <!-- if you use this style, it will turn everything red
     <link rel="stylesheet" href="~/theme-assets/vendors/css/core.css" class="template-customizer-core-css" />
     -->
     <link rel="stylesheet" href="~/theme-assets/vendors/css/theme-default.css" class="template-customizer-theme-css" />
-    <link rel="stylesheet" href="~/theme-assets/css/demo.css" />
+@*    <link rel="stylesheet" href="~/theme-assets/css/demo.css" />*@
     <!-- Vendors CSS -->
-    <link rel="stylesheet" href="~/theme-assets/vendors/libs/perfect-scrollbar/perfect-scrollbar.css" />
+@*    <link rel="stylesheet" href="~/theme-assets/vendors/libs/perfect-scrollbar/perfect-scrollbar.css" />*@
     <!-- Page CSS -->
-    <link rel="stylesheet" href="~/assets/vendor/css/pages/page-auth.css" />
+    <link rel="stylesheet" href="~/assets/vendor/css/pages/page-auth.css" /> @*formato de auth form*@
     <!-- Helpers -->
     <script src="~/assets/vendor/js/helpers.js"></script>
     <script src="~/theme-assets/vendors/js/helpers.js"></script>
@@ -67,7 +66,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
 </head>
-<body style="background-image: url('/theme-assets/images/backgrounds/bg-celeste.jpg')">
+<body style="background-image: url('/theme-assets/images/backgrounds/bg-celeste.jpg'); max-width: 100%;">
     <!-- Content -->
     <div class="container-xxl">
         <div class="authentication-wrapper authentication-basic container-p-y">
@@ -139,13 +138,10 @@
     <script src="~/assets/vendor/libs/popper/popper.js"></script>
     <script src="~/assets/vendor/js/bootstrap.js"></script>
     <script src="~/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
-
     <script src="~/assets/vendor/js/menu.js"></script>
     <!-- endbuild -->
-    <!-- Vendors JS -->
     <!-- Main JS -->
     <script src="~/assets/js/main.js"></script>
-
     <!-- Page JS -->
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
