@@ -1651,6 +1651,7 @@ namespace sistema_reconocimiento.Controllers
             {
                 LoadPoints(model);
                 LoadIdEngineer(model);
+                LoadProfile(model);
                 result = validateAccountEnabled(result);
                 if (result == true)
                 {
