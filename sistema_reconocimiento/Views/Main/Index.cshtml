@@ -7,7 +7,30 @@
     int ID_Engineer = ViewBag.GetIdEngineer;
     var activePhrases = Model.Phrases;
 }
+<style>
+    .card-content {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem; /* Adjust the gap as needed */
+    }
 
+    .media {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 1rem; /* Adjust the gap as needed */
+        margin-bottom: 1rem; /* Adjust margin as needed */
+    }
+
+    .avatar {
+        width: 64px; /* Adjust the avatar width as needed */
+        height: 64px; /* Adjust the avatar height as needed */
+    }
+
+    .media-body {
+        flex: 1;
+    }
+</style>
 <!-------------rest of the page ------------->
 <div class="app-content content">
     <div class="content-wrapper">
@@ -51,7 +74,7 @@
                 </div>
                 @foreach (var listTop in Model.Top5)
                 {
-                    <div class="card-content">
+                    <div class="card-content d-flex flex-wrap">
                         <div id="recent-buyers" class="media-list">
                             <div>
                                 <a href="#" class="media border-0">
@@ -105,7 +128,7 @@
                 {
                     <div class="col-md-6 col-xl-4">
                         <div class="card mb-3">
-                            <img class="card-img-top" src="@Url.Action("ShowPicture", "Main", new { id = item.ID_Reward })" width="150" height="350" />
+                            <img class="card-img-top responsive-img" src="@Url.Action("ShowPicture", "Main", new { id = item.ID_Reward })"/>
                             <div class="card-body">
                                 <h5 class="card-title">
                                     @Html.DisplayFor(modelItem => item.Reward_Name)

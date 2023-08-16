@@ -59,6 +59,147 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
 
+    <style >
+        .responsive-img {
+            max-width: 100%;
+            height: auto;
+        }
+        #paginationAR ul.pagination {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            justify-content: center; /* Center the items horizontally */
+        }
+
+        #paginationAR li.page-item {
+            margin: 0 0.5rem; /* Adjust margin as needed */
+        }
+
+        @@media (max-width: 576px) {
+            #paginationAR ul.pagination {
+                flex-wrap: wrap;
+            }
+
+            #paginationAR li.page-item {
+                flex-basis: calc(33.33% - 1rem); /* Three items per row */
+            }
+        }
+
+        #paginationP ul.pagination {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            justify-content: center; /* Center the items horizontally */
+        }
+
+        #paginationP li.page-item {
+            margin: 0 0.5rem; /* Adjust margin as needed */
+        }
+
+        @@media (max-width: 576px) {
+            #paginationP ul.pagination {
+                flex-wrap: wrap;
+            }
+
+            #paginationP li.page-item {
+                flex-basis: calc(33.33% - 1rem); /* Three items per row */
+            }
+        }
+
+        #paginationI ul.pagination {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            justify-content: center; /* Center the items horizontally */
+        }
+
+        #paginationI li.page-item {
+            margin: 0 0.5rem; /* Adjust margin as needed */
+        }
+
+        @@media (max-width: 576px) {
+            #paginationI ul.pagination {
+                flex-wrap: wrap;
+            }
+
+            #paginationI li.page-item {
+                flex-basis: calc(33.33% - 1rem); /* Three items per row */
+            }
+        }
+
+        #paginationIwas ul.pagination {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            justify-content: center; /* Center the items horizontally */
+        }
+
+        #paginationIwas li.page-item {
+            margin: 0 0.5rem; /* Adjust margin as needed */
+        }
+
+        @@media (max-width: 576px) {
+            #paginationIwas ul.pagination {
+                flex-wrap: wrap;
+            }
+
+            #paginationIwas li.page-item {
+                flex-basis: calc(33.33% - 1rem); /* Three items per row */
+            }
+        }
+      </style>
+    <style>
+        @@media (max-width: 991px) {
+            .nav-item.d-md-none {
+                display: block !important;
+            }
+    
+            .float-right .dropdown-user {
+                margin-right: 0;
+            }
+    
+            .float-right span.d-md-none {
+                display: inline-block;
+                margin-right: 15px;
+            }
+        }
+    
+        @@media (max-width: 767px) {
+            .navbar-wrapper {
+                display: block;
+            }
+        }
+
+        @@media (max-width: 991px) {
+            .nav-item.d-md-none {
+                display: block !important;
+            }
+
+            .float-right .dropdown-user {
+                margin-right: 0;
+            }
+
+            .float-right span.d-md-none {
+                display: inline-block;
+                margin-right: 15px;
+            }
+        }
+
+        @@media (max-width: 767px) {
+            .navbar-wrapper {
+                display: block;
+            }
+
+            .d-md-none .btn-glow.btn-sm {
+                font-size: 12px;
+                padding: 5px 10px;
+            }
+        }
+    </style>
 </head>
 <body class="vertical-layout vertical-menu 2-columns menu-expanded fixed-navbar" data-open="click" data-menu="vertical-menu" data-color="bg-chartbg" data-col="2-columns">
     <!-- fixed-top-->
@@ -67,25 +208,24 @@
             <div class="navbar-container content">
                 <div class="collapse navbar-collapse show" id="navbar-mobile">
                     <ul class="nav navbar-nav mr-auto float-left">
-                        <li class="nav-item d-block d-md-none"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="ft-menu"></i></a></li>
+                        <li class="nav-item d-block d-md-none"></li>
                         <a class="btn btn-danger btn-block btn-glow" asp-controller="Main" asp-action="Reconocer" target="">Recognize</a>
                     </ul>
                     <ul class="nav navbar-nav mr-auto float-left">
-                        <li class="nav-item d-block d-md-none"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="ft-menu"></i></a></li>
-                        <span><i class="fas fa-smile"></i> Hey @username ! </span>
+                        <li class="nav-item d-block d-md-none">
+                            <span><i class="fas fa-smile"></i> Hey @username ! </span>
+                        </li>
                     </ul>
                     <span><i class="fas fa-wallet"></i> @points pts</span>
                     <ul class="nav navbar-nav float-right">
                         <li class="dropdown dropdown-user nav-item">
                             <a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
-                                <span class="avatar avatar-online"><img src="data:image/png;base64,@base64Image" alt="avatar"><i></i></span>
+                                <span class="avatar"><img src="data:image/png;base64,@base64Image" alt="avatar"><i></i></span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right">
                                 <div class="arrow_box_right">
                                     <a class="dropdown-item" href="#">
-                                        <span class="avatar avatar-online">
-                                            <span class="user-name text-bold-700 ml-1">@FullName</span>
-                                        </span>
+                                        <span class="user-name text-bold-700 ml-1">@FullName</span>
                                     </a>
                                     <div class="dropdown-divider"></div><a class="dropdown-item" asp-controller="Main" asp-action="Perfil"><i class="ft-user"></i> Edit Profile</a>
                                     <div class="dropdown-divider"></div><a class="dropdown-item" asp-controller="Auth" asp-action="Logout"><i class="ft-power"></i> Sign out</a>
