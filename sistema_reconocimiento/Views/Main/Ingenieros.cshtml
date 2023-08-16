@@ -17,25 +17,6 @@
                 <div class="breadcrumbs-top float-md-right">
                     <div class="breadcrumb-wrapper mr-1">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item">
-                                <a href="index.html">Principal</a>
-                            </li>
-                            <li class="breadcrumb-item active">
-                                Engineers
-                            </li>
-                        </ol>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="content-body">
-            <!-- Basic Tables start -->
-            <!-- Table head options start -->
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <a asp-controller="Main" asp-action="Agregar_ingeniero" class="btn btn-danger"><i class="fas fa-plus"></i>Add Engineer</a>
                             <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
                             <div class="heading-elements">
                                 <ul class="list-inline mb-0">
@@ -53,6 +34,23 @@
                                         </div>
                                         <!-- /Search -->
                                     </li>
+                                </ul>
+                            </div>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <!-- Basic Tables start -->
+            <!-- Table head options start -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <a asp-controller="Main" asp-action="Agregar_ingeniero" class="btn btn-danger"><i class="fas fa-plus"></i>Add Engineer</a>
+                            <div class="heading-elements">
+                                <ul class="list-inline mb-0">
                                     <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
                                     <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
                                     <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
@@ -69,6 +67,8 @@
                                             <th scope="col">#</th>
                                             <th scope="col">Name</th>
                                             <th scope="col">Email</th>
+                                            <th scope="col">Is locked out?</th>
+                                            <th scope="col">Is a new account?</th>
                                             <th scope="col">Manager</th>
                                             <th scope="col">User Rol</th>
                                             <th scope="col">Position</th>
@@ -88,10 +88,21 @@
                                                     <div data-toggle="tooltip"
                                                          data-placement="top"
                                                          title="Lock/Unlock account" style="display: flex;">
-                                                         @Html.DisplayFor(modelItem => item.ApplicationUser.Email) (Is locked out?: @Html.DisplayFor(modelItem => item.ApplicationUser.LockoutEnabled) (
-                                                        <a class="enlace-visitado" asp-controller="Main" asp-action="Change_lock" asp-route-id="@item.ID_Engineer"><i class="fas fa-lock"></i></a>
-                                                        )
-                                                        Is New?: @Html.DisplayFor(modelItem => item.ApplicationUser.IsNew) )
+                                                         @Html.DisplayFor(modelItem => item.ApplicationUser.Email)
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div data-toggle="tooltip"
+                                                         data-placement="top"
+                                                         title="Lock/Unlock account" style="display: flex;">
+                                                        @Html.DisplayFor(modelItem => item.ApplicationUser.LockoutEnabled) <a class="enlace-visitado" asp-controller="Main" asp-action="Change_lock" asp-route-id="@item.ID_Engineer"><i class="fas fa-lock"></i></a>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div data-toggle="tooltip"
+                                                         data-placement="top"
+                                                         title="Lock/Unlock account" style="display: flex;">
+                                                        @Html.DisplayFor(modelItem => item.ApplicationUser.IsNew)
                                                     </div>
                                                 </td>
                                                 <td>@Html.DisplayFor(modelItem => item.Manager.Name_Manager)  @Html.DisplayFor(modelItem => item.Manager.LastName_Manager)</td>

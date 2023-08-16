@@ -17,12 +17,24 @@
                 <div class="breadcrumbs-top float-md-right">
                     <div class="breadcrumb-wrapper mr-1">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item">
-                                <a asp-controller="Main" asp-action="Index"> Principal</a>
-                            </li>
-                            <li class="breadcrumb-item active">
-                                Rewards
-                            </li>
+                            <div class="heading-elements">
+                                <ul class="list-inline mb-0">
+                                    <li>
+                                        <!-- Search -->
+                                        <div class="navbar-nav align-items-center">
+                                            <div class="nav-item d-flex align-items-center">
+                                                <i class="bx bx-search fs-4 lh-0"></i>
+                                                <input type="text"
+                                                       class="form-control border-0 shadow-none"
+                                                       placeholder="Search"
+                                                       aria-label="Search"
+                                                       id="searchInput" />
+                                            </div>
+                                        </div>
+                                        <!-- /Search -->
+                                    </li>
+                                </ul>
+                            </div>
                         </ol>
                     </div>
                 </div>
@@ -40,20 +52,6 @@
                             <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
                             <div class="heading-elements">
                                 <ul class="list-inline mb-0">
-                                    <li>
-                                        <!-- Search -->
-                                        <div class="navbar-nav align-items-center">
-                                            <div class="nav-item d-flex align-items-center">
-                                                <i class="bx bx-search fs-4 lh-0"></i>
-                                                <input type="text"
-                                                       class="form-control border-0 shadow-none"
-                                                       placeholder="Search"
-                                                       aria-label="Search"
-                                                       id="searchInput" />
-                                            </div>
-                                        </div>
-                                        <!-- /Search -->
-                                    </li>
                                     <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
                                     <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
                                     <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
@@ -69,6 +67,7 @@
                                         <tr>
                                             <th scope="col">Reward number</th>
                                             <th scope="col">Name</th>
+                                            <th scope="col">Enabled?</th>
                                             <th scope="col">Description</th>
                                             <th scope="col">Price</th>
                                             <th scope="col">Actions</th>
@@ -83,12 +82,14 @@
                                             <tr>
                                                 <td>@contador</td>
                                                 <td>
+                                                    @Html.DisplayFor(modelItem => item.Reward_Name)
+                                                </td>
+                                                <td>
                                                     <div data-toggle="tooltip"
                                                          data-placement="top"
                                                          title="Enable/disable reward">
-                                                    @Html.DisplayFor(modelItem => item.Reward_Name) (Is Enabled?: @Html.DisplayFor(modelItem => item.IsEnabled) (
+                                                        @Html.DisplayFor(modelItem => item.IsEnabled)
                                                         <a class="enlace-visitado" asp-controller="Main" asp-action="Change_RewardState" asp-route-id="@item.ID_Reward"><i class="fas fa-eye"></i></a>
-                                                    ))
                                                     </div>
                                                 </td>
                                                 <td>@Html.DisplayFor(modelItem => item.Reward_Description)</td>
