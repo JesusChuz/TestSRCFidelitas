@@ -1,12 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-.git/
-.vs/
-=======
 .vs/
 .git/
->>>>>>> jesus
-=======
-.vs/
-.git/
->>>>>>> jesus
+/sistema_reconocimiento/appsettings.Development.json
