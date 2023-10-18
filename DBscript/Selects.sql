@@ -19,7 +19,9 @@ SELECT * FROM Engineers;
 SELECT * FROM Log_PasswordUpdate;
 SELECT * FROM Positions;
 SELECT * FROM Rewards;
-SELECT * FROM Purchases;
+DELETE FROM Rewards where ID_Reward = 4;
+SELECT * FROM Purchases where Reward_ID = 4;
+DELETE FROM Purchases where Reward_ID = 4;
 SELECT * FROM Manager;
 
 SELECT * FROM Recognitions;

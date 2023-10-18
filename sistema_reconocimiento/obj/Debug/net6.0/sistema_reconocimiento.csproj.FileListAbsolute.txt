@@ -1180,7 +1180,6 @@ E:\Users\XPC\Documents\Fidelitas\Cuatrimestre VIII\DiseñoyDesarrolloSistemas\Wo
 E:\Users\XPC\Documents\Fidelitas\Cuatrimestre VIII\DiseñoyDesarrolloSistemas\Workspace\sistema_reconocimiento\bin\Debug\net6.0\Microsoft.DotNet.PlatformAbstractions.dll
 E:\Users\XPC\Documents\Fidelitas\Cuatrimestre VIII\DiseñoyDesarrolloSistemas\Workspace\sistema_reconocimiento\bin\Debug\net6.0\Microsoft.Extensions.DependencyModel.dll
 E:\Users\XPC\Documents\Fidelitas\Cuatrimestre VIII\DiseñoyDesarrolloSistemas\Workspace\sistema_reconocimiento\bin\Debug\net6.0\Newtonsoft.Json.Bson.dll
-E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\bin\Debug\net6.0\appsettings.Development.json
 E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\bin\Debug\net6.0\appsettings.json
 E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\bin\Debug\net6.0\sistema_reconocimiento.staticwebassets.runtime.json
 E:\GHDesktopRepros\SistemaReconocimientos\sistema_reconocimiento\bin\Debug\net6.0\sistema_reconocimiento.exe
