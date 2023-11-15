@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "+uZn/GOQHVI7cf+5+Du1GRrP7ul0EfKKkaFg3m+LhqtGX4hRP3vLg2CRhpdC+K0tNJV4QcYa2vV1dXcSl4z3Cg==",
+  "dgSpecHash": "7MkLcvLmqY3piw/f175VrPm6MiP5iOsqGK+Wyq6tWejUwdaxLmxT/kNz0+RsmUC9WpKhGMOFwWGGzHtXyZbbow==",
   "success": true,
-  "projectFilePath": "E:\\GHDesktopRepros\\SistemaReconocimientos\\sistema_reconocimiento\\sistema_reconocimiento.csproj",
+  "projectFilePath": "E:\\GHDesktopRepros\\pruebagitclone\\SistemaReconocimientos\\sistema_reconocimiento\\sistema_reconocimiento.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\XPC\\.nuget\\packages\\bouncycastle.cryptography\\2.1.1\\bouncycastle.cryptography.2.1.1.nupkg.sha512",
     "C:\\Users\\XPC\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",

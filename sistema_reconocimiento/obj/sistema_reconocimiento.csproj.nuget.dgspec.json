@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\GHDesktopRepros\\SistemaReconocimientos\\sistema_reconocimiento\\sistema_reconocimiento.csproj": {}
+    "E:\\GHDesktopRepros\\pruebagitclone\\SistemaReconocimientos\\sistema_reconocimiento\\sistema_reconocimiento.csproj": {}
   },
   "projects": {
-    "E:\\GHDesktopRepros\\SistemaReconocimientos\\sistema_reconocimiento\\sistema_reconocimiento.csproj": {
+    "E:\\GHDesktopRepros\\pruebagitclone\\SistemaReconocimientos\\sistema_reconocimiento\\sistema_reconocimiento.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\GHDesktopRepros\\SistemaReconocimientos\\sistema_reconocimiento\\sistema_reconocimiento.csproj",
+        "projectUniqueName": "E:\\GHDesktopRepros\\pruebagitclone\\SistemaReconocimientos\\sistema_reconocimiento\\sistema_reconocimiento.csproj",
         "projectName": "sistema_reconocimiento",
-        "projectPath": "E:\\GHDesktopRepros\\SistemaReconocimientos\\sistema_reconocimiento\\sistema_reconocimiento.csproj",
+        "projectPath": "E:\\GHDesktopRepros\\pruebagitclone\\SistemaReconocimientos\\sistema_reconocimiento\\sistema_reconocimiento.csproj",
         "packagesPath": "C:\\Users\\XPC\\.nuget\\packages\\",
-        "outputPath": "E:\\GHDesktopRepros\\SistemaReconocimientos\\sistema_reconocimiento\\obj\\",
+        "outputPath": "E:\\GHDesktopRepros\\pruebagitclone\\SistemaReconocimientos\\sistema_reconocimiento\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
