@@ -1,3 +1,5 @@
 .vs/
 .git/
+/sistema_reconocimiento/Properties/launchSettings.json
 /sistema_reconocimiento/appsettings.Development.json
+/sistema_reconocimiento/appsettings.json
