@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\GHDesktopRepros\\pruebagitclone\\SistemaReconocimientos\\sistema_reconocimiento\\sistema_reconocimiento.csproj": {}
+    "E:\\GHDesktopRepros\\SRC-Fidelitas\\TestSRCFidelitas\\sistema_reconocimiento\\sistema_reconocimiento.csproj": {}
   },
   "projects": {
-    "E:\\GHDesktopRepros\\pruebagitclone\\SistemaReconocimientos\\sistema_reconocimiento\\sistema_reconocimiento.csproj": {
+    "E:\\GHDesktopRepros\\SRC-Fidelitas\\TestSRCFidelitas\\sistema_reconocimiento\\sistema_reconocimiento.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\GHDesktopRepros\\pruebagitclone\\SistemaReconocimientos\\sistema_reconocimiento\\sistema_reconocimiento.csproj",
+        "projectUniqueName": "E:\\GHDesktopRepros\\SRC-Fidelitas\\TestSRCFidelitas\\sistema_reconocimiento\\sistema_reconocimiento.csproj",
         "projectName": "sistema_reconocimiento",
-        "projectPath": "E:\\GHDesktopRepros\\pruebagitclone\\SistemaReconocimientos\\sistema_reconocimiento\\sistema_reconocimiento.csproj",
+        "projectPath": "E:\\GHDesktopRepros\\SRC-Fidelitas\\TestSRCFidelitas\\sistema_reconocimiento\\sistema_reconocimiento.csproj",
         "packagesPath": "C:\\Users\\XPC\\.nuget\\packages\\",
-        "outputPath": "E:\\GHDesktopRepros\\pruebagitclone\\SistemaReconocimientos\\sistema_reconocimiento\\obj\\",
+        "outputPath": "E:\\GHDesktopRepros\\SRC-Fidelitas\\TestSRCFidelitas\\sistema_reconocimiento\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
